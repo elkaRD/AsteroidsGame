@@ -12,13 +12,27 @@ public class PlayerSpaceship extends GameObject implements IControllable {
     public void reset()
     {
         curVelocity = new Vec2(0, 0);
+        resetTransform();
     }
 
-    public void onAccelerate(float force) {
+    public void onAccelerate(float force)
+    {
 
     }
 
-    public void onSlowDown(float force) {
+    public void onSlowDown(float force)
+    {
 
+    }
+
+    public void onRotate(float turn)
+    {
+        updateRotation(turn);
+    }
+
+    public boolean checkCollision(Asteroid asteroid)
+    {
+        // TODO: fix
+        return false;
     }
 }

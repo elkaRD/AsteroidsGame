@@ -54,6 +54,16 @@ public final class Vec2 {
         return negate();
     }
 
+    public float magnitude()
+    {
+        return (float) Math.sqrt(x*x + y*y);
+    }
+
+    public float sqrMagnitude()
+    {
+        return x*x + y*y;
+    }
+
     public static Vec2 add(Vec2 a, Vec2 b) {
         return new Vec2(a.x + b.x, a.y + b.y);
     }

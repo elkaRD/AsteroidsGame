@@ -2,7 +2,7 @@ package com.elkard.asteroidsgame;
 
 public class InputHandler implements IInputHandler
 {
-    private boolean acceleratePressed = false;
+    public Boolean acceleratePressed = false;
     private boolean slowDownPressed = false;
     private boolean leftTurnPressed = false;
     private boolean rightTurnPressed = false;
@@ -10,25 +10,58 @@ public class InputHandler implements IInputHandler
     private boolean pressedShoot = false;
     private boolean pressedPause = false;
 
-    public void onAcceleratePressed(boolean isPressed)
-    {
-        acceleratePressed = isPressed;
-    }
+//    public void onAcceleratePressed(boolean isPressed)
+//    {
+//        acceleratePressed = isPressed;
+//    }
+//
+//    public void onSlowDownPressed(boolean isPressed)
+//    {
+//        slowDownPressed = isPressed;
+//
+//    }
+//
+//    public void onLeftPressed(boolean isPressed)
+//    {
+//        leftTurnPressed = isPressed;
+//    }
+//
+//    public void onRightPressed(boolean isPressed)
+//    {
+//        rightTurnPressed = isPressed;
+//    }
 
-    public void onSlowDownPressed(boolean isPressed)
+    public void onKeyPressed(char key, boolean isPressed)
     {
-        slowDownPressed = isPressed;
+        Debug.Log("Pressed " + key + ", status: " + isPressed);
 
-    }
+        switch(key)
+        {
+            case 'w':
+                this.acceleratePressed = isPressed;
+                //acceleratePressed = true;
+                break;
 
-    public void onLeftPressed(boolean isPressed)
-    {
-        leftTurnPressed = isPressed;
-    }
+            case 's':
+                slowDownPressed = isPressed;
+                break;
 
-    public void onRightPressed(boolean isPressed)
-    {
-        rightTurnPressed = isPressed;
+            case 'a':
+                leftTurnPressed = isPressed;
+                break;
+
+            case 'd':
+                rightTurnPressed = isPressed;
+                break;
+
+            case 27:
+                pressedPause = isPressed || pressedShoot;
+                break;
+
+            case 32:
+                pressedShoot = isPressed || pressedShoot;
+                break;
+        }
     }
 
     public void onPause(boolean isPaused)
@@ -41,9 +74,14 @@ public class InputHandler implements IInputHandler
         pressedShoot = true;
     }
 
-    public void HandleInput(IGameController asteroidsGame)
+    public void handleInput(IGameController asteroidsGame)
     {
-        if (acceleratePressed) asteroidsGame.onAccelerate(1.0f);
+        //Debug.Log("input handler addr: " + this);
+        //Debug.Log("handling input");
+        if (this.acceleratePressed) {
+            Debug.Log("testing");
+            asteroidsGame.onAccelerate(1.0f);
+        }
         if (slowDownPressed) asteroidsGame.onSlowDown(1.0f);
 
         float turnFactor = 0f;

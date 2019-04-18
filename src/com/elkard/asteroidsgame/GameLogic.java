@@ -12,6 +12,12 @@ public class GameLogic {
         GOODBYE
     }
 
+    private boolean isPaused = false;
+
+    private float accelerateForce = 0;
+    private float slowDownForce = 0;
+    private float turnForce = 0;
+
 //    public enum MenuButton{
 //        PLAY,
 //        EXIT,
@@ -53,30 +59,35 @@ public class GameLogic {
 
     }
 
-    public  void onResume()
-    {
-
-    }
-
     public void onAccelerate(float force)
     {
+        Debug.Log("accelerating");
+        //accelerateForce = force;
 
+        player.onAccelerate(force);
     }
 
     public void onSlowDown(float force)
     {
+        Debug.Log("slowing down");
+    }
 
+    public void onTurn(float turn)
+    {
+        if (turn != 0)
+            Debug.Log("turning" + turn);
     }
 
     public void onShoot()
     {
-
+        Debug.Log("shoot");
     }
 
     private void onDeath()
     {
 
     }
+
 
     public PlayerSpaceship getPlayer()
     {

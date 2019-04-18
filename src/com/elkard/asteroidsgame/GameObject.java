@@ -15,6 +15,16 @@ public class GameObject {
         position = newPosition;
     }
 
+    public void setPosition(float x, float y)
+    {
+        position = new Vec2(x, y);
+    }
+
+    public void move(Vec2 deltaPosition)
+    {
+        position.add(deltaPosition);
+    }
+
     public Vec2 getPosition() {
         return position;
     }
@@ -23,11 +33,22 @@ public class GameObject {
         rotation = newRotation;
     }
 
+    public void updateRotation(float deltaRotation)
+    {
+        rotation += deltaRotation;
+    }
+
     public float getRotation() {
         return rotation;
     }
 
     public String getName() {
         return name;
+    }
+
+    public void resetTransform()
+    {
+        position = new Vec2(0, 0);
+        rotation = 0;
     }
 }

@@ -26,12 +26,13 @@ public class AsteroidsGame implements IGameController{
             handleInput();
             gameLogic.onUpdate(0.016f);
             gameRenderer.onUpdate(0.016f);
+            Debug.FlushLog();
         }
     }
 
     private void handleInput()
     {
-
+        gameRenderer.handleInput();
     }
 
     public void menuButtonClicked(MenuButton buttonClicked)
@@ -52,26 +53,26 @@ public class AsteroidsGame implements IGameController{
 
     public void onAccelerate(float force)
     {
-
+        gameLogic.onAccelerate(force);
     }
 
     public void onSlowDown(float force)
     {
-
+        gameLogic.onSlowDown(force);
     }
 
     public void onTurn(float turn)
     {
-
+        gameLogic.onTurn(turn);
     }
 
     public void onShoot()
     {
-
+        gameLogic.onShoot();
     }
 
     public void onPause()
     {
-
+        gameLogic.onPause();
     }
 }
