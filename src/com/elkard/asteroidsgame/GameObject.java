@@ -51,4 +51,9 @@ public class GameObject {
         position = new Vec2(0, 0);
         rotation = 0;
     }
+
+    public void update(float delta)
+    {
+
+    }
 }

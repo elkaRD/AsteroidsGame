@@ -17,16 +17,47 @@ public class AsteroidsGame implements IGameController{
         gameRenderer = new GameRenderer(this);
     }
 
+    public GameLogic getGameLogic()
+    {
+        return gameLogic;
+    }
+
     public void run() {
         System.out.println("Game started");
 
         gameRenderer.showWindow();
 
+        long lastTime = System.nanoTime();
+
+        long prevTime = System.currentTimeMillis();
+
         while (true) {
+//            long time = System.nanoTime();
+//            int deltaMillis = (int) ((time - lastTime) / 1000000);
+//            float deltaTime = (float) deltaMillis / 1000.0f;
+//            lastTime = time;
+
+            long curTime = System.currentTimeMillis();
+            long elapsedTimeMillis = curTime - prevTime;
+            float deltaTime = elapsedTimeMillis/1000F;
+            prevTime = curTime;
+
+            if (deltaTime < 0.013f) {
+                try {
+                    int toSleep  = (int) (13 - deltaTime * 1000);
+                    Thread.sleep(toSleep);
+
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
             handleInput();
-            gameLogic.onUpdate(0.016f);
-            gameRenderer.onUpdate(0.016f);
+            gameLogic.onUpdate(deltaTime);
+            gameRenderer.onUpdate(deltaTime);
             Debug.FlushLog();
+
+            //System.out.println("delta time: " + deltaTime);
         }
     }
 

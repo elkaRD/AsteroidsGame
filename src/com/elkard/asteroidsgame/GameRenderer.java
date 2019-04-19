@@ -5,6 +5,7 @@ import jdk.internal.util.xml.impl.Input;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 public class GameRenderer extends JFrame
@@ -25,6 +26,9 @@ public class GameRenderer extends JFrame
 
     public Boolean isKeyPressed = false;
 
+    private Image strona;
+    private Graphics g_str;
+
     public GameRenderer(AsteroidsGame ag)
     {
         gameEngine = ag;
@@ -43,21 +47,83 @@ public class GameRenderer extends JFrame
 //            }
 //        });
 
+        int w = getWidth();
+        int h = getHeight();
+
+
 
     }
+
+//    int counter = 0;
 
     public void onUpdate(float deltaTime)
     {
+//        counter++;
+//        if(counter == 20) {
+//            revalidate();
+//            repaint();
+//            counter = 0;
+//        }
 
+        revalidate();
+        repaint();
+    }
+
+    public void paint(Graphics g) {
+        //super.paint(g);  // fixes the immediate problem.
+
+        if (strona == null)
+        {
+            strona = createImage(getWidth(), getHeight());
+            g_str=strona.getGraphics();
+
+            System.out.println("object strona was null");
+        }
+
+        Vec2 pos = gameEngine.getGameLogic().getPlayer().getPosition();
+        float rot = gameEngine.getGameLogic().getPlayer().getRotation();
+
+//        printMsg("player: " + pos + rot);
+        //System.out.println("player: " + pos +", " + rot);
+
+        //Graphics2D g2 = (Graphics2D) g;
+        Graphics g2 = g_str;
+        //Line2D lin = new Line2D.Float(100, 100, 250, 260);
+        //Line2D lin = new Line2D.Float(pos.x + 500, pos.y + 500, 250, 260);
+        //g2.draw(lin);
+        g2.drawLine((int)(pos.x + 500), (int)(pos.y + 500), 250, 260);
+
+        Vec2[] p = gameEngine.getGameLogic().getPlayer().getRenderPoints();
+
+        for (int i = 0; i < p.length; i++)
+        {
+            int j = i % p.length;
+            //System.out.println("render point " + i + ": " + p[i]);
+            g2.drawLine((int) p[i].x, (int) p[i].y, (int) p[j].x, (int) p[j].y);
+        }
+
+        //g.drawRect(0, 0, 30, 50);
+
+        g.drawImage(strona, 0, 0, this);
     }
 
     public ArrayList<String> list = new ArrayList<String>();
+
+    private JLabel debugBox;
+
+    public void printMsg(String msg)
+    {
+        debugBox.setText("msg: " + msg);
+    }
 
     private void buildWindow(int w, int h)
     {
         JPanel panel = new JPanel();
         getContentPane().add(panel);
         setSize(w, h);
+
+        debugBox = new JLabel("DebugBox: ");
+        getContentPane().add(debugBox);
 
 
         playButton = new JButton("Play");
@@ -109,6 +175,8 @@ public class GameRenderer extends JFrame
 
         //addKeyListener(new KeyCheck(this));
         //addKeyListener(keyCheck);
+
+
 
     }
 

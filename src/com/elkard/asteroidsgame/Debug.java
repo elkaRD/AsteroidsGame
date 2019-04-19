@@ -13,12 +13,12 @@ public class Debug
 
     public static void FlushLog()
     {
-        System.out.println("trying to print all data");
-        if (data.length() > 0) {
-            System.out.println("trying to print all data");
-            System.out.println(data);
-            System.out.println("Printed all data ");
-            data = "";
-        }
+//        System.out.println("trying to print all data");
+//        if (data.length() > 0) {
+//            System.out.println("trying to print all data");
+//            System.out.println(data);
+//            System.out.println("Printed all data ");
+//            data = "";
+//        }
     }
 }

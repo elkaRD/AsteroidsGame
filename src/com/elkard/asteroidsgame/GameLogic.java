@@ -41,7 +41,7 @@ public class GameLogic {
 
     public void onUpdate(float deltaTime)
     {
-
+        player.update(deltaTime);
     }
 
     public void startGame()
@@ -70,12 +70,12 @@ public class GameLogic {
     public void onSlowDown(float force)
     {
         Debug.Log("slowing down");
+        player.onSlowDown(force);
     }
 
     public void onTurn(float turn)
     {
-        if (turn != 0)
-            Debug.Log("turning" + turn);
+        player.onRotate(turn);
     }
 
     public void onShoot()
