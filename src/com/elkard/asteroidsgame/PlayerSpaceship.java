@@ -7,14 +7,23 @@ import java.util.List;
 public class PlayerSpaceship extends GameObject implements IControllable {
 
     private Vec2 curVelocity;
-    private float accelarationFactor = 1f;
-    private float frictionFactor = 0.999f;
+    private float accelarationFactor = 300f;
+    private float frictionFactor = 0.995f;
     private float slowingDownFactor = 0.5f;
+    private float rotationFactor = 100f;
 
+    private int resetX;
+    private int resetY;
 
+    private float lastAccelerate;
+    private float lastSlowDown;
+    private float lastRotate;
+    private boolean lastShoot;
 
-    public PlayerSpaceship()
+    public PlayerSpaceship(GameLogic gl)
     {
+        resetX = gl.getWidth() / 2;
+        resetY = gl.getHeight() / 2;
         reset();
     }
 
@@ -22,25 +31,38 @@ public class PlayerSpaceship extends GameObject implements IControllable {
     {
         curVelocity = new Vec2(0, 0);
         resetTransform();
+
+        setPosition(resetX, resetY);
     }
 
     public void onAccelerate(float force)
     {
-        Vec2 deltaVelocity = new Vec2();
-        deltaVelocity.x = (float) Math.cos(Math.toRadians(getRotation())) * accelarationFactor * force;
-        deltaVelocity.y = (float) Math.sin(Math.toRadians(getRotation())) * accelarationFactor * force;
+//        Vec2 deltaVelocity = new Vec2();
+//        deltaVelocity.x = (float) Math.cos(Math.toRadians(getRotation())) * accelarationFactor * force;
+//        deltaVelocity.y = (float) Math.sin(Math.toRadians(getRotation())) * accelarationFactor * force;
+//
+//        curVelocity.add(deltaVelocity);
 
-        curVelocity.add(deltaVelocity);
+        lastAccelerate = force;
     }
 
     public void onSlowDown(float force)
     {
-        onAccelerate(-force * slowingDownFactor);
+//        onAccelerate(-force * slowingDownFactor);
+
+        lastSlowDown = force;
     }
 
     public void onRotate(float turn)
     {
-        updateRotation(turn);
+//        updateRotation(turn * rotateFactor);
+
+        lastRotate = turn;
+    }
+
+    public void onShoot()
+    {
+        lastShoot = true;
     }
 
     public boolean checkCollision(Asteroid asteroid)
@@ -52,10 +74,36 @@ public class PlayerSpaceship extends GameObject implements IControllable {
     @Override
     public void update(float delta)
     {
-        curVelocity.mul(frictionFactor);
-        move(Vec2.multiply(curVelocity, delta));
+//        curVelocity.mul(frictionFactor);
+//        move(Vec2.multiply(curVelocity, delta));
 //        System.out.println("Cur velocity: " + curVelocity);
         //System.out.println("cur pos: " + getPosition());
+
+        updateShipVelocity(delta);
+        updateShipPosition(delta);
+        updateShipRotation(delta);
+    }
+
+    private void updateShipVelocity(float delta)
+    {
+        lastAccelerate *= delta;
+
+        Vec2 deltaVelocity = new Vec2();
+        deltaVelocity.x = (float) Math.cos(Math.toRadians(getRotation())) * accelarationFactor * lastAccelerate;
+        deltaVelocity.y = (float) Math.sin(Math.toRadians(getRotation())) * accelarationFactor * lastAccelerate;
+
+        curVelocity.add(deltaVelocity);
+        curVelocity.mul(frictionFactor);
+    }
+
+    private void updateShipPosition(float delta)
+    {
+        move(Vec2.multiply(curVelocity, delta));
+    }
+
+    private void updateShipRotation(float delta)
+    {
+        updateRotation(lastRotate * rotationFactor * delta);
     }
 
     public Vec2[] getRenderPoints()
@@ -64,16 +112,16 @@ public class PlayerSpaceship extends GameObject implements IControllable {
         float[] pointDst = new float[4];
         float[] pointRot = new float[4];
 
-        pointDst[0] = 100;  pointRot[0] = 0;
-        pointDst[1] = 50;   pointRot[1] = 150;
-        pointDst[2] = 10;   pointRot[2] = 180;
-        pointDst[3] = 50;   pointRot[3] = -150;
+        pointDst[0] = 50;   pointRot[0] = 0;
+        pointDst[1] = 25;   pointRot[1] = 135;
+        pointDst[2] = 5;    pointRot[2] = 180;
+        pointDst[3] = 25;   pointRot[3] = -135;
 
         for (int i = 0; i < 4; i++)
         {
             renderPoints[i] = new Vec2(getPosition());
-            renderPoints[i].x += (float) Math.cos(Math.toRadians(pointRot[i])) * pointDst[i];
-            renderPoints[i].y += (float) Math.sin(Math.toRadians(pointRot[i])) * pointDst[i];
+            renderPoints[i].x += (float) Math.cos(Math.toRadians(pointRot[i] + getRotation())) * pointDst[i];
+            renderPoints[i].y += (float) Math.sin(Math.toRadians(pointRot[i] + getRotation())) * pointDst[i];
         }
 
         //return new ArrayList<Vec2>(Arrays.asList(renderPoints));

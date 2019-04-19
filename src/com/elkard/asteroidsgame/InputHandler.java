@@ -85,8 +85,8 @@ public class InputHandler implements IInputHandler
         if (slowDownPressed) asteroidsGame.onSlowDown(1.0f);
 
         float turnFactor = 0f;
-        if (leftTurnPressed) turnFactor += 1f;
-        if (rightTurnPressed) turnFactor -= 1f;
+        if (leftTurnPressed) turnFactor -= 1f;
+        if (rightTurnPressed) turnFactor += 1f;
         asteroidsGame.onTurn(turnFactor);
 
         if (pressedShoot)

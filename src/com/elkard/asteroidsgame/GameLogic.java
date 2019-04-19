@@ -18,6 +18,19 @@ public class GameLogic {
     private float slowDownForce = 0;
     private float turnForce = 0;
 
+    private int screenWidth = 1280;
+    private int screenHeight = 720;
+
+    public int getWidth()
+    {
+        return screenWidth;
+    }
+
+    public int getHeight()
+    {
+        return screenHeight;
+    }
+
 //    public enum MenuButton{
 //        PLAY,
 //        EXIT,
@@ -36,7 +49,7 @@ public class GameLogic {
     private GameState curState = GameState.MAINMENU;
 
     public GameLogic() {
-        player = new PlayerSpaceship();
+        player = new PlayerSpaceship(this);
     }
 
     public void onUpdate(float deltaTime)
