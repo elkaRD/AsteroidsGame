@@ -95,4 +95,9 @@ public final class Vec2 {
     public String toString() {
         return new String("(" + x + ", " + y + ")");
     }
+
+    public Vec2 clone()
+    {
+        return new Vec2(this);
+    }
 }

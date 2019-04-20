@@ -20,8 +20,14 @@ public class PlayerSpaceship extends GameObject implements IControllable {
     private float lastRotate;
     private boolean lastShoot;
 
+    private Weapon curWeapon;
+
     public PlayerSpaceship(GameLogic gl)
     {
+        super(gl);
+
+        curWeapon = new StandardWeapon(gameEngine, this);
+
         resetX = gl.getWidth() / 2;
         resetY = gl.getHeight() / 2;
         reset();
@@ -63,6 +69,7 @@ public class PlayerSpaceship extends GameObject implements IControllable {
     public void onShoot()
     {
         lastShoot = true;
+        System.out.println("player: " + getPosition() + ",  " + getRotation());
     }
 
     public boolean checkCollision(Asteroid asteroid)
@@ -82,6 +89,10 @@ public class PlayerSpaceship extends GameObject implements IControllable {
         updateShipVelocity(delta);
         updateShipPosition(delta);
         updateShipRotation(delta);
+        updateShipWeapon(delta);
+
+//        System.out.println("PLAYER: " + getPosition() + ",    " + getRotation());
+//        System.out.println("WEAPON: " + curWeapon.getPosition() + ",    " + getRotation());
     }
 
     private void updateShipVelocity(float delta)
@@ -106,9 +117,20 @@ public class PlayerSpaceship extends GameObject implements IControllable {
         updateRotation(lastRotate * rotationFactor * delta);
     }
 
+    private void updateShipWeapon(float delta)
+    {
+        if (lastShoot)
+        {
+            System.out.println("shoot a bullet");
+            lastShoot = false;
+            curWeapon.onShoot();
+        }
+    }
+
     public Vec2[] getRenderPoints()
     {
-        Vec2[] renderPoints = new Vec2[4];
+        //TODO: just for debugging
+        Vec2[] renderPoints = new Vec2[5];
         float[] pointDst = new float[4];
         float[] pointRot = new float[4];
 
@@ -123,6 +145,8 @@ public class PlayerSpaceship extends GameObject implements IControllable {
             renderPoints[i].x += (float) Math.cos(Math.toRadians(pointRot[i] + getRotation())) * pointDst[i];
             renderPoints[i].y += (float) Math.sin(Math.toRadians(pointRot[i] + getRotation())) * pointDst[i];
         }
+
+        renderPoints[4] = curWeapon.getPosition();
 
         //return new ArrayList<Vec2>(Arrays.asList(renderPoints));
         return renderPoints;

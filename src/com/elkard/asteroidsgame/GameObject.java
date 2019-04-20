@@ -2,17 +2,26 @@ package com.elkard.asteroidsgame;
 
 public class GameObject {
 
-    private Vec2 position;
+    private Vec2 position = new Vec2();
     private float rotation;
-    private String name;
+    private String name = "";
 
-    public GameObject() {
+    protected GameLogic gameEngine;
 
+    public GameObject(GameLogic gl)
+    {
+        gameEngine = gl;
+        gameEngine.registerObject(this);
+    }
+
+    public void cleanUp()
+    {
+        gameEngine.removeObject(this);
     }
 
     public void setPosition(Vec2 newPosition)
     {
-        position = newPosition;
+        position = new Vec2(newPosition);
     }
 
     public void setPosition(float x, float y)
@@ -26,7 +35,7 @@ public class GameObject {
     }
 
     public Vec2 getPosition() {
-        return position;
+        return new Vec2(position);
     }
 
     public void setRotation(float newRotation) {
@@ -56,4 +65,19 @@ public class GameObject {
     {
 
     }
+
+    //TODO: think about this concept
+//    protected Vec2[] renderPoints()
+//    {
+//
+//    }
+//
+//    public Vec2[] getRenderPoints()
+//    {
+//        Vec2[] renderPoints = renderPoints();
+//        for (Vec2 p : renderPoints)
+//            p.add(getPosition());
+//
+//
+//    }
 }

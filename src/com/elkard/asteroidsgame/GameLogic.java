@@ -1,5 +1,8 @@
 package com.elkard.asteroidsgame;
 
+import java.awt.image.AreaAveragingScaleFilter;
+import java.util.ArrayList;
+
 public class GameLogic {
 
     private PlayerSpaceship player;
@@ -20,6 +23,11 @@ public class GameLogic {
 
     private int screenWidth = 1280;
     private int screenHeight = 720;
+
+    private ArrayList<Bullet> bullets = new ArrayList<>();
+    private ArrayList<GameObject> gameObjects = new ArrayList<>();
+    private ArrayList<GameObject> newObjects = new ArrayList<>();
+    private ArrayList<GameObject> objectsToRemove = new ArrayList<>();
 
     public int getWidth()
     {
@@ -54,7 +62,22 @@ public class GameLogic {
 
     public void onUpdate(float deltaTime)
     {
-        player.update(deltaTime);
+//        player.update(deltaTime);
+//
+//        for (GameObject go : bullets)
+//            go.update(deltaTime);
+
+        for (GameObject go : gameObjects)
+            go.update(deltaTime);
+
+        for (GameObject go : newObjects)
+            gameObjects.add(go);
+
+        for (GameObject go : objectsToRemove)
+            gameObjects.remove(go);
+
+        newObjects.clear();
+        objectsToRemove.clear();
     }
 
     public void startGame()
@@ -94,6 +117,7 @@ public class GameLogic {
     public void onShoot()
     {
         Debug.Log("shoot");
+        player.onShoot();
     }
 
     private void onDeath()
@@ -214,5 +238,43 @@ public class GameLogic {
     private void changedUpdate()
     {
 
+    }
+
+    public void addBullet(Bullet bullet)
+    {
+        bullets.add(bullet);
+    }
+
+    public void removeBullet(Bullet bullet)
+    {
+        bullets.remove(bullet);
+    }
+
+    public Vec2[] getBulletsRenderPoints()
+    {
+        ArrayList<Vec2> renderPoints = new ArrayList<>();
+        for (Bullet bullet : bullets)
+        {
+            Vec2[] temp = bullet.getRenderPoints();
+            renderPoints.add(temp[0]);
+            renderPoints.add(temp[1]);
+        }
+        //TODO: check if this solution works
+
+        Vec2[] toReturn = new Vec2[renderPoints.size()];
+        for (int i = 0; i < renderPoints.size(); i++)
+            toReturn[i] = renderPoints.get(i);
+
+        return toReturn;
+    }
+
+    public void registerObject(GameObject newObject)
+    {
+        newObjects.add(newObject);
+    }
+
+    public void removeObject(GameObject toRemove)
+    {
+        objectsToRemove.add(toRemove);
     }
 }

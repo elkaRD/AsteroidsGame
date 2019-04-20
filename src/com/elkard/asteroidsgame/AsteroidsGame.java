@@ -52,6 +52,8 @@ public class AsteroidsGame implements IGameController{
                 }
             }
 
+            if (deltaTime > 0.25f) deltaTime = 0.25f;
+
             handleInput();
             gameLogic.onUpdate(deltaTime);
             gameRenderer.onUpdate(deltaTime);

@@ -84,7 +84,7 @@ public class GameRenderer extends JFrame
         float rot = gameEngine.getGameLogic().getPlayer().getRotation();
 
 //        printMsg("player: " + pos + rot);
-        System.out.println("player: " + pos +", " + rot);
+        //System.out.println("player: " + pos +", " + rot);
 
         //Graphics2D g2 = (Graphics2D) g;
         g_str.clearRect(0, 0, getWidth(), getHeight());
@@ -99,8 +99,15 @@ public class GameRenderer extends JFrame
         for (int i = 0; i < p.length; i++)
         {
             int j = (i+1) % p.length;
-            System.out.println("render point " + i + ": " + p[i]);
+            //System.out.println("render point " + i + ": " + p[i]);
             g2.drawLine((int) p[i].x, (int) p[i].y, (int) p[j].x, (int) p[j].y);
+        }
+
+        Vec2[] b = gameEngine.getGameLogic().getBulletsRenderPoints();
+
+        for (int i = 0; i < b.length; i += 2)
+        {
+            g2.drawLine((int) b[i].x, (int) b[i].y, (int) b[i+1].x, (int) b[i+1].y);
         }
 
         //g.drawRect(0, 0, 30, 50);
