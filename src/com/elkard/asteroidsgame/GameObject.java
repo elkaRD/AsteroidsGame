@@ -67,17 +67,33 @@ public class GameObject {
     }
 
     //TODO: think about this concept
-//    protected Vec2[] renderPoints()
-//    {
-//
-//    }
-//
-//    public Vec2[] getRenderPoints()
-//    {
-//        Vec2[] renderPoints = renderPoints();
-//        for (Vec2 p : renderPoints)
-//            p.add(getPosition());
-//
-//
-//    }
+    protected PolarLayout[] renderPoints()
+    {
+        return null;
+    }
+
+    public final Line[] getRenderLines()
+    {
+        PolarLayout[] definedPoints = renderPoints();
+        Vec2[] renderPoints = new Vec2[definedPoints.length];
+        Line[] renderLines = new Line[definedPoints.length];
+
+        for (int i = 0; i < renderPoints.length; i++)
+        {
+            renderPoints[i] = new Vec2(getPosition());
+            renderPoints[i].x += (float) Math.cos(Math.toRadians(definedPoints[i].rot + getRotation())) * definedPoints[i].dst;
+            renderPoints[i].y += (float) Math.sin(Math.toRadians(definedPoints[i].rot + getRotation())) * definedPoints[i].dst;
+        }
+
+        for (int i = 0; i < renderLines.length; i++)
+        {
+
+            int j = (i+1) % renderLines.length;
+            renderLines[i] = new Line();
+            renderLines[i].b = renderPoints[i];
+            renderLines[i].e = renderPoints[j];
+        }
+
+        return renderLines;
+    }
 }

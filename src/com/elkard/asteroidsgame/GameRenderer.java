@@ -1,5 +1,6 @@
 package com.elkard.asteroidsgame;
 
+import com.sun.org.apache.xml.internal.serialize.LineSeparator;
 import jdk.internal.util.xml.impl.Input;
 
 import javax.swing.*;
@@ -83,34 +84,37 @@ public class GameRenderer extends JFrame
         Vec2 pos = gameEngine.getGameLogic().getPlayer().getPosition();
         float rot = gameEngine.getGameLogic().getPlayer().getRotation();
 
-//        printMsg("player: " + pos + rot);
-        //System.out.println("player: " + pos +", " + rot);
-
-        //Graphics2D g2 = (Graphics2D) g;
         g_str.clearRect(0, 0, getWidth(), getHeight());
         Graphics g2 = g_str;
-        //Line2D lin = new Line2D.Float(100, 100, 250, 260);
-        //Line2D lin = new Line2D.Float(pos.x + 500, pos.y + 500, 250, 260);
-        //g2.draw(lin);
-        g2.drawLine((int)(pos.x + 500), (int)(pos.y + 500), 250, 260);
 
-        Vec2[] p = gameEngine.getGameLogic().getPlayer().getRenderPoints();
+//        Vec2[] p = gameEngine.getGameLogic().getPlayer().getRenderPoints();
+//
+//        for (int i = 0; i < p.length; i++)
+//        {
+//            int j = (i+1) % p.length;
+//            g2.drawLine((int) p[i].x, (int) p[i].y, (int) p[j].x, (int) p[j].y);
+//        }
+//
+//        Vec2[] b = gameEngine.getGameLogic().getBulletsRenderPoints();
+//
+//        for (int i = 0; i < b.length; i += 2)
+//        {
+//            g2.drawLine((int) b[i].x, (int) b[i].y, (int) b[i+1].x, (int) b[i+1].y);
+//        }
 
-        for (int i = 0; i < p.length; i++)
+        Line[] p = gameEngine.getGameLogic().getPlayer().getRenderLines();
+
+        for (Line line : p)
         {
-            int j = (i+1) % p.length;
-            //System.out.println("render point " + i + ": " + p[i]);
-            g2.drawLine((int) p[i].x, (int) p[i].y, (int) p[j].x, (int) p[j].y);
+            g2.drawLine((int) line.b.x, (int) line.b.y, (int) line.e.x, (int) line.e.y);
         }
 
-        Vec2[] b = gameEngine.getGameLogic().getBulletsRenderPoints();
+        Line[] b = gameEngine.getGameLogic().getBulletsRenderLines();
 
-        for (int i = 0; i < b.length; i += 2)
+        for (Line line : b)
         {
-            g2.drawLine((int) b[i].x, (int) b[i].y, (int) b[i+1].x, (int) b[i+1].y);
+            g2.drawLine((int) line.b.x, (int) line.b.y, (int) line.e.x, (int) line.e.y);
         }
-
-        //g.drawRect(0, 0, 30, 50);
 
         g.drawImage(strona, 0, 0, this);
     }

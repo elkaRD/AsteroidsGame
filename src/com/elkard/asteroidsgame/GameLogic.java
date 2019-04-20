@@ -250,20 +250,20 @@ public class GameLogic {
         bullets.remove(bullet);
     }
 
-    public Vec2[] getBulletsRenderPoints()
+    public Line[] getBulletsRenderLines()
     {
-        ArrayList<Vec2> renderPoints = new ArrayList<>();
+        ArrayList<Line> renderLines = new ArrayList<>();
         for (Bullet bullet : bullets)
         {
-            Vec2[] temp = bullet.getRenderPoints();
-            renderPoints.add(temp[0]);
-            renderPoints.add(temp[1]);
+            Line[] temp = bullet.getRenderLines();
+            renderLines.add(temp[0]);
+            renderLines.add(temp[1]);
         }
         //TODO: check if this solution works
 
-        Vec2[] toReturn = new Vec2[renderPoints.size()];
-        for (int i = 0; i < renderPoints.size(); i++)
-            toReturn[i] = renderPoints.get(i);
+        Line[] toReturn = new Line[renderLines.size()];
+        for (int i = 0; i < renderLines.size(); i++)
+            toReturn[i] = renderLines.get(i);
 
         return toReturn;
     }

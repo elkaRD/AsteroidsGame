@@ -60,17 +60,30 @@ public class Bullet extends GameObject
 
     }
 
-    public Vec2[] getRenderPoints()
+//    public Vec2[] getRenderPoints()
+//    {
+//        Vec2[] renderPoints = new Vec2[2];
+//        renderPoints[0] = new Vec2(getPosition());
+//        renderPoints[1] = new Vec2(Vec2.sub(getPosition(), Vec2.mul(bulletDirection, bulletLen)));
+//
+//        if (counter > 0)
+//        {
+//            System.out.println("another debug: " + renderPoints[0]);
+//        }
+//
+//        return renderPoints;
+//    }
+
+    protected PolarLayout[] renderPoints()
     {
-        Vec2[] renderPoints = new Vec2[2];
-        renderPoints[0] = new Vec2(getPosition());
-        renderPoints[1] = new Vec2(Vec2.sub(getPosition(), Vec2.mul(bulletDirection, bulletLen)));
+        PolarLayout[] points = new PolarLayout[2];
 
-        if (counter > 0)
-        {
-            System.out.println("another debug: " + renderPoints[0]);
-        }
+        for (int i = 0; i < 2; i++)
+            points[i] = new PolarLayout();
 
-        return renderPoints;
+        points[0].dst = 0;      points[0].rot = 0;
+        points[1].dst = 20;     points[1].rot = 180;
+
+        return points;
     }
 }

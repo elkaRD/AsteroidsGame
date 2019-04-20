@@ -1,5 +1,6 @@
 package com.elkard.asteroidsgame;
 
+import java.security.PolicySpi;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -127,28 +128,37 @@ public class PlayerSpaceship extends GameObject implements IControllable {
         }
     }
 
-    public Vec2[] getRenderPoints()
+    protected PolarLayout[] renderPoints()
     {
-        //TODO: just for debugging
-        Vec2[] renderPoints = new Vec2[5];
-        float[] pointDst = new float[4];
-        float[] pointRot = new float[4];
+//        Vec2[] renderPoints = new Vec2[4];
+//        float[] pointDst = new float[4];
+//        float[] pointRot = new float[4];
+//
+//        pointDst[0] = 50;   pointRot[0] = 0;
+//        pointDst[1] = 25;   pointRot[1] = 135;
+//        pointDst[2] = 5;    pointRot[2] = 180;
+//        pointDst[3] = 25;   pointRot[3] = -135;
+//
+//        for (int i = 0; i < 4; i++)
+//        {
+//            renderPoints[i] = new Vec2(getPosition());
+//            renderPoints[i].x += (float) Math.cos(Math.toRadians(pointRot[i] + getRotation())) * pointDst[i];
+//            renderPoints[i].y += (float) Math.sin(Math.toRadians(pointRot[i] + getRotation())) * pointDst[i];
+//        }
+//
+//        //return new ArrayList<Vec2>(Arrays.asList(renderPoints));
+//        return renderPoints;
 
-        pointDst[0] = 50;   pointRot[0] = 0;
-        pointDst[1] = 25;   pointRot[1] = 135;
-        pointDst[2] = 5;    pointRot[2] = 180;
-        pointDst[3] = 25;   pointRot[3] = -135;
+        PolarLayout[] points = new PolarLayout[4];
 
         for (int i = 0; i < 4; i++)
-        {
-            renderPoints[i] = new Vec2(getPosition());
-            renderPoints[i].x += (float) Math.cos(Math.toRadians(pointRot[i] + getRotation())) * pointDst[i];
-            renderPoints[i].y += (float) Math.sin(Math.toRadians(pointRot[i] + getRotation())) * pointDst[i];
-        }
+            points[i] = new PolarLayout();
 
-        renderPoints[4] = curWeapon.getPosition();
+        points[0].dst = 50;     points[0].rot = 0;
+        points[1].dst = 25;     points[1].rot = 135;
+        points[2].dst = 5;      points[2].rot = 180;
+        points[3].dst = 25;     points[3].rot = -135;
 
-        //return new ArrayList<Vec2>(Arrays.asList(renderPoints));
-        return renderPoints;
+        return points;
     }
 }
