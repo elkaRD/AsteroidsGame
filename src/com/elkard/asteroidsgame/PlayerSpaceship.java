@@ -82,6 +82,8 @@ public class PlayerSpaceship extends GameObject implements IControllable {
     @Override
     public void update(float delta)
     {
+        super.update(delta);
+
 //        curVelocity.mul(frictionFactor);
 //        move(Vec2.multiply(curVelocity, delta));
 //        System.out.println("Cur velocity: " + curVelocity);

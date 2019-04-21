@@ -49,6 +49,8 @@ public class Bullet extends GameObject
 
     public void update(float delta)
     {
+        super.update(delta);
+
         move(Vec2.mul(bulletVelocity, delta));
         //setPosition(debug.getPosition());
 

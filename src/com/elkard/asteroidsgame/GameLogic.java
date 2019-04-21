@@ -21,8 +21,8 @@ public class GameLogic {
     private float slowDownForce = 0;
     private float turnForce = 0;
 
-    private int screenWidth = 1280;
-    private int screenHeight = 720;
+    public final int screenWidth = 1280;
+    public final int screenHeight = 720;
 
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
@@ -68,7 +68,7 @@ public class GameLogic {
 //            go.update(deltaTime);
 
         for (GameObject go : gameObjects)
-            go.update(deltaTime);
+            go.updateObject(deltaTime);
 
         for (GameObject go : newObjects)
             gameObjects.add(go);
