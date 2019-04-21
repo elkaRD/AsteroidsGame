@@ -84,18 +84,10 @@ public class PlayerSpaceship extends GameObject implements IControllable {
     {
         super.update(delta);
 
-//        curVelocity.mul(frictionFactor);
-//        move(Vec2.multiply(curVelocity, delta));
-//        System.out.println("Cur velocity: " + curVelocity);
-        //System.out.println("cur pos: " + getPosition());
-
         updateShipVelocity(delta);
         updateShipPosition(delta);
         updateShipRotation(delta);
         updateShipWeapon(delta);
-
-//        System.out.println("PLAYER: " + getPosition() + ",    " + getRotation());
-//        System.out.println("WEAPON: " + curWeapon.getPosition() + ",    " + getRotation());
     }
 
     private void updateShipVelocity(float delta)
@@ -132,25 +124,6 @@ public class PlayerSpaceship extends GameObject implements IControllable {
 
     protected PolarLayout[] renderPoints()
     {
-//        Vec2[] renderPoints = new Vec2[4];
-//        float[] pointDst = new float[4];
-//        float[] pointRot = new float[4];
-//
-//        pointDst[0] = 50;   pointRot[0] = 0;
-//        pointDst[1] = 25;   pointRot[1] = 135;
-//        pointDst[2] = 5;    pointRot[2] = 180;
-//        pointDst[3] = 25;   pointRot[3] = -135;
-//
-//        for (int i = 0; i < 4; i++)
-//        {
-//            renderPoints[i] = new Vec2(getPosition());
-//            renderPoints[i].x += (float) Math.cos(Math.toRadians(pointRot[i] + getRotation())) * pointDst[i];
-//            renderPoints[i].y += (float) Math.sin(Math.toRadians(pointRot[i] + getRotation())) * pointDst[i];
-//        }
-//
-//        //return new ArrayList<Vec2>(Arrays.asList(renderPoints));
-//        return renderPoints;
-
         PolarLayout[] points = new PolarLayout[4];
 
         for (int i = 0; i < 4; i++)

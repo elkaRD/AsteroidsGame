@@ -104,7 +104,6 @@ public class GameObject {
     {
         PolarLayout[] definedPoints = renderPoints();
         Vec2[] renderPoints = new Vec2[definedPoints.length];
-        //Line[] renderLines = new Line[definedPoints.length];
 
         float objectDimension = Collections.max(Arrays.asList(definedPoints)).dst; // actually half of the object dimension
 
@@ -137,18 +136,4 @@ public class GameObject {
 
         return renderLines;
     }
-
-//    private float findObjectDimension(PolarLayout[] points)
-//    {
-//        return Collections.max(points, new Comparator<float>() {
-//            @Override
-//            public int compare(PolarLayout first, PolarLayout second) {
-//                if (first.dst > second.dst)
-//                    return 1;
-//                else if (first.dst < second.dst)
-//                    return -1;
-//                return 0;
-//            }
-//        });
-//    }
 }
