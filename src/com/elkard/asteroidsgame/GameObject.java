@@ -5,13 +5,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
-public class GameObject {
+public class GameObject implements ICollisionable{
 
     private Vec2 position = new Vec2();
     private float rotation;
     private String name = "";
 
     private boolean infinitySpace = true;
+
+    private float halfOfDimension = 0;
 
     protected GameLogic gameEngine;
 
@@ -72,17 +74,19 @@ public class GameObject {
 
     private void checkPosition()
     {
-        while (position.x > gameEngine.screenWidth)
-            position.x -= gameEngine.screenWidth;
+        if (infinitySpace) {
+            while (position.x > gameEngine.screenWidth)
+                position.x -= gameEngine.screenWidth;
 
-        while (position.x < 0)
-            position.x += gameEngine.screenWidth;
+            while (position.x < 0)
+                position.x += gameEngine.screenWidth;
 
-        while (position.y > gameEngine.screenHeight)
-            position.y -= gameEngine.screenHeight;
+            while (position.y > gameEngine.screenHeight)
+                position.y -= gameEngine.screenHeight;
 
-        while (position.y < 0)
-            position.y += gameEngine.screenHeight;
+            while (position.y < 0)
+                position.y += gameEngine.screenHeight;
+        }
     }
 
     public final void updateObject(float delta)
@@ -106,14 +110,21 @@ public class GameObject {
         Vec2[] renderPoints = new Vec2[definedPoints.length];
 
         float objectDimension = Collections.max(Arrays.asList(definedPoints)).dst; // actually half of the object dimension
+        halfOfDimension = objectDimension;
 
         ArrayList<Vec2> positionsToRender = new ArrayList<>();
         positionsToRender.add(position);
 
-        if (position.x < objectDimension) positionsToRender.add(Vec2.add(position, new Vec2(gameEngine.getWidth(), 0)));
-        if (position.y < objectDimension) positionsToRender.add(Vec2.add(position, new Vec2(0, gameEngine.getHeight())));
-        if (position.x > gameEngine.getWidth()-objectDimension) positionsToRender.add(Vec2.add(position, new Vec2(-gameEngine.getWidth(), 0)));
-        if (position.y > gameEngine.getHeight()-objectDimension) positionsToRender.add(Vec2.add(position, new Vec2(0, -gameEngine.getHeight())));
+        if (infinitySpace) {
+            if (position.x < objectDimension)
+                positionsToRender.add(Vec2.add(position, new Vec2(gameEngine.getWidth(), 0)));
+            if (position.y < objectDimension)
+                positionsToRender.add(Vec2.add(position, new Vec2(0, gameEngine.getHeight())));
+            if (position.x > gameEngine.getWidth() - objectDimension)
+                positionsToRender.add(Vec2.add(position, new Vec2(-gameEngine.getWidth(), 0)));
+            if (position.y > gameEngine.getHeight() - objectDimension)
+                positionsToRender.add(Vec2.add(position, new Vec2(0, -gameEngine.getHeight())));
+        }
 
         Line[] renderLines = new Line[definedPoints.length * positionsToRender.size()];
         int linesIter = 0;
@@ -135,5 +146,24 @@ public class GameObject {
         }
 
         return renderLines;
+    }
+
+    public final Line[] getRenderLines(boolean multiplyObjectOnBoundaries)
+    {
+        boolean temp = infinitySpace;
+        infinitySpace = multiplyObjectOnBoundaries;
+        Line[] result = getRenderLines();
+        infinitySpace = temp;
+        return result;
+    }
+
+    public Line[] getCollisionLines()
+    {
+        return getRenderLines(false);
+    }
+
+    public float getCollisionRadius()
+    {
+        return halfOfDimension;
     }
 }

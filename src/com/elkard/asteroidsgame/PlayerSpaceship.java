@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlayerSpaceship extends GameObject implements IControllable {
+public class PlayerSpaceship extends GameObject implements IControllable, ICollisionable {
 
     private Vec2 curVelocity;
     private float accelarationFactor = 300f;

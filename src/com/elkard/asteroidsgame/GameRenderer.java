@@ -116,6 +116,14 @@ public class GameRenderer extends JFrame
             g2.drawLine((int) line.b.x, (int) line.b.y, (int) line.e.x, (int) line.e.y);
         }
 
+        Line[] a = gameEngine.getGameLogic().getAsteroidsRenderLines();
+
+        for (Line line : a)
+        {
+            g2.drawLine((int) line.b.x, (int) line.b.y, (int) line.e.x, (int) line.e.y);
+        }
+
+
         g.drawImage(strona, 0, 0, this);
     }
 

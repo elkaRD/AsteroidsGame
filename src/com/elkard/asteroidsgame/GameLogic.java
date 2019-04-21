@@ -25,6 +25,8 @@ public class GameLogic {
     public final int screenHeight = 720;
 
     private ArrayList<Bullet> bullets = new ArrayList<>();
+    private ArrayList<Asteroid> asteroids = new ArrayList<>();
+
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
     private ArrayList<GameObject> newObjects = new ArrayList<>();
     private ArrayList<GameObject> objectsToRemove = new ArrayList<>();
@@ -56,8 +58,17 @@ public class GameLogic {
 
     private GameState curState = GameState.MAINMENU;
 
-    public GameLogic() {
+    public GameLogic()
+    {
         player = new PlayerSpaceship(this);
+
+        //TODO: remove this; just testing
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 3; j++)
+            {
+                Asteroid temp = new Asteroid(this);
+                temp.setPosition(150 + i*300, 50 + j*200);
+            }
     }
 
     public void onUpdate(float deltaTime)
@@ -250,6 +261,16 @@ public class GameLogic {
         bullets.remove(bullet);
     }
 
+    public void addAsteroid(Asteroid asteroid)
+    {
+        asteroids.add(asteroid);
+    }
+
+    public void removeAsteroid(Asteroid asteroid)
+    {
+        asteroids.remove(asteroid);
+    }
+
     public Line[] getBulletsRenderLines()
     {
         ArrayList<Line> renderLines = new ArrayList<>();
@@ -260,7 +281,26 @@ public class GameLogic {
             renderLines.add(temp[1]);
         }
         //TODO: check if this solution works
+        //TODO: think about switching from arrays to ArrayLists
 
+        Line[] toReturn = new Line[renderLines.size()];
+        for (int i = 0; i < renderLines.size(); i++)
+            toReturn[i] = renderLines.get(i);
+
+        return toReturn;
+    }
+
+    public Line[] getAsteroidsRenderLines()
+    {
+        ArrayList<Line> renderLines = new ArrayList<>();
+        for (Asteroid asteroid : asteroids)
+        {
+            Line[] temp = asteroid.getRenderLines();
+            for (Line line : temp)
+            {
+                renderLines.add(line);
+            }
+        }
         Line[] toReturn = new Line[renderLines.size()];
         for (int i = 0; i < renderLines.size(); i++)
             toReturn[i] = renderLines.get(i);

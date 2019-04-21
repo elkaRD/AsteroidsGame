@@ -11,6 +11,8 @@ public class Bullet extends GameObject
 
     private GameObject debug;
 
+    PolarLayout[] points = new PolarLayout[2];
+
     public Bullet(GameLogic gl, Weapon weapon, float speedMultiplier)
     {
         super(gl);
@@ -31,6 +33,12 @@ public class Bullet extends GameObject
         System.out.println("weapon: " + weapon.getPosition() + ",  " + weapon.getRotation());
 
         debug = weapon;
+
+        for (int i = 0; i < 2; i++)
+            points[i] = new PolarLayout();
+
+        points[0].dst = 0;          points[0].rot = 0;
+        points[1].dst = bulletLen;  points[1].rot = 180;
     }
 
     public Bullet(GameLogic gl, Weapon weapon)
@@ -58,14 +66,8 @@ public class Bullet extends GameObject
 
     protected PolarLayout[] renderPoints()
     {
-        PolarLayout[] points = new PolarLayout[2];
-
-        for (int i = 0; i < 2; i++)
-            points[i] = new PolarLayout();
-
-        points[0].dst = 0;      points[0].rot = 0;
-        points[1].dst = bulletLen;     points[1].rot = 180;
-
         return points;
     }
+
+
 }
