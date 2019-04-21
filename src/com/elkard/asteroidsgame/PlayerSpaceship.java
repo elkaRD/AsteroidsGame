@@ -25,6 +25,8 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
 
     private Weapon curWeapon;
 
+    private static int playersCounter = 0;
+
     public PlayerSpaceship(GameLogic gl)
     {
         super(gl);
@@ -35,6 +37,9 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         resetX = gl.getWidth() / 2;
         resetY = gl.getHeight() / 2;
         reset();
+
+        setName("player" + playersCounter);
+        playersCounter++;
     }
 
     public void reset()

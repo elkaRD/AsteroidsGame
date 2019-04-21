@@ -4,6 +4,8 @@ import java.util.Random;
 
 public class Asteroid extends GameObject implements ICollisionable
 {
+    private static int asteroidsCounter = 0;
+
     private float collisionRadius = 2;
     private float asteroidRadius = 100;
 
@@ -23,6 +25,9 @@ public class Asteroid extends GameObject implements ICollisionable
     public Asteroid(GameLogic gl, Vec2 startPos)
     {
         super(gl);
+
+        setName("asteroid" + asteroidsCounter);
+        asteroidsCounter++;
 
         gameEngine.addAsteroid(this);
 

@@ -1,10 +1,12 @@
 package com.elkard.asteroidsgame;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 
 public class GameLogic {
 
     private PlayerSpaceship player;
+    private Physics physics;
 
     public enum GameState{
         MAINMENU,
@@ -23,8 +25,8 @@ public class GameLogic {
     public final int screenWidth = 1280;
     public final int screenHeight = 720;
 
-    private ArrayList<Bullet> bullets = new ArrayList<>();
-    private ArrayList<Asteroid> asteroids = new ArrayList<>();
+    private ArrayList<GameObject> bullets = new ArrayList<>();
+    private ArrayList<GameObject> asteroids = new ArrayList<>();
 
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
     private ArrayList<GameObject> newObjects = new ArrayList<>();
@@ -61,6 +63,8 @@ public class GameLogic {
     {
         player = new PlayerSpaceship(this);
 
+        launchPhysics();
+
         //TODO: remove this; just testing
 //        for (int i = 0; i < 4; i++)
 //            for (int j = 0; j < 3; j++)
@@ -78,6 +82,13 @@ public class GameLogic {
             pos.y = (float) Math.sin(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
             Asteroid temp = new Asteroid(this, pos);
         }
+    }
+
+    private void launchPhysics()
+    {
+        physics = new Physics(this);
+        physics.addGroupsToCheck(player, asteroids);
+        physics.addGroupsToCheck(bullets, asteroids);
     }
 
     public void onUpdate(float deltaTime)
@@ -98,6 +109,15 @@ public class GameLogic {
 
         newObjects.clear();
         objectsToRemove.clear();
+
+        ICollisionable[] tempArray = new ICollisionable[asteroids.size()];
+        for (int i = 0; i < asteroids.size(); i++)
+        {
+            tempArray[i] = asteroids.get(i);
+        }
+        //physics.checkCollisionWithGroup(player, tempArray);
+
+        physics.updatePhysics(deltaTime);
     }
 
     public void startGame()
@@ -293,7 +313,7 @@ public class GameLogic {
     public Line[] getBulletsRenderLines()
     {
         ArrayList<Line> renderLines = new ArrayList<>();
-        for (Bullet bullet : bullets)
+        for (GameObject bullet : bullets)
         {
             Line[] temp = bullet.getRenderLines();
             renderLines.add(temp[0]);
@@ -312,7 +332,7 @@ public class GameLogic {
     public Line[] getAsteroidsRenderLines()
     {
         ArrayList<Line> renderLines = new ArrayList<>();
-        for (Asteroid asteroid : asteroids)
+        for (GameObject asteroid : asteroids)
         {
             Line[] temp = asteroid.getRenderLines();
             for (Line line : temp)

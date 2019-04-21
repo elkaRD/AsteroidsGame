@@ -64,8 +64,14 @@ public class GameObject implements ICollisionable{
         return rotation;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
+    }
+
+    protected void setName(String newName)
+    {
+        name = newName;
     }
 
     public final float getScale()
@@ -178,5 +184,11 @@ public class GameObject implements ICollisionable{
     public float getCollisionRadius()
     {
         return halfOfDimension;
+    }
+
+    public void onCollisionEnter(ICollisionable other)
+    {
+        GameObject o = (GameObject) other;
+        System.out.println(getName() + ": collision with " + o.getName());
     }
 }

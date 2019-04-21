@@ -1,12 +1,78 @@
 package com.elkard.asteroidsgame;
 
-public class Physics
+import com.sun.tools.corba.se.idl.PragmaEntry;
+import javafx.util.Pair;
+
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReferenceArray;
+
+public final class Physics
 {
     private GameLogic gameEngine;
+
+//    private GameObject player;
+//    private ArrayList<GameObject> asteroids;
+//    private ArrayList<GameObject> bullets;
+
+    private ArrayList<PairOfGruops> pairs = new ArrayList<>();
+
+    private static class PairOfGruops
+    {
+        public PairOfGruops(){}
+        public PairOfGruops(ArrayList<GameObject> group1, ArrayList<GameObject> group2)
+        {
+            g1 = group1;
+            g2 = group2;
+        }
+
+        public ArrayList<GameObject> g1;
+        public ArrayList<GameObject> g2;
+    }
 
     public Physics(GameLogic gl)
     {
         gameEngine = gl;
+    }
+
+    public void updatePhysics(float delta)
+    {
+        for (PairOfGruops pair : pairs)
+        {
+            checkCollisionForGroups(pair.g1, pair.g2);
+        }
+    }
+
+    public void addGroupsToCheck(ArrayList<GameObject> g1, ArrayList<GameObject> g2)
+    {
+        pairs.add(new PairOfGruops(g1, g2));
+    }
+
+    public void addGroupsToCheck(GameObject gameObject, ArrayList<GameObject> g2)
+    {
+        ArrayList<GameObject> temp = new ArrayList<>();
+        temp.add(gameObject);
+        pairs.add(new PairOfGruops(temp, g2));
+    }
+
+//    public void checkCollisionWithGroup(ICollisionable object1, ICollisionable[] group)
+//    {
+//        ICollisionable[] temp = {object1};
+//        checkCollisionForGroups(temp, group);
+//    }
+
+    public void checkCollisionForGroups(ArrayList<GameObject> group1, ArrayList<GameObject> group2)
+    {
+        for (ICollisionable object1 : group1)
+        {
+            for (ICollisionable object2 : group2)
+            {
+                if (checkCollision(object1, object2))
+                {
+                    object1.onCollisionEnter(object2);
+                    object2.onCollisionEnter(object1);
+                }
+            }
+        }
     }
 
     public boolean checkCollision(ICollisionable a, ICollisionable b)
@@ -27,7 +93,7 @@ public class Physics
         return false;
     }
 
-    float iloczyn_wektorowy(Vec2 X, Vec2 Y, Vec2 Z)
+    private float iloczyn_wektorowy(Vec2 X, Vec2 Y, Vec2 Z)
     {
         float x1 = Z.x - X.x, y1 = Z.y - X.y,
                 x2 = Y.x - X.x, y2 = Y.y - X.y;
@@ -35,13 +101,13 @@ public class Physics
     }
     //sprawdzenie, czy punkt Z(koniec odcinka pierwszego)
 //leży na odcinku XY
-    boolean sprawdz(Vec2 X, Vec2 Y, Vec2 Z)
+    private boolean sprawdz(Vec2 X, Vec2 Y, Vec2 Z)
     {
         return Math.min(X.x, Y.x) <= Z.x && Z.x <= Math.max(X.x, Y.x)
                 && Math.min(X.y, Y.y) <= Z.y && Z.y <= Math.max(X.y, Y.y);
     }
 
-    boolean czy_przecinaja(Vec2 A, Vec2 B, Vec2 C, Vec2 D)
+    private boolean doLinesCross(Vec2 A, Vec2 B, Vec2 C, Vec2 D)
     {
         float v1 = iloczyn_wektorowy(C, D, A),
                 v2 = iloczyn_wektorowy(C, D, B),
@@ -66,6 +132,6 @@ public class Physics
 
     private boolean checkCollisionBetweenLines(Line a, Line b)
     {
-        return czy_przecinaja(a.b, a.e, b.b, b.e);
+        return doLinesCross(a.b, a.e, b.b, b.e);
     }
 }
