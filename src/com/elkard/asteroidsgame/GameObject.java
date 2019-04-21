@@ -8,7 +8,9 @@ import java.util.Collections;
 public class GameObject implements ICollisionable{
 
     private Vec2 position = new Vec2();
-    private float rotation;
+    private float rotation = 0f;
+    private float scale = 1f;
+
     private String name = "";
 
     private boolean infinitySpace = true;
@@ -66,10 +68,21 @@ public class GameObject implements ICollisionable{
         return name;
     }
 
+    public final float getScale()
+    {
+        return scale;
+    }
+
+    public final void setScale(float newScale)
+    {
+        scale = newScale;
+    }
+
     public void resetTransform()
     {
         position = new Vec2(0, 0);
         rotation = 0;
+        scale = 1f;
     }
 
     private void checkPosition()
@@ -133,8 +146,8 @@ public class GameObject implements ICollisionable{
 
             for (int i = 0; i < renderPoints.length; i++) {
                 renderPoints[i] = renderPos.clone();
-                renderPoints[i].x += (float) Math.cos(Math.toRadians(definedPoints[i].rot + getRotation())) * definedPoints[i].dst;
-                renderPoints[i].y += (float) Math.sin(Math.toRadians(definedPoints[i].rot + getRotation())) * definedPoints[i].dst;
+                renderPoints[i].x += (float) Math.cos(Math.toRadians(definedPoints[i].rot + getRotation())) * definedPoints[i].dst * scale;
+                renderPoints[i].y += (float) Math.sin(Math.toRadians(definedPoints[i].rot + getRotation())) * definedPoints[i].dst * scale;
             }
 
             for (int i = 0; i < renderPoints.length; i++, linesIter++) {

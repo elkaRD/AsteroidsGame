@@ -1,14 +1,20 @@
 package com.elkard.asteroidsgame;
 
-public class StandardWeapon extends Weapon implements IWeapon
+public class StandardWeapon extends Weapon
 {
     public StandardWeapon(GameLogic gl, GameObject parentObject)
     {
         super(gl, parentObject);
     }
 
-    public void onShoot()
+    public void update(float delta)
     {
-        Bullet temp = new Bullet(gameEngine, this);
+        super.update(delta);
+
+        if (isShooting)
+        {
+            isShooting = false;
+            Bullet temp = new Bullet(gameEngine, this);
+        }
     }
 }

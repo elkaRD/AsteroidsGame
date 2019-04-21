@@ -99,9 +99,19 @@ public class AsteroidsGame implements IGameController{
         gameLogic.onTurn(turn);
     }
 
-    public void onShoot()
+//    public void onSingleShoot()
+//    {
+//        gameLogic.onSingleShoot();
+//    }
+
+    public void onStartShooting()
     {
-        gameLogic.onShoot();
+        gameLogic.onStartShooting();
+    }
+
+    public void onEndShooting()
+    {
+        gameLogic.onEndShooting();
     }
 
     public void onPause()

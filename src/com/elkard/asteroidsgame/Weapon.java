@@ -3,6 +3,7 @@ package com.elkard.asteroidsgame;
 public abstract class Weapon extends GameObject implements IWeapon
 {
     protected GameObject parent;
+    protected boolean isShooting = false;
 
     public Weapon(GameLogic gl, GameObject parentObject)
     {
@@ -15,5 +16,15 @@ public abstract class Weapon extends GameObject implements IWeapon
     {
         setPosition(parent.getPosition());
         setRotation(parent.getRotation());
+    }
+
+    public final void onStartShooting()
+    {
+        isShooting = true;
+    }
+
+    public final void onEndShooting()
+    {
+        isShooting = false;
     }
 }

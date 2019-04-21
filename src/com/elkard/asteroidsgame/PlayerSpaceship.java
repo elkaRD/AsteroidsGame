@@ -20,6 +20,8 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     private float lastSlowDown;
     private float lastRotate;
     private boolean lastShoot;
+    private boolean startedShooting = false;
+    private boolean stoppedShooting = false;
 
     private Weapon curWeapon;
 
@@ -27,7 +29,8 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     {
         super(gl);
 
-        curWeapon = new StandardWeapon(gameEngine, this);
+        //curWeapon = new StandardWeapon(gameEngine, this);
+        curWeapon = new MachineGun(gameEngine, this);
 
         resetX = gl.getWidth() / 2;
         resetY = gl.getHeight() / 2;
@@ -67,10 +70,20 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         lastRotate = turn;
     }
 
-    public void onShoot()
+//    public void onSingleShoot()
+//    {
+//        lastShoot = true;
+//        System.out.println("player: " + getPosition() + ",  " + getRotation());
+//    }
+
+    public void onStartShooting()
     {
-        lastShoot = true;
-        System.out.println("player: " + getPosition() + ",  " + getRotation());
+        startedShooting = true;
+    }
+
+    public void onEndShooting()
+    {
+        stoppedShooting = true;
     }
 
     public boolean checkCollision(Asteroid asteroid)
@@ -114,11 +127,16 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
 
     private void updateShipWeapon(float delta)
     {
-        if (lastShoot)
+        if (startedShooting)
         {
-            System.out.println("shoot a bullet");
-            lastShoot = false;
-            curWeapon.onShoot();
+            startedShooting = false;
+            curWeapon.onStartShooting();
+        }
+
+        if (stoppedShooting)
+        {
+            stoppedShooting = false;
+            curWeapon.onEndShooting();
         }
     }
 

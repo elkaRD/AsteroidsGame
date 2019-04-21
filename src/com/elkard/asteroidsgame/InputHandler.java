@@ -6,9 +6,12 @@ public class InputHandler implements IInputHandler
     private boolean slowDownPressed = false;
     private boolean leftTurnPressed = false;
     private boolean rightTurnPressed = false;
+    private boolean shootHeld = false;
 
     private boolean pressedShoot = false;
     private boolean pressedPause = false;
+
+    private boolean prevShootState = false;
 
 //    public void onAcceleratePressed(boolean isPressed)
 //    {
@@ -60,6 +63,7 @@ public class InputHandler implements IInputHandler
 
             case 32:
                 pressedShoot = isPressed || pressedShoot;
+                shootHeld = isPressed;
                 break;
         }
     }
@@ -89,10 +93,17 @@ public class InputHandler implements IInputHandler
         if (rightTurnPressed) turnFactor += 1f;
         asteroidsGame.onTurn(turnFactor);
 
-        if (pressedShoot)
+//        if (pressedShoot)
+//        {
+//            pressedShoot = false;
+//            asteroidsGame.onSingleShoot();
+//        }
+
+        if (shootHeld != prevShootState)
         {
-            pressedShoot = false;
-            asteroidsGame.onShoot();
+            prevShootState = shootHeld;
+            if (shootHeld) asteroidsGame.onStartShooting();
+            else asteroidsGame.onEndShooting();
         }
 
         if (pressedPause)

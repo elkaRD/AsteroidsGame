@@ -17,15 +17,17 @@ public class Asteroid extends GameObject implements ICollisionable
     private Vec2 velocityDirection;
     private float speed;
 
+    private float[] scaleLevels = {0.7f, 0.4f, 0.25f, 0.1f};
 
-    public Asteroid(GameLogic gl)
+
+    public Asteroid(GameLogic gl, Vec2 startPos)
     {
         super(gl);
 
         gameEngine.addAsteroid(this);
 
-        //TODO: remove this line; it's just for testing
-        setPosition(300, 300);
+        setPosition(startPos);
+        setScale(0.5f);
 
         Random generator = new Random();
         int amountBoundary = generator.nextInt(maxBoundaries - minBoundaries) + minBoundaries;
@@ -47,6 +49,11 @@ public class Asteroid extends GameObject implements ICollisionable
         velocityDirection = new Vec2();
         velocityDirection.x = (float) Math.cos(Math.toRadians(randomDirection));
         velocityDirection.y = (float) Math.sin(Math.toRadians(randomDirection));
+    }
+
+    public Asteroid(GameLogic gl)
+    {
+        this(gl, new Vec2());
     }
 
     protected void cleanup()

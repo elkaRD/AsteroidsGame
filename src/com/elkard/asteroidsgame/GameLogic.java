@@ -1,6 +1,5 @@
 package com.elkard.asteroidsgame;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 
 public class GameLogic {
@@ -63,12 +62,22 @@ public class GameLogic {
         player = new PlayerSpaceship(this);
 
         //TODO: remove this; just testing
-        for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 3; j++)
-            {
-                Asteroid temp = new Asteroid(this);
-                temp.setPosition(150 + i*300, 50 + j*200);
-            }
+//        for (int i = 0; i < 4; i++)
+//            for (int j = 0; j < 3; j++)
+//            {
+//                Asteroid temp = new Asteroid(this);
+//                temp.setPosition(150 + i*300, 50 + j*200);
+//            }
+
+        int amountAsteroids = 5;
+
+        for (int i = 0; i < amountAsteroids; i++)
+        {
+            Vec2 pos = new Vec2(getWidth()/2, getHeight()/2);
+            pos.x = (float) Math.cos(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
+            pos.y = (float) Math.sin(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
+            Asteroid temp = new Asteroid(this, pos);
+        }
     }
 
     public void onUpdate(float deltaTime)
@@ -125,10 +134,20 @@ public class GameLogic {
         player.onRotate(turn);
     }
 
-    public void onShoot()
+//    public void onSingleShoot()
+//    {
+//        Debug.Log("shoot");
+//        player.onSingleShoot();
+//    }
+
+    public void onStartShooting()
     {
-        Debug.Log("shoot");
-        player.onShoot();
+        player.onStartShooting();
+    }
+
+    public void onEndShooting()
+    {
+        player.onEndShooting();
     }
 
     private void onDeath()
