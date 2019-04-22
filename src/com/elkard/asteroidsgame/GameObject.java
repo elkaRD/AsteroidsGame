@@ -48,7 +48,7 @@ public class GameObject implements ICollisionable{
     }
 
     public final Vec2 getPosition() {
-        return new Vec2(position);
+        return position.clone();
     }
 
     public final void setRotation(float newRotation) {
@@ -188,7 +188,7 @@ public class GameObject implements ICollisionable{
 
     public void onCollisionEnter(ICollisionable other)
     {
-        GameObject o = (GameObject) other;
-        System.out.println(getName() + ": collision with " + o.getName());
+//        GameObject o = (GameObject) other;
+//        System.out.println(getName() + ": collision with " + o.getName());
     }
 }

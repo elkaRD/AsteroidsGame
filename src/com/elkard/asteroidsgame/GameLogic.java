@@ -18,10 +18,6 @@ public class GameLogic {
 
     private boolean isPaused = false;
 
-    private float accelerateForce = 0;
-    private float slowDownForce = 0;
-    private float turnForce = 0;
-
     public final int screenWidth = 1280;
     public final int screenHeight = 720;
 
@@ -137,15 +133,11 @@ public class GameLogic {
 
     public void onAccelerate(float force)
     {
-        Debug.Log("accelerating");
-        //accelerateForce = force;
-
         player.onAccelerate(force);
     }
 
     public void onSlowDown(float force)
     {
-        Debug.Log("slowing down");
         player.onSlowDown(force);
     }
 
@@ -153,12 +145,6 @@ public class GameLogic {
     {
         player.onRotate(turn);
     }
-
-//    public void onSingleShoot()
-//    {
-//        Debug.Log("shoot");
-//        player.onSingleShoot();
-//    }
 
     public void onStartShooting()
     {

@@ -166,7 +166,7 @@ public class GameRenderer extends JFrame
             public void keyPressed(KeyEvent event) {
                 if (event.getKeyCode() == KeyEvent.VK_F11 && event.isAltDown()) {
 //                    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-                    System.out.println("pressed");
+                    //System.out.println("pressed");
                 }
 
                 getOuter().inputHandler.onKeyPressed(event.getKeyChar(), true);
@@ -179,7 +179,7 @@ public class GameRenderer extends JFrame
 
             @Override
             public void keyReleased(KeyEvent event) {
-                System.out.println("released");
+                //System.out.println("released");
                 inputHandler.onKeyPressed(event.getKeyChar(), false);
 
                 //getOuter().isKeyPressed = false;
@@ -187,7 +187,7 @@ public class GameRenderer extends JFrame
 
             @Override
             public void keyTyped(KeyEvent e) {
-                System.out.println("typed");
+                //awwSystem.out.println("typed");
             }
         });
 

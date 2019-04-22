@@ -32,7 +32,9 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         super(gl);
 
         //curWeapon = new StandardWeapon(gameEngine, this);
-        curWeapon = new MachineGun(gameEngine, this);
+        //curWeapon = new MachineGun(gameEngine, this);
+        //curWeapon = new ShotGun(gameEngine, this);
+        curWeapon = new RoundGun(gameEngine, this);
 
         resetX = gl.getWidth() / 2;
         resetY = gl.getHeight() / 2;
@@ -52,20 +54,12 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
 
     public void onAccelerate(float force)
     {
-//        Vec2 deltaVelocity = new Vec2();
-//        deltaVelocity.x = (float) Math.cos(Math.toRadians(getRotation())) * accelarationFactor * force;
-//        deltaVelocity.y = (float) Math.sin(Math.toRadians(getRotation())) * accelarationFactor * force;
-//
-//        curVelocity.add(deltaVelocity);
-
-        lastAccelerate = force;
+        lastAccelerate += force;
     }
 
     public void onSlowDown(float force)
     {
-//        onAccelerate(-force * slowingDownFactor);
-
-        lastSlowDown = force;
+        onAccelerate(-force/2);
     }
 
     public void onRotate(float turn)
@@ -75,12 +69,6 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         lastRotate = turn;
     }
 
-//    public void onSingleShoot()
-//    {
-//        lastShoot = true;
-//        System.out.println("player: " + getPosition() + ",  " + getRotation());
-//    }
-
     public void onStartShooting()
     {
         startedShooting = true;
@@ -89,12 +77,6 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     public void onEndShooting()
     {
         stoppedShooting = true;
-    }
-
-    public boolean checkCollision(Asteroid asteroid)
-    {
-        // TODO: fix
-        return false;
     }
 
     @Override
@@ -118,6 +100,8 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
 
         curVelocity.add(deltaVelocity);
         curVelocity.mul(frictionFactor);
+
+        lastAccelerate = 0;
     }
 
     private void updateShipPosition(float delta)
