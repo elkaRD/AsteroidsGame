@@ -15,4 +15,9 @@ public class Line
         b = begOfLine.clone();
         e = endofLine.clone();
     }
+
+    public Vec2 getMiddle()
+    {
+        return Vec2.add(b, e).div(2);
+    }
 }

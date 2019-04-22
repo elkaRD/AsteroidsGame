@@ -3,6 +3,7 @@ package com.elkard.asteroidsgame;
 import com.sun.tools.corba.se.idl.PragmaEntry;
 import javafx.util.Pair;
 
+import javax.crypto.AEADBadTagException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
@@ -59,19 +60,42 @@ public final class Physics
 //        ICollisionable[] temp = {object1};
 //        checkCollisionForGroups(temp, group);
 //    }
+    
+    private class PairOfObjects
+    {
+        public PairOfObjects(){}
+        public PairOfObjects(ICollisionable o1, ICollisionable o2)
+        {
+            go1 = o1;
+            go2 = o2;
+        }
+        public ICollisionable go1;
+        public ICollisionable go2;
+    }
 
     public void checkCollisionForGroups(ArrayList<GameObject> group1, ArrayList<GameObject> group2)
     {
+        ArrayList<PairOfObjects> objectsToNotify = new ArrayList<>();
+        
         for (ICollisionable object1 : group1)
         {
+            if (!object1.isPhysicsEnabled()) continue;
             for (ICollisionable object2 : group2)
             {
+                if (!object2.isPhysicsEnabled()) continue;
                 if (checkCollision(object1, object2))
                 {
-                    object1.onCollisionEnter(object2);
-                    object2.onCollisionEnter(object1);
+//                    object1.onCollisionEnter(object2);
+//                    object2.onCollisionEnter(object1);
+                    objectsToNotify.add(new PairOfObjects(object1, object2));
                 }
             }
+        }
+
+        for (PairOfObjects pair : objectsToNotify)
+        {
+            pair.go1.onCollisionEnter(pair.go2);
+            pair.go2.onCollisionEnter(pair.go1);
         }
     }
 

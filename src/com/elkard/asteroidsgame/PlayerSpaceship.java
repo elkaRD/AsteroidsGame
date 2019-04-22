@@ -31,10 +31,10 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     {
         super(gl);
 
-        //curWeapon = new StandardWeapon(gameEngine, this);
+        curWeapon = new StandardWeapon(gameEngine, this);
         //curWeapon = new MachineGun(gameEngine, this);
         //curWeapon = new ShotGun(gameEngine, this);
-        curWeapon = new RoundGun(gameEngine, this);
+        //curWeapon = new RoundGun(gameEngine, this);
 
         resetX = gl.getWidth() / 2;
         resetY = gl.getHeight() / 2;

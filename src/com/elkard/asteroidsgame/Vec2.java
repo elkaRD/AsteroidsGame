@@ -138,6 +138,16 @@ public final class Vec2 {
         return a.clone().normalize();
     }
 
+    public static Vec2 lerp(Vec2 b, Vec2 e, float s)
+    {
+        return new Vec2(b.x + (e.x - b.x)*s, b.y + (e.y - b.y)*s);
+    }
+
+    public static Vec2 getNormalVector(float angle)
+    {
+        return new Vec2((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle)));
+    }
+
     public String toString() {
         return new String("(" + x + ", " + y + ")");
     }

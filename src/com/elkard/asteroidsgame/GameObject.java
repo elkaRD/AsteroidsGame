@@ -1,9 +1,6 @@
 package com.elkard.asteroidsgame;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 public class GameObject implements ICollisionable{
 
@@ -18,6 +15,13 @@ public class GameObject implements ICollisionable{
     private float halfOfDimension = 0;
 
     protected GameLogic gameEngine;
+
+    private boolean isDestructing = false;
+    private float destructionDuration = 2f;
+    private float destructionTime = 0;
+    private float destructionScale = 100;
+
+    private boolean physicsEnabled = true;
 
     public GameObject(GameLogic gl)
     {
@@ -115,7 +119,11 @@ public class GameObject implements ICollisionable{
 
     public void update(float delta)
     {
-
+        if (isDestructing) {
+            destructionTime += delta;
+            if (destructionTime >= destructionDuration)
+                cleanUp();
+        }
     }
 
     protected PolarLayout[] renderPoints()
@@ -164,6 +172,20 @@ public class GameObject implements ICollisionable{
             }
         }
 
+        if (isDestructing)
+        {
+            Random generator = new Random();
+            float s = destructionTime / destructionDuration;
+            for (Line line : renderLines)
+            {
+                //first king of animation
+                Vec2 destructionVector = line.getMiddle().sub(position).normalize().mul(destructionScale).neg();
+                //Vec2 destructionVector = Vec2.getNormalVector(generator.nextFloat() * 360f).mul(destructionScale);
+                line.b = Vec2.lerp(line.b, Vec2.add(line.b, destructionVector), s);
+                line.e = Vec2.lerp(line.e, Vec2.add(line.e, destructionVector), s);
+            }
+        }
+
         return renderLines;
     }
 
@@ -186,9 +208,36 @@ public class GameObject implements ICollisionable{
         return halfOfDimension;
     }
 
+    public boolean isPhysicsEnabled()
+    {
+        return physicsEnabled;
+    }
+
+    public void enablePhysics(boolean isEnabled)
+    {
+        physicsEnabled = isEnabled;
+    }
+
     public void onCollisionEnter(ICollisionable other)
     {
 //        GameObject o = (GameObject) other;
 //        System.out.println(getName() + ": collision with " + o.getName());
+    }
+
+    protected void animateDestruction(float duration, float destructScale)
+    {
+        destructionDuration = duration;
+        destructionTime = 0;
+        isDestructing = true;
+    }
+
+    protected void animateDestruction(float duration)
+    {
+        animateDestruction(duration, destructionScale);
+    }
+
+    protected void animateDestruction()
+    {
+        animateDestruction(destructionDuration, destructionScale);
     }
 }

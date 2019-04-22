@@ -147,4 +147,11 @@ public class Bullet extends GameObject
         temp[0] = new Line(getPosition(), prevPos);
         return temp;
     }
+
+    @Override
+    public void onCollisionEnter(ICollisionable other) {
+        super.onCollisionEnter(other);
+
+        cleanUp();
+    }
 }

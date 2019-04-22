@@ -19,10 +19,11 @@ public class Asteroid extends GameObject implements ICollisionable
     private Vec2 velocityDirection;
     private float speed;
 
-    private float[] scaleLevels = {0.7f, 0.4f, 0.25f, 0.1f};
+    private static final float[] scaleLevels = {0.7f, 0.4f, 0.25f, 0.1f};
+    private int curScaleLevel;
 
 
-    public Asteroid(GameLogic gl, Vec2 startPos)
+    protected Asteroid(GameLogic gl, Vec2 startPos, int scaleLevel)
     {
         super(gl);
 
@@ -30,9 +31,10 @@ public class Asteroid extends GameObject implements ICollisionable
         asteroidsCounter++;
 
         gameEngine.addAsteroid(this);
+        curScaleLevel = scaleLevel;
 
         setPosition(startPos);
-        setScale(0.5f);
+        setScale(scaleLevels[curScaleLevel]);
 
         Random generator = new Random();
         int amountBoundary = generator.nextInt(maxBoundaries - minBoundaries) + minBoundaries;
@@ -56,9 +58,13 @@ public class Asteroid extends GameObject implements ICollisionable
         velocityDirection.y = (float) Math.sin(Math.toRadians(randomDirection));
     }
 
+    public Asteroid(GameLogic gl, Vec2 startPos) {
+        this(gl, startPos, 0);
+    }
+
     public Asteroid(GameLogic gl)
     {
-        this(gl, new Vec2());
+        this(gl, new Vec2(), 0);
     }
 
     protected void cleanup()
@@ -75,6 +81,18 @@ public class Asteroid extends GameObject implements ICollisionable
         move(Vec2.mul(velocityDirection, speed * delta));
     }
 
+    public void destroy()
+    {
+        enablePhysics(false);
+        animateDestruction();
+
+        if (curScaleLevel != scaleLevels.length-1)
+        {
+            new Asteroid(gameEngine, getPosition(), curScaleLevel+1);
+            new Asteroid(gameEngine, getPosition(), curScaleLevel+1);
+        }
+    }
+
     public float getCollisionRadius()
     {
         return collisionRadius;
@@ -83,5 +101,15 @@ public class Asteroid extends GameObject implements ICollisionable
     protected PolarLayout[] renderPoints()
     {
         return boundaryPoints;
+    }
+
+    @Override
+    public void onCollisionEnter(ICollisionable other) {
+        super.onCollisionEnter(other);
+
+        if (other instanceof Bullet)
+        {
+            destroy();
+        }
     }
 }
