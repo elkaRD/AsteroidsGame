@@ -3,10 +3,14 @@ package com.elkard.asteroidsgame;
 import com.sun.org.apache.xml.internal.serialize.LineSeparator;
 import jdk.internal.util.xml.impl.Input;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameRenderer extends JFrame
@@ -30,6 +34,8 @@ public class GameRenderer extends JFrame
     private Image strona;
     private Graphics g_str;
 
+    private Image image;
+
     public GameRenderer(AsteroidsGame ag)
     {
         gameEngine = ag;
@@ -51,8 +57,7 @@ public class GameRenderer extends JFrame
         int w = getWidth();
         int h = getHeight();
 
-
-
+        loadImages();
     }
 
 //    int counter = 0;
@@ -123,8 +128,17 @@ public class GameRenderer extends JFrame
             g2.drawLine((int) line.b.x, (int) line.b.y, (int) line.e.x, (int) line.e.y);
         }
 
+        drawUI(g2);
 
         g.drawImage(strona, 0, 0, this);
+    }
+
+    private void drawUI(Graphics g)
+    {
+        int lives = gameEngine.getGameLogic().getRemainingLives();
+
+        for (int i = 0; i < lives; i++)
+            g.drawImage(image, 50 + 60*i, 50, this);
     }
 
     public ArrayList<String> list = new ArrayList<String>();
@@ -191,13 +205,8 @@ public class GameRenderer extends JFrame
             }
         });
 
-
-
         //addKeyListener(new KeyCheck(this));
         //addKeyListener(keyCheck);
-
-
-
     }
 
     public GameRenderer getOuter()
@@ -275,6 +284,17 @@ public class GameRenderer extends JFrame
     private void exitClicked()
     {
 
+    }
+
+    private void loadImages()
+    {
+        try {
+            BufferedImage temp = ImageIO.read(new File("heart2.png"));
+            image = temp.getScaledInstance(48, 48, Image.SCALE_DEFAULT);
+        } catch (IOException ex) {
+            System.out.println("Can't load the image");
+            ex.printStackTrace();
+        }
     }
 
     class KeyCheck implements KeyListener

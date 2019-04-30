@@ -1,5 +1,7 @@
 package com.elkard.asteroidsgame;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 
@@ -21,6 +23,7 @@ public class GameLogic {
     public final int screenWidth = 1280;
     public final int screenHeight = 720;
 
+    private ArrayList<GameObject> players = new ArrayList<>();
     private ArrayList<GameObject> bullets = new ArrayList<>();
     private ArrayList<GameObject> asteroids = new ArrayList<>();
 
@@ -37,6 +40,10 @@ public class GameLogic {
     {
         return screenHeight;
     }
+
+    private IGameController gameController;
+
+    private int remainingLives;
 
 //    public enum MenuButton{
 //        PLAY,
@@ -74,16 +81,18 @@ public class GameLogic {
         for (int i = 0; i < amountAsteroids; i++)
         {
             Vec2 pos = new Vec2(getWidth()/2, getHeight()/2);
-            pos.x = (float) Math.cos(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
-            pos.y = (float) Math.sin(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
+            pos.x += (float) Math.cos(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
+            pos.y += (float) Math.sin(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
             Asteroid temp = new Asteroid(this, pos);
         }
+
+        startGame();
     }
 
     private void launchPhysics()
     {
         physics = new Physics(this);
-        physics.addGroupsToCheck(player, asteroids);
+        physics.addGroupsToCheck(players, asteroids);
         physics.addGroupsToCheck(bullets, asteroids);
     }
 
@@ -113,6 +122,9 @@ public class GameLogic {
         }
         //physics.checkCollisionWithGroup(player, tempArray);
 
+        if (asteroids.size() == 0) onGameIsOver();
+        if (remainingLives == 0) onGameIsOver();
+
         physics.updatePhysics(deltaTime);
     }
 
@@ -123,12 +135,19 @@ public class GameLogic {
 
     public void onReset()
     {
-
+        remainingLives = 3;
     }
 
     public void onPause()
     {
 
+    }
+
+    public void onGameIsOver()
+    {
+        if (gameController == null) return;
+
+        gameController.onGameIsOver();
     }
 
     public void onAccelerate(float force)
@@ -156,11 +175,16 @@ public class GameLogic {
         player.onEndShooting();
     }
 
-    private void onDeath()
+    public void onDeath()
     {
-
+        remainingLives--;
+        player = new PlayerSpaceship(this);
     }
 
+    public int getRemainingLives()
+    {
+        return remainingLives;
+    }
 
     public PlayerSpaceship getPlayer()
     {
@@ -294,6 +318,17 @@ public class GameLogic {
     public void removeAsteroid(Asteroid asteroid)
     {
         asteroids.remove(asteroid);
+        System.out.println("CALLED REMOVE ASTEROID, size: " + asteroids.size());
+    }
+
+    public void addPlayer(PlayerSpaceship newPlayer)
+    {
+        players.add(newPlayer);
+    }
+
+    public void removePlayer(PlayerSpaceship toRemove)
+    {
+        players.remove(toRemove);
     }
 
     public Line[] getBulletsRenderLines()
@@ -318,9 +353,17 @@ public class GameLogic {
     public Line[] getAsteroidsRenderLines()
     {
         ArrayList<Line> renderLines = new ArrayList<>();
-        for (GameObject asteroid : asteroids)
+//        for (GameObject asteroid : asteroids)
+//        {
+//            Line[] temp = asteroid.getRenderLines();
+//            for (Line line : temp)
+//            {
+//                renderLines.add(line);
+//            }
+//        }
+        for (int i = 0; i < asteroids.size(); i++)
         {
-            Line[] temp = asteroid.getRenderLines();
+            Line[] temp = asteroids.get(i).getRenderLines();
             for (Line line : temp)
             {
                 renderLines.add(line);
@@ -341,5 +384,10 @@ public class GameLogic {
     public void removeObject(GameObject toRemove)
     {
         objectsToRemove.add(toRemove);
+    }
+
+    public void attachController(IGameController gc)
+    {
+        gameController = gc;
     }
 }

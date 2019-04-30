@@ -22,6 +22,10 @@ public class GameObject implements ICollisionable{
     private float destructionScale = 100;
 
     private boolean physicsEnabled = true;
+    private boolean isVisible = true;
+
+    private boolean areLinesValid = false;
+    private Line[] validLines;
 
     public GameObject(GameLogic gl)
     {
@@ -114,6 +118,7 @@ public class GameObject implements ICollisionable{
 
     public final void updateObject(float delta)
     {
+        areLinesValid = false;
         update(delta);
     }
 
@@ -131,12 +136,13 @@ public class GameObject implements ICollisionable{
         return new PolarLayout[0];
     }
 
-    public final Line[] getRenderLines()
+    private Line[] generateLines()
     {
         PolarLayout[] definedPoints = renderPoints();
         Vec2[] renderPoints = new Vec2[definedPoints.length];
 
-        float objectDimension = Collections.max(Arrays.asList(definedPoints)).dst; // actually half of the object dimension
+//        float objectDimension = Collections.max(Arrays.asList(definedPoints)).dst; // actually half of the object dimension
+        float objectDimension = getMaxDst(definedPoints);   // actually half of the object dimensiona
         halfOfDimension = objectDimension;
 
         ArrayList<Vec2> positionsToRender = new ArrayList<>();
@@ -160,6 +166,7 @@ public class GameObject implements ICollisionable{
 
             for (int i = 0; i < renderPoints.length; i++) {
                 renderPoints[i] = renderPos.clone();
+                if (definedPoints[i] == null) continue;
                 renderPoints[i].x += (float) Math.cos(Math.toRadians(definedPoints[i].rot + getRotation())) * definedPoints[i].dst * scale;
                 renderPoints[i].y += (float) Math.sin(Math.toRadians(definedPoints[i].rot + getRotation())) * definedPoints[i].dst * scale;
             }
@@ -186,7 +193,19 @@ public class GameObject implements ICollisionable{
             }
         }
 
+        areLinesValid = true;
         return renderLines;
+    }
+
+    public final Line[] getRenderLines()
+    {
+        if (!isVisible)
+            return new Line[0];
+
+        if (!areLinesValid)
+            validLines = generateLines();
+
+        return validLines;
     }
 
     public final Line[] getRenderLines(boolean multiplyObjectOnBoundaries)
@@ -200,7 +219,11 @@ public class GameObject implements ICollisionable{
 
     public Line[] getCollisionLines()
     {
-        return getRenderLines(false);
+        //return getRenderLines(true);
+        if (!areLinesValid)
+            validLines = generateLines();
+
+        return validLines;
     }
 
     public float getCollisionRadius()
@@ -216,6 +239,11 @@ public class GameObject implements ICollisionable{
     public void enablePhysics(boolean isEnabled)
     {
         physicsEnabled = isEnabled;
+    }
+
+    public void setVisible(boolean isEnabled)
+    {
+        isVisible = isEnabled;
     }
 
     public void onCollisionEnter(ICollisionable other)
@@ -239,5 +267,23 @@ public class GameObject implements ICollisionable{
     protected void animateDestruction()
     {
         animateDestruction(destructionDuration, destructionScale);
+    }
+
+    private float getMaxDst(PolarLayout[] points)
+    {
+        if (points.length == 0)
+            return 0;
+
+        float result = points[0].dst;
+        for (int i = 1; i < points.length; i++) {
+            //if (points ==  null) System.out.println("points is null " + i);
+            if (points[i] == null) continue;
+            //wdif (points[i].dst == null) System.out.println("points[i].dst is null " + i);
+
+            if (points[i].dst < result)
+                result = points[i].dst;
+        }
+
+        return result;
     }
 }

@@ -1,5 +1,8 @@
 package com.elkard.asteroidsgame;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class AsteroidsGame implements IGameController{
     private GameLogic gameLogic;
     private GameRenderer gameRenderer;
@@ -13,8 +16,14 @@ public class AsteroidsGame implements IGameController{
     }
 
     public AsteroidsGame() {
-        gameLogic = new GameLogic();
+        startNewGame();
         gameRenderer = new GameRenderer(this);
+    }
+
+    private void startNewGame()
+    {
+        gameLogic = new GameLogic();
+        gameLogic.attachController(this);
     }
 
     public GameLogic getGameLogic()
@@ -61,6 +70,11 @@ public class AsteroidsGame implements IGameController{
 
             //System.out.println("delta time: " + deltaTime);
         }
+    }
+
+    public void onGameIsOver()
+    {
+        startNewGame();
     }
 
     private void handleInput()

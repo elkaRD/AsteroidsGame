@@ -67,7 +67,7 @@ public class Asteroid extends GameObject implements ICollisionable
         this(gl, new Vec2(), 0);
     }
 
-    protected void cleanup()
+    public void cleanUp()
     {
         super.cleanUp();
 
@@ -86,11 +86,11 @@ public class Asteroid extends GameObject implements ICollisionable
         enablePhysics(false);
         animateDestruction();
 
-        if (curScaleLevel != scaleLevels.length-1)
-        {
-            new Asteroid(gameEngine, getPosition(), curScaleLevel+1);
-            new Asteroid(gameEngine, getPosition(), curScaleLevel+1);
-        }
+//        if (curScaleLevel != scaleLevels.length-1)
+//        {
+//            new Asteroid(gameEngine, getPosition(), curScaleLevel+1);
+//            new Asteroid(gameEngine, getPosition(), curScaleLevel+1);
+//        }
     }
 
     public float getCollisionRadius()

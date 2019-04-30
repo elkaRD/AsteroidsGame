@@ -12,7 +12,7 @@ public class PolarLayout implements Comparable
 
         if (dst > ((PolarLayout) o).dst)
             return 1;
-        if (dst > ((PolarLayout) o).dst)
+        if (dst < ((PolarLayout) o).dst)
             return -1;
         return 0;
     }

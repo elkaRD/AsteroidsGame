@@ -23,13 +23,20 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     private boolean startedShooting = false;
     private boolean stoppedShooting = false;
 
+    private float untouchedTime = 0;
+    private float untouchedTickDuration = 0.5f;
+    private int untouchedTicks = 6;
+
     private Weapon curWeapon;
 
     private static int playersCounter = 0;
 
+    private GameLogic gameLogic;
+
     public PlayerSpaceship(GameLogic gl)
     {
         super(gl);
+        gameLogic = gl;
 
         curWeapon = new StandardWeapon(gameEngine, this);
         //curWeapon = new MachineGun(gameEngine, this);
@@ -42,6 +49,16 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
 
         setName("player" + playersCounter);
         playersCounter++;
+
+        gl.addPlayer(this);
+
+        enablePhysics(false);
+    }
+
+    public void cleanUp()
+    {
+        super.cleanUp();
+        gameLogic.removePlayer(this);
     }
 
     public void reset()
@@ -84,10 +101,32 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     {
         super.update(delta);
 
+        updateUntouched(delta);
         updateShipVelocity(delta);
         updateShipPosition(delta);
         updateShipRotation(delta);
         updateShipWeapon(delta);
+    }
+
+    private void updateUntouched(float delta)
+    {
+        untouchedTime += delta;
+        if (untouchedTime < untouchedTickDuration / 2)
+        {
+            setVisible(false);
+        }
+        else
+        {
+            setVisible(true);
+        }
+        if (untouchedTicks > 0 && untouchedTime > untouchedTickDuration)
+        {
+            untouchedTicks--;
+            untouchedTime = 0;
+
+            if (untouchedTicks == 0)
+                enablePhysics(true);
+        }
     }
 
     private void updateShipVelocity(float delta)
@@ -142,5 +181,17 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         points[3].dst = 25;     points[3].rot = -135;
 
         return points;
+    }
+
+    @Override
+    public void onCollisionEnter(ICollisionable other) {
+        super.onCollisionEnter(other);
+
+        if (other instanceof Asteroid)
+        {
+            enablePhysics(false);
+            animateDestruction();
+            gameEngine.onDeath();
+        }
     }
 }

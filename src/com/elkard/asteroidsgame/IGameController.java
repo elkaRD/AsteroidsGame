@@ -9,4 +9,6 @@ public interface IGameController
     void onStartShooting();
     void onEndShooting();
     public void onPause();
+
+    void onGameIsOver();
 }
