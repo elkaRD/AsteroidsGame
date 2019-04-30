@@ -27,10 +27,26 @@ public class GameObject implements ICollisionable{
     private boolean areLinesValid = false;
     private Line[] validLines;
 
-    public GameObject(GameLogic gl)
+//    protected GameObject parent;
+//    private Vec2
+
+    //protected ArrayList<GameObject> additionalRender;
+
+    public GameObject(GameLogic gl, GameObject parentObject)
     {
         gameEngine = gl;
         gameEngine.registerObject(this);
+
+//        parent = parentObject;
+//        if (parent != null)
+//        {
+//
+//        }
+    }
+
+    public GameObject(GameLogic gl)
+    {
+        this(gl, null);
     }
 
     public void cleanUp()

@@ -107,7 +107,7 @@ public class GameRenderer extends JFrame
 //            g2.drawLine((int) b[i].x, (int) b[i].y, (int) b[i+1].x, (int) b[i+1].y);
 //        }
 
-        Line[] p = gameEngine.getGameLogic().getPlayer().getRenderLines();
+        Line[] p = gameEngine.getGameLogic().getPlayerRenderLines();
 
         for (Line line : p)
         {

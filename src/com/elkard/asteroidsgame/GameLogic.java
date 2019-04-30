@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GameLogic {
 
@@ -329,6 +330,20 @@ public class GameLogic {
     public void removePlayer(PlayerSpaceship toRemove)
     {
         players.remove(toRemove);
+    }
+
+    public Line[] getPlayerRenderLines()
+    {
+        ArrayList<Line> result = new ArrayList<>();
+        for (GameObject p : players) {
+            result.addAll(Arrays.asList(p.getRenderLines()));
+        }
+        //result.addAll(Arrays.asList(player.getRenderLines()));
+        result.addAll(Arrays.asList(player.booster.getRenderLines()));
+
+        Line[] lines = new Line[result.size()];
+        lines = result.toArray(lines);
+        return lines;
     }
 
     public Line[] getBulletsRenderLines()

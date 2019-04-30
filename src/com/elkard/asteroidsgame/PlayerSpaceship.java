@@ -33,6 +33,8 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
 
     private GameLogic gameLogic;
 
+    public ShipBooster booster;
+
     public PlayerSpaceship(GameLogic gl)
     {
         super(gl);
@@ -53,6 +55,9 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         gl.addPlayer(this);
 
         enablePhysics(false);
+
+        booster = new ShipBooster(gl, this);
+        //additionalRender.add(booster);
     }
 
     public void cleanUp()
@@ -72,11 +77,13 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     public void onAccelerate(float force)
     {
         lastAccelerate += force;
+        booster.onAccelerate(force);
     }
 
     public void onSlowDown(float force)
     {
         onAccelerate(-force/2);
+        booster.onSlowDown(force/2);
     }
 
     public void onRotate(float turn)
@@ -172,7 +179,7 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     {
         PolarLayout[] points = new PolarLayout[4];
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < points.length; i++)
             points[i] = new PolarLayout();
 
         points[0].dst = 50;     points[0].rot = 0;
