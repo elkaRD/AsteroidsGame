@@ -58,7 +58,7 @@ public class InputHandler implements IInputHandler
                 break;
 
             case 27:
-                pressedPause = isPressed || pressedShoot;
+                pressedPause = isPressed || pressedPause;
                 break;
 
             case 32:

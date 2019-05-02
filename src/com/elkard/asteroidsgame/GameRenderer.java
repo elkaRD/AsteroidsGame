@@ -117,12 +117,14 @@ public class GameRenderer extends JFrame
 
     private void drawPauseMenu(Graphics g)
     {
-
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
+        g.drawString("PAUSED", 450, 400);
     }
 
     private void drawGameoverMenu(Graphics g)
     {
-
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
+        g.drawString("GAME OVER", 400, 400);
     }
 
     private void drawMainMenu(Graphics g)
@@ -149,6 +151,9 @@ public class GameRenderer extends JFrame
 
         for (int i = 0; i < lives; i++)
             g.drawImage(image, 50 + 60*i, 50, this);
+
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+        g.drawString("SCORE: " + gameEngine.getGameLogic().getCurScore(), screenWidth/2, 80);
     }
 
     public ArrayList<String> list = new ArrayList<String>();

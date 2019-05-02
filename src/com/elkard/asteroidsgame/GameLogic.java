@@ -110,6 +110,8 @@ public class GameLogic {
 //        for (GameObject go : bullets)
 //            go.update(deltaTime);
 
+        if (curState == GameState.PAUSED) deltaTime = 0;
+
         for (GameObject go : gameObjects)
             go.updateObject(deltaTime);
 
@@ -151,45 +153,60 @@ public class GameLogic {
 
     public void onPause()
     {
-
+        isPaused = !isPaused;
+        if (isPaused) curState = GameState.PAUSED;
+        else curState = GameState.GAMEPLAY;
     }
 
     public void onGameIsOver()
     {
-        if (gameController == null) return;
+//        if (gameController == null) return;
+//        gameController.onGameIsOver();
 
-        gameController.onGameIsOver();
+        curState = GameState.GAMEOVER;
     }
 
     public void onAccelerate(float force)
     {
+        if (curState != GameState.GAMEPLAY) return;
+
         player.onAccelerate(force);
     }
 
     public void onSlowDown(float force)
     {
+        if (curState != GameState.GAMEPLAY) return;
+
         player.onSlowDown(force);
     }
 
     public void onTurn(float turn)
     {
+        if (curState != GameState.GAMEPLAY) return;
+
         player.onRotate(turn);
     }
 
     public void onStartShooting()
     {
+        if (curState != GameState.GAMEPLAY) return;
+
         player.onStartShooting();
     }
 
     public void onEndShooting()
     {
+        if (curState != GameState.GAMEPLAY) return;
+
         player.onEndShooting();
     }
 
     public void onDeath()
     {
         remainingLives--;
-        player = new PlayerSpaceship(this);
+
+        if (remainingLives > 0)
+            player = new PlayerSpaceship(this);
     }
 
     public int getRemainingLives()
@@ -197,9 +214,18 @@ public class GameLogic {
         return remainingLives;
     }
 
+    public int getCurScore()
+    {
+        return curScore;
+    }
+
     private void nextLevel()
     {
         curLevel++;
+        curScore += 200 * curLevel;
+        if (curLevel % 2 == 0 && remainingLives < 5);
+            remainingLives++;
+
         generateAsteroids();
     }
 
