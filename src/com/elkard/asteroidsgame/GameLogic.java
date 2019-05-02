@@ -45,6 +45,8 @@ public class GameLogic {
     private IGameController gameController;
 
     private int remainingLives;
+    private int curLevel;
+    private int curScore;
 
 //    public enum MenuButton{
 //        PLAY,
@@ -77,17 +79,21 @@ public class GameLogic {
 //                temp.setPosition(150 + i*300, 50 + j*200);
 //            }
 
-        int amountAsteroids = 5;
+//        int amountAsteroids = 5;
+//
+//        for (int i = 0; i < amountAsteroids; i++)
+//        {
+//            Vec2 pos = new Vec2(getWidth()/2, getHeight()/2);
+//            pos.x += (float) Math.cos(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
+//            pos.y += (float) Math.sin(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
+//            Asteroid temp = new Asteroid(this, pos);
+//        }
 
-        for (int i = 0; i < amountAsteroids; i++)
-        {
-            Vec2 pos = new Vec2(getWidth()/2, getHeight()/2);
-            pos.x += (float) Math.cos(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
-            pos.y += (float) Math.sin(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
-            Asteroid temp = new Asteroid(this, pos);
-        }
+
 
         startGame();
+
+
     }
 
     private void launchPhysics()
@@ -123,7 +129,7 @@ public class GameLogic {
         }
         //physics.checkCollisionWithGroup(player, tempArray);
 
-        if (asteroids.size() == 0) onGameIsOver();
+        if (asteroids.size() == 0) nextLevel();
         if (remainingLives == 0) onGameIsOver();
 
         physics.updatePhysics(deltaTime);
@@ -132,11 +138,15 @@ public class GameLogic {
     public void startGame()
     {
         onReset();
+        curState = GameState.GAMEPLAY;
+        generateAsteroids();
     }
 
     public void onReset()
     {
         remainingLives = 3;
+        curLevel = 5;
+        curScore = 0;
     }
 
     public void onPause()
@@ -187,9 +197,55 @@ public class GameLogic {
         return remainingLives;
     }
 
+    private void nextLevel()
+    {
+        curLevel++;
+        generateAsteroids();
+    }
+
+    private void generateAsteroids()
+    {
+        float screenPerimeter = 2*screenHeight + 2*screenWidth;
+        for (int i = 0; i < curLevel; i++)
+        {
+            float whereToSpot = screenPerimeter * i/curLevel + screenWidth / 2;
+            whereToSpot %= screenPerimeter;
+            Vec2 posToSpot = new Vec2();
+
+            if (whereToSpot < screenWidth)
+            {
+                posToSpot.x = whereToSpot;
+                posToSpot.y = 0;
+            }
+            else if (whereToSpot < screenWidth + screenHeight)
+            {
+                posToSpot.x = screenWidth;
+                posToSpot.y = whereToSpot - screenWidth;
+            }
+            else if (whereToSpot < 2*screenWidth + screenHeight)
+            {
+                posToSpot.x = whereToSpot - screenWidth - screenHeight;
+                posToSpot.y = screenHeight;
+            }
+            else
+            {
+                posToSpot.x = 0;
+                posToSpot.y = whereToSpot - 2*screenWidth - screenHeight;
+            }
+
+            Asteroid temp = new Asteroid(this, posToSpot);
+        }
+    }
+
     public PlayerSpaceship getPlayer()
     {
         return player;
+    }
+
+    public void onAsteroidDestroyed(Asteroid asteroid, int asteroidSize)
+    {
+        curScore += (asteroidSize + 1) * 10;
+
     }
 
     public void onMenuButtonClicked(AsteroidsGame.MenuButton buttonClicked)

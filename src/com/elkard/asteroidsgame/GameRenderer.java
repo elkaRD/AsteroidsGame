@@ -86,51 +86,61 @@ public class GameRenderer extends JFrame
             System.out.println("object strona was null");
         }
 
-        Vec2 pos = gameEngine.getGameLogic().getPlayer().getPosition();
-        float rot = gameEngine.getGameLogic().getPlayer().getRotation();
-
         g_str.clearRect(0, 0, getWidth(), getHeight());
         Graphics g2 = g_str;
 
-//        Vec2[] p = gameEngine.getGameLogic().getPlayer().getRenderPoints();
-//
-//        for (int i = 0; i < p.length; i++)
-//        {
-//            int j = (i+1) % p.length;
-//            g2.drawLine((int) p[i].x, (int) p[i].y, (int) p[j].x, (int) p[j].y);
-//        }
-//
-//        Vec2[] b = gameEngine.getGameLogic().getBulletsRenderPoints();
-//
-//        for (int i = 0; i < b.length; i += 2)
-//        {
-//            g2.drawLine((int) b[i].x, (int) b[i].y, (int) b[i+1].x, (int) b[i+1].y);
-//        }
+        GameLogic.GameState curState = gameEngine.getGameLogic().getState();
 
-        Line[] p = gameEngine.getGameLogic().getPlayerRenderLines();
-
-        for (Line line : p)
+        if (curState == GameLogic.GameState.GAMEPLAY || curState == GameLogic.GameState.PAUSED || curState == GameLogic.GameState.GAMEOVER)
         {
-            g2.drawLine((int) line.b.x, (int) line.b.y, (int) line.e.x, (int) line.e.y);
+            drawGameplay(g2);
+            drawUI(g2);
         }
 
-        Line[] b = gameEngine.getGameLogic().getBulletsRenderLines();
-
-        for (Line line : b)
+        if (curState == GameLogic.GameState.PAUSED)
         {
-            g2.drawLine((int) line.b.x, (int) line.b.y, (int) line.e.x, (int) line.e.y);
+            drawPauseMenu(g2);
         }
 
-        Line[] a = gameEngine.getGameLogic().getAsteroidsRenderLines();
-
-        for (Line line : a)
+        if (curState == GameLogic.GameState.GAMEOVER)
         {
-            g2.drawLine((int) line.b.x, (int) line.b.y, (int) line.e.x, (int) line.e.y);
+            drawGameoverMenu(g2);
         }
 
-        drawUI(g2);
+        if (curState == GameLogic.GameState.MAINMENU)
+        {
+            drawMainMenu(g2);
+        }
 
         g.drawImage(strona, 0, 0, this);
+    }
+
+    private void drawPauseMenu(Graphics g)
+    {
+
+    }
+
+    private void drawGameoverMenu(Graphics g)
+    {
+
+    }
+
+    private void drawMainMenu(Graphics g)
+    {
+
+    }
+
+    private void drawGameplay(Graphics g)
+    {
+        drawLines(g, gameEngine.getGameLogic().getPlayerRenderLines());
+        drawLines(g, gameEngine.getGameLogic().getBulletsRenderLines());
+        drawLines(g, gameEngine.getGameLogic().getAsteroidsRenderLines());
+    }
+
+    private void drawLines(Graphics g, Line[] lines)
+    {
+        for (Line line : lines)
+            g.drawLine((int) line.b.x, (int) line.b.y, (int) line.e.x, (int) line.e.y);
     }
 
     private void drawUI(Graphics g)

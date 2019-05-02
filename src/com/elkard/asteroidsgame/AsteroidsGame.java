@@ -7,6 +7,8 @@ public class AsteroidsGame implements IGameController{
     private GameLogic gameLogic;
     private GameRenderer gameRenderer;
 
+    long prevTime;
+
     public enum MenuButton{
         PLAY,
         EXIT,
@@ -36,9 +38,8 @@ public class AsteroidsGame implements IGameController{
 
         gameRenderer.showWindow();
 
-        long lastTime = System.nanoTime();
-
-        long prevTime = System.currentTimeMillis();
+//        long lastTime = System.nanoTime();
+        prevTime = System.currentTimeMillis();
 
         while (true) {
 //            long time = System.nanoTime();
@@ -46,22 +47,7 @@ public class AsteroidsGame implements IGameController{
 //            float deltaTime = (float) deltaMillis / 1000.0f;
 //            lastTime = time;
 
-            long curTime = System.currentTimeMillis();
-            long elapsedTimeMillis = curTime - prevTime;
-            float deltaTime = elapsedTimeMillis/1000F;
-            prevTime = curTime;
-
-            if (deltaTime < 0.013f) {
-                try {
-                    int toSleep  = (int) (13 - deltaTime * 1000);
-                    Thread.sleep(toSleep);
-
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-
-            if (deltaTime > 0.25f) deltaTime = 0.25f;
+            float deltaTime = getDeltaTime();
 
             handleInput();
             gameLogic.onUpdate(deltaTime);
@@ -75,6 +61,28 @@ public class AsteroidsGame implements IGameController{
     public void onGameIsOver()
     {
         startNewGame();
+    }
+
+    private float getDeltaTime()
+    {
+        long curTime = System.currentTimeMillis();
+        long elapsedTimeMillis = curTime - prevTime;
+        float deltaTime = elapsedTimeMillis/1000F;
+        prevTime = curTime;
+
+        if (deltaTime < 0.013f) {
+            try {
+                int toSleep  = (int) (13 - deltaTime * 1000);
+                Thread.sleep(toSleep);
+
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        if (deltaTime > 0.25f) deltaTime = 0.25f;
+
+        return deltaTime;
     }
 
     private void handleInput()

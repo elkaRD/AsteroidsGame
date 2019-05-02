@@ -110,6 +110,7 @@ public class Asteroid extends GameObject implements ICollisionable
         if (other instanceof Bullet)
         {
             destroy();
+            gameEngine.onAsteroidDestroyed(this, curScaleLevel);
         }
     }
 }
