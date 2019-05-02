@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GameRenderer extends JFrame
+public class GameRenderer extends JFrame implements IButtonClickListener
 {
 
     private static final int screenWidth = 1280;
@@ -36,12 +36,26 @@ public class GameRenderer extends JFrame
 
     private Image image;
 
+//    private JButton buttonMainPlay = new JButton("PLAY");
+//    private JButton buttonMainExit = new JButton("EXIT");
+//    private JButton buttonMainBoard = new JButton("HIGHSCORES");
+//    private JButton buttonGameoverAgain = new JButton("AGAIN");
+//    private JButton buttonGameoverReturn = new JButton("RETURN");
+
     public GameRenderer(AsteroidsGame ag)
     {
         gameEngine = ag;
         inputHandler = new InputHandler();
         keyCheck = new KeyCheck(this);
         buildWindow(screenWidth, screenHeight);
+
+        //addMouseListener(this);
+        addMouseListener(ButtonsManager.getInstance());
+
+//        buttonMainPlay.addActionListener(this);
+//        buttonMainPlay.setBounds(40, 40, 400, 200);
+//        buttonMainPlay.setVisible(true);
+        //add(buttonMainPlay);
 
         //keyboardListener = new KeyboardListener(gameEngine);
 
@@ -112,7 +126,9 @@ public class GameRenderer extends JFrame
             drawMainMenu(g2);
         }
 
+        ButtonsManager.getInstance().draw(g2);
         g.drawImage(strona, 0, 0, this);
+
     }
 
     private void drawPauseMenu(Graphics g)
@@ -220,6 +236,8 @@ public class GameRenderer extends JFrame
             }
         });
 
+        prepareButtons();
+
         //addKeyListener(new KeyCheck(this));
         //addKeyListener(keyCheck);
     }
@@ -227,6 +245,15 @@ public class GameRenderer extends JFrame
     public GameRenderer getOuter()
     {
         return this;
+    }
+
+    private void prepareButtons()
+    {
+        ButtonsGroup buttonsMain = new ButtonsGroup();
+        buttonsMain.add(new Button().setPosition(100, 100)
+                                    .setSize(40,20)
+                                    .setText("PLAY"));
+
     }
 
     private void keyPressed(char key)
@@ -358,5 +385,11 @@ public class GameRenderer extends JFrame
 
             inha.handleInput(gameEngine);
         }
+    }
+
+    @Override
+    public void onButtonClicked(Button clicked)
+    {
+
     }
 }
