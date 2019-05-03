@@ -1,23 +1,33 @@
 package com.elkard.asteroidsgame;
 
-import com.sun.org.apache.xml.internal.serialize.LineSeparator;
-import jdk.internal.util.xml.impl.Input;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GameRenderer extends JFrame implements IButtonClickListener
+public class GameRenderer extends JFrame implements IButtonClickListener, IGameState
 {
 
     private static final int screenWidth = 1280;
     private static final int screenHeight = 720;
+
+    private static final String TAG_MENU_MAIN = "mainMenu";
+    private static final String TAG_MENU_PAUSE = "pauseMenu";
+    private static final String TAG_MENU_GAMEOVER = "gameoverMenu";
+
+    private static final String BUTTON_MAIN_PLAY = "PLAY";
+    private static final String BUTTON_MAIN_HIGHSCORES = "HI-SCORES";
+    private static final String BUTTON_MAIN_EXIT = "EXIT";
+    
+    private static final String BUTTON_PAUSE_RESUME = "RESUME";
+    private static final String BUTTON_PAUSE_MENU = "EXIT";
+
+    private static final String BUTTON_GAMEOVER_AGAIN = "AGAIN";
+    private static final String BUTTON_GAMEOVER_MENU = "RETURN";
 
     private final AsteroidsGame gameEngine;
     //private KeyboardListener keyboardListener;
@@ -26,8 +36,8 @@ public class GameRenderer extends JFrame implements IButtonClickListener
 
     private final KeyCheck keyCheck;
 
-    JButton playButton;
-    JButton exitButton;
+//    JButton playButton;
+//    JButton exitButton;
 
     public Boolean isKeyPressed = false;
 
@@ -35,6 +45,10 @@ public class GameRenderer extends JFrame implements IButtonClickListener
     private Graphics g_str;
 
     private Image image;
+
+    private ButtonsGroup buttonsMain;
+    private ButtonsGroup buttonsPause;
+    private ButtonsGroup buttonsGameover;
 
 //    private JButton buttonMainPlay = new JButton("PLAY");
 //    private JButton buttonMainExit = new JButton("EXIT");
@@ -51,6 +65,8 @@ public class GameRenderer extends JFrame implements IButtonClickListener
 
         //addMouseListener(this);
         addMouseListener(ButtonsManager.getInstance());
+
+        gameEngine.getGameLogic().setStateChangedListener(this);
 
 //        buttonMainPlay.addActionListener(this);
 //        buttonMainPlay.setBounds(40, 40, 400, 200);
@@ -191,13 +207,13 @@ public class GameRenderer extends JFrame implements IButtonClickListener
         getContentPane().add(debugBox);
 
 
-        playButton = new JButton("Play");
-        playButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                playClicked();
-            }
-        } );
-        panel.add(playButton);
+//        playButton = new JButton("Play");
+//        playButton.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                playClicked();
+//            }
+//        } );
+//        panel.add(playButton);
 
 //        addKeyListener(keyboardListener);
         setFocusable(true);
@@ -249,11 +265,60 @@ public class GameRenderer extends JFrame implements IButtonClickListener
 
     private void prepareButtons()
     {
-        ButtonsGroup buttonsMain = new ButtonsGroup();
-        buttonsMain.add(new Button().setPosition(100, 100)
-                                    .setSize(40,20)
-                                    .setText("PLAY"));
+        buttonsMain = new ButtonsGroup()
+                .setPosition(300,300)
+                .setListener(this)
+                .setTag(TAG_MENU_MAIN)
+                .setVisible(false);
 
+        buttonsMain.add(new Button()
+                .setPosition(0, 0)
+                .setSize(100,20)
+                .setText(BUTTON_MAIN_PLAY));
+
+        buttonsMain.add(new Button()
+                .setPosition(0, 60)
+                .setSize(100,20)
+                .setText(BUTTON_MAIN_HIGHSCORES));
+
+        buttonsMain.add(new Button()
+                .setPosition(0, 120)
+                .setSize(100,20)
+                .setText(BUTTON_MAIN_EXIT));
+
+
+        buttonsPause = new ButtonsGroup()
+                .setPosition(300,300)
+                .setListener(this)
+                .setTag(TAG_MENU_PAUSE)
+                .setVisible(false);
+
+        buttonsPause.add(new Button()
+                .setPosition(0, 0)
+                .setSize(100,20)
+                .setText(BUTTON_PAUSE_RESUME));
+
+        buttonsPause.add(new Button()
+                .setPosition(0, 200)
+                .setSize(100,20)
+                .setText(BUTTON_PAUSE_MENU));
+
+
+        buttonsGameover = new ButtonsGroup()
+                .setPosition(300,300)
+                .setListener(this)
+                .setTag(TAG_MENU_GAMEOVER)
+                .setVisible(false);
+
+        buttonsGameover.add(new Button()
+                .setPosition(0, 0)
+                .setSize(100,20)
+                .setText(BUTTON_GAMEOVER_AGAIN));
+
+        buttonsGameover.add(new Button()
+                .setPosition(0, 200)
+                .setSize(100,20)
+                .setText(BUTTON_GAMEOVER_MENU));
     }
 
     private void keyPressed(char key)
@@ -318,15 +383,15 @@ public class GameRenderer extends JFrame implements IButtonClickListener
 
     }
 
-    private void playClicked()
-    {
-        gameEngine.menuButtonClicked(AsteroidsGame.MenuButton.PLAY);
-    }
-
-    private void exitClicked()
-    {
-
-    }
+//    private void playClicked()
+//    {
+//        gameEngine.menuButtonClicked(AsteroidsGame.MenuButton.MAIN_PLAY);
+//    }
+//
+//    private void exitClicked()
+//    {
+//
+//    }
 
     private void loadImages()
     {
@@ -388,8 +453,88 @@ public class GameRenderer extends JFrame implements IButtonClickListener
     }
 
     @Override
-    public void onButtonClicked(Button clicked)
+    public void onButtonClicked(ButtonsGroup group, Button clicked)
     {
+        if (group.getTag().equals(TAG_MENU_MAIN))
+        {
+            if (clicked.getText().equals(BUTTON_MAIN_PLAY))
+            {
+                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.MAIN_PLAY);
+            }
+            else if (clicked.getText().equals(BUTTON_MAIN_HIGHSCORES))
+            {
+                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.MAIN_HIGHSCORES);
+            }
+            else if (clicked.getText().equals(BUTTON_MAIN_EXIT))
+            {
+                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.MAIN_EXIT);
+            }
+            
+            return;
+        }
+        
+        if (group.getTag().equals(TAG_MENU_PAUSE))
+        {
+            if (clicked.getText().equals(BUTTON_PAUSE_RESUME))
+            {
+                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.PAUSE_RESUME);
+            }
+            else if  (clicked.getText().equals(BUTTON_PAUSE_MENU))
+            {
+                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.PAUSE_MENU);
+            }
+            
+            return;
+        }
 
+        if (group.getTag().equals(TAG_MENU_GAMEOVER))
+        {
+            if (clicked.getText().equals(BUTTON_GAMEOVER_AGAIN))
+            {
+                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.GAMEOVER_AGAIN);
+            }
+            else if  (clicked.getText().equals(BUTTON_GAMEOVER_MENU))
+            {
+                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.GAMEOVER_RETURN);
+            }
+
+            return;
+        }
+    }
+
+    @Override
+    public void onStateChanged(GameLogic.GameState prevState, GameLogic.GameState curState)
+    {
+        System.out.println("State changed from " + prevState + " to " + curState);
+
+        switch (prevState)
+        {
+            case MAINMENU:
+                buttonsMain.setVisible(false);
+                break;
+
+            case PAUSED:
+                buttonsPause.setVisible(false);
+                break;
+
+            case GAMEOVER:
+                buttonsGameover.setVisible(false);
+                break;
+        }
+
+        switch (curState)
+        {
+            case MAINMENU:
+                buttonsMain.setVisible(true);
+                break;
+
+            case PAUSED:
+                buttonsPause.setVisible(true);
+                break;
+
+            case GAMEOVER:
+                buttonsGameover.setVisible(true);
+                break;
+        }
     }
 }

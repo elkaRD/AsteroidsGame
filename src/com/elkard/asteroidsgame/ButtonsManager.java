@@ -43,8 +43,9 @@ public class ButtonsManager extends JFrame implements MouseListener
     }
 
     @Override
-    public void mouseClicked(MouseEvent event) {
-        System.out.println("Cursor clicked screen");
+    public void mouseClicked(MouseEvent event)
+    {
+        System.out.println("Clicked");
 
         for (ButtonsGroup group : groups)
         {

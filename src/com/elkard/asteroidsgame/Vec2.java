@@ -5,7 +5,8 @@ public final class Vec2 {
     public float y;
 
     public Vec2() {
-
+        x = 0;
+        y = 0;
     }
 
     public Vec2(float newX, float newY) {
@@ -101,7 +102,9 @@ public final class Vec2 {
         return new Vec2(a.x * m, a.y * m);
     }
 
-    public static Vec2 mul(Vec2 a, float m) {
+    public static Vec2 mul(Vec2 a, float m)
+    {
+        if (a == null) return new Vec2();
         return new Vec2(a.x * m, a.y * m);
     }
 

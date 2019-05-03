@@ -14,6 +14,11 @@ public class Button
 
     public String text = "";
     public int fontSize = 20;
+    public int boundary = 10;
+
+    public boolean centerText = false;
+
+    public String tag = "";
 
     public Button()
     {
@@ -40,23 +45,59 @@ public class Button
         return this;
     }
 
+    public String getText()
+    {
+        return text;
+    }
+
     public Button setFontSize(int fontSize)
     {
         this.fontSize = fontSize;
         return this;
     }
 
-    public void draw(Graphics g)
+    public Button setBoundary(int boundary)
+    {
+        this.boundary = boundary;
+        return this;
+    }
+
+    public Button setCenter(boolean isCenter)
+    {
+        centerText = isCenter;
+        return this;
+    }
+
+    public Button setTag(String tag)
+    {
+        this.tag = tag;
+        return this;
+    }
+
+    public String getTag()
+    {
+        return tag;
+    }
+
+    public void draw(Graphics g, Vec2 parentPos)
     {
         g.setFont(new Font("TimesRoman", Font.PLAIN, fontSize));
 
-        int realSizeX = g.getFontMetrics().stringWidth(text) + 20;
-        int realSizeY = fontSize + 20;
+        int realSizeX = g.getFontMetrics().stringWidth(text) + 2*boundary;
+        int realSizeY = fontSize + 2*boundary;
+        int posX = (int) (position.x + boundary + parentPos.x);
+        if (centerText)
+        {
+            //TODO:
+            //posX +=
+        }
         if (size.x > realSizeX) realSizeX = (int) size.x;
         if (size.y > realSizeY) realSizeY = (int) size.y;
 
-        g.drawRect((int) position.x, (int) position.y, realSizeX, realSizeY);
+        g.drawRect((int) (position.x + parentPos.x), (int) (position.y + parentPos.y), realSizeX, realSizeY);
 
-        g.drawString(text, (int) position.x + 10, (int) position.y + 10);
+
+
+        g.drawString(text, posX, (int) (position.y + size.y + boundary + parentPos.y));
     }
 }

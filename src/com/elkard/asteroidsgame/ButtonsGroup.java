@@ -10,6 +10,10 @@ public class ButtonsGroup
     private IButtonClickListener listener = null;
     private boolean isVisible = true;
 
+    public Vec2 position = new Vec2();
+
+    public String tag = "";
+
     public ButtonsGroup()
     {
         ButtonsManager.getInstance().registerGroup(this);
@@ -32,14 +36,27 @@ public class ButtonsGroup
         buttons.remove(toRemove);
     }
 
-    public void setVisible(boolean isVisible)
+    public ButtonsGroup setVisible(boolean isVisible)
     {
         this.isVisible = isVisible;
+        return this;
     }
 
-    public void setListener(IButtonClickListener newListener)
+    public ButtonsGroup setListener(IButtonClickListener newListener)
     {
         listener = newListener;
+        return this;
+    }
+
+    public ButtonsGroup setTag(String tag)
+    {
+        this.tag = tag;
+        return this;
+    }
+
+    public String getTag()
+    {
+        return tag;
     }
 
     public boolean getVisible()
@@ -51,7 +68,7 @@ public class ButtonsGroup
     {
         for (Button button : buttons)
         {
-            button.draw(g);
+            button.draw(g, position);
         }
     }
 
@@ -59,14 +76,24 @@ public class ButtonsGroup
     {
         if (listener == null) return;
 
+        posX -= position.x;
+        posY -= position.y;
+
         for (Button button : buttons)
         {
             if (posX >= button.position.x && posX <= button.position.x + button.size.x
                 && posY >= button.position.y && posY <= button.position.y + button.size.y)
             {
-                listener.onButtonClicked(button);
+                listener.onButtonClicked(this, button);
                 break;
             }
         }
+    }
+
+    public ButtonsGroup setPosition(int x, int y)
+    {
+        position.x = x;
+        position.y = y;
+        return this;
     }
 }

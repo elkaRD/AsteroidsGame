@@ -12,11 +12,22 @@ public class GameLogic {
     private Physics physics;
 
     public enum GameState{
+        INIT,
         MAINMENU,
         GAMEPLAY,
         PAUSED,
         GAMEOVER,
         GOODBYE
+    }
+
+    public enum MenuButton{
+        MAIN_PLAY,
+        MAIN_HIGHSCORES,
+        MAIN_EXIT,
+        GAMEOVER_AGAIN,
+        GAMEOVER_RETURN,
+        PAUSE_RESUME,
+        PAUSE_MENU
     }
 
     private boolean isPaused = false;
@@ -48,6 +59,8 @@ public class GameLogic {
     private int curLevel;
     private int curScore;
 
+    private IGameState gameStateListener;
+
 //    public enum MenuButton{
 //        PLAY,
 //        EXIT,
@@ -64,10 +77,11 @@ public class GameLogic {
 //    }
 
     private GameState curState = GameState.MAINMENU;
+    private GameState prevState = GameState.INIT;
 
     public GameLogic()
     {
-        player = new PlayerSpaceship(this);
+        //player = new PlayerSpaceship(this);
 
         launchPhysics();
 
@@ -91,7 +105,8 @@ public class GameLogic {
 
 
 
-        startGame();
+        //startGame();
+        curState = GameState.MAINMENU;
 
 
     }
@@ -135,17 +150,72 @@ public class GameLogic {
         if (remainingLives == 0) onGameIsOver();
 
         physics.updatePhysics(deltaTime);
+
+        if (prevState != curState)
+        {
+            gameStateListener.onStateChanged(prevState, curState);
+            prevState = curState;
+        }
+    }
+
+    public void menuButtonClicked(MenuButton buttonClicked)
+    {
+        System.out.println("Clicked " + buttonClicked + " button");
+
+        switch (buttonClicked)
+        {
+            case MAIN_PLAY:
+                startGame();
+                break;
+
+            case MAIN_HIGHSCORES:
+                //TODO:
+                break;
+
+            case MAIN_EXIT:
+                exitGame();
+                break;
+
+            case PAUSE_RESUME:
+                isPaused = false;
+                break;
+
+            case PAUSE_MENU:
+                //TODO:
+                break;
+
+            case GAMEOVER_AGAIN:
+                startGame();
+                break;
+
+            case GAMEOVER_RETURN:
+                //TODO:
+                break;
+        }
     }
 
     public void startGame()
     {
         onReset();
         curState = GameState.GAMEPLAY;
+        player = new PlayerSpaceship(this);
         generateAsteroids();
+    }
+
+    public void exitGame()
+    {
+
     }
 
     public void onReset()
     {
+        players.clear();
+        bullets.clear();
+        asteroids.clear();
+        gameObjects.clear();
+        newObjects.clear();
+        objectsToRemove.clear();
+
         remainingLives = 3;
         curLevel = 5;
         curScore = 0;
@@ -206,7 +276,7 @@ public class GameLogic {
         remainingLives--;
 
         if (remainingLives > 0)
-            player = new PlayerSpaceship(this);
+             player = new PlayerSpaceship(this);
     }
 
     public int getRemainingLives()
@@ -274,7 +344,7 @@ public class GameLogic {
 
     }
 
-    public void onMenuButtonClicked(AsteroidsGame.MenuButton buttonClicked)
+    public void onMenuButtonClicked(MenuButton buttonClicked)
     {
 //        if (curState != GameState.MAINMENU) return;
 //
@@ -290,7 +360,7 @@ public class GameLogic {
 
     }
 
-    public void onGameoverButtonClicked(AsteroidsGame.MenuButton buttonClicked)
+    public void onGameoverButtonClicked(MenuButton buttonClicked)
     {
 //        if (curState != GameState.GAMEOVER) return;
 //
@@ -486,5 +556,10 @@ public class GameLogic {
     public void attachController(IGameController gc)
     {
         gameController = gc;
+    }
+
+    public void setStateChangedListener(IGameState listener)
+    {
+        gameStateListener = listener;
     }
 }

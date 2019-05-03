@@ -9,13 +9,7 @@ public class AsteroidsGame implements IGameController{
 
     long prevTime;
 
-    public enum MenuButton{
-        PLAY,
-        EXIT,
-        AGAIN,
-        EXITGAMEOVER,
-        MAINMENU
-    }
+
 
     public AsteroidsGame() {
         startNewGame();
@@ -90,10 +84,7 @@ public class AsteroidsGame implements IGameController{
         gameRenderer.handleInput();
     }
 
-    public void menuButtonClicked(MenuButton buttonClicked)
-    {
-        System.out.println("Clicked " + buttonClicked + " button");
-    }
+
 
     public void keyPressed(char key)
     {
