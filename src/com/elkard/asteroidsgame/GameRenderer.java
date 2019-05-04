@@ -36,9 +36,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
 
     private final KeyCheck keyCheck;
 
-//    JButton playButton;
-//    JButton exitButton;
-
     public Boolean isKeyPressed = false;
 
     private Image strona;
@@ -50,12 +47,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     private ButtonsGroup buttonsPause;
     private ButtonsGroup buttonsGameover;
 
-//    private JButton buttonMainPlay = new JButton("PLAY");
-//    private JButton buttonMainExit = new JButton("EXIT");
-//    private JButton buttonMainBoard = new JButton("HIGHSCORES");
-//    private JButton buttonGameoverAgain = new JButton("AGAIN");
-//    private JButton buttonGameoverReturn = new JButton("RETURN");
-
     public GameRenderer(AsteroidsGame ag)
     {
         gameEngine = ag;
@@ -63,26 +54,11 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         keyCheck = new KeyCheck(this);
         buildWindow(screenWidth, screenHeight);
 
-        //addMouseListener(this);
         addMouseListener(ButtonsManager.getInstance());
 
         gameEngine.getGameLogic().setStateChangedListener(this);
 
-//        buttonMainPlay.addActionListener(this);
-//        buttonMainPlay.setBounds(40, 40, 400, 200);
-//        buttonMainPlay.setVisible(true);
-        //add(buttonMainPlay);
-
-        //keyboardListener = new KeyboardListener(gameEngine);
-
-//        keyboardListener =
-
-//        EventQueue.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                new KeyboardListener(gameEngine);
-//            }
-//        });
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         int w = getWidth();
         int h = getHeight();
@@ -90,17 +66,8 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         loadImages();
     }
 
-//    int counter = 0;
-
     public void onUpdate(float deltaTime)
     {
-//        counter++;
-//        if(counter == 20) {
-//            revalidate();
-//            repaint();
-//            counter = 0;
-//        }
-
         revalidate();
         repaint();
     }
@@ -111,9 +78,7 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         if (strona == null)
         {
             strona = createImage(getWidth(), getHeight());
-            g_str=strona.getGraphics();
-
-            System.out.println("object strona was null");
+            g_str = strona.getGraphics();
         }
 
         g_str.clearRect(0, 0, getWidth(), getHeight());
@@ -206,56 +171,32 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         debugBox = new JLabel("DebugBox: ");
         getContentPane().add(debugBox);
 
-
-//        playButton = new JButton("Play");
-//        playButton.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                playClicked();
-//            }
-//        } );
-//        panel.add(playButton);
-
-//        addKeyListener(keyboardListener);
         setFocusable(true);
-//        setFocusTraversalKeysEnabled(false);
 
-        addKeyListener(new KeyListener() {
-
-
-
+        addKeyListener(new KeyListener()
+        {
             @Override
-            public void keyPressed(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_F11 && event.isAltDown()) {
-//                    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-                    //System.out.println("pressed");
-                }
-
+            public void keyPressed(KeyEvent event)
+            {
                 getOuter().inputHandler.onKeyPressed(event.getKeyChar(), true);
-                //inputHandler.handleInput(gameEngine);
-                //GameRenderer.this.keyPressed(event.getKeyChar());
                 getOuter().list.add("new");
-
                 getOuter().isKeyPressed = true;
             }
 
             @Override
-            public void keyReleased(KeyEvent event) {
-                //System.out.println("released");
+            public void keyReleased(KeyEvent event)
+            {
                 inputHandler.onKeyPressed(event.getKeyChar(), false);
-
-                //getOuter().isKeyPressed = false;
             }
 
             @Override
-            public void keyTyped(KeyEvent e) {
-                //awwSystem.out.println("typed");
+            public void keyTyped(KeyEvent e)
+            {
+
             }
         });
 
         prepareButtons();
-
-        //addKeyListener(new KeyCheck(this));
-        //addKeyListener(keyCheck);
     }
 
     public GameRenderer getOuter()
@@ -273,74 +214,57 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
 
         buttonsMain.add(new Button()
                 .setPosition(0, 0)
-                .setSize(100,20)
+                .setSize(200,20)
                 .setText(BUTTON_MAIN_PLAY));
 
         buttonsMain.add(new Button()
                 .setPosition(0, 60)
-                .setSize(100,20)
+                .setSize(200,20)
                 .setText(BUTTON_MAIN_HIGHSCORES));
 
         buttonsMain.add(new Button()
                 .setPosition(0, 120)
-                .setSize(100,20)
+                .setSize(200,20)
                 .setText(BUTTON_MAIN_EXIT));
 
 
         buttonsPause = new ButtonsGroup()
-                .setPosition(300,300)
+                .setPosition(400,500)
                 .setListener(this)
                 .setTag(TAG_MENU_PAUSE)
                 .setVisible(false);
 
         buttonsPause.add(new Button()
                 .setPosition(0, 0)
-                .setSize(100,20)
+                .setSize(200,20)
                 .setText(BUTTON_PAUSE_RESUME));
 
         buttonsPause.add(new Button()
-                .setPosition(0, 200)
-                .setSize(100,20)
+                .setPosition(240, 0)
+                .setSize(200,20)
                 .setText(BUTTON_PAUSE_MENU));
 
 
         buttonsGameover = new ButtonsGroup()
-                .setPosition(300,300)
+                .setPosition(400,500)
                 .setListener(this)
                 .setTag(TAG_MENU_GAMEOVER)
                 .setVisible(false);
 
         buttonsGameover.add(new Button()
                 .setPosition(0, 0)
-                .setSize(100,20)
+                .setSize(200,20)
                 .setText(BUTTON_GAMEOVER_AGAIN));
 
         buttonsGameover.add(new Button()
-                .setPosition(0, 200)
-                .setSize(100,20)
+                .setPosition(240, 0)
+                .setSize(200,20)
                 .setText(BUTTON_GAMEOVER_MENU));
-    }
-
-    private void keyPressed(char key)
-    {
-        inputHandler.onKeyPressed(key, true);
-        Debug.Log("pressed1: " + inputHandler.acceleratePressed);
-        inputHandler.handleInput(gameEngine);
-        Debug.Log("pressed2: " + inputHandler.acceleratePressed);
     }
 
     public void handleInput()
     {
         inputHandler.handleInput(gameEngine);
-//        if (inputHandler.acceleratePressed) Debug.Log("wtf1");
-
-//        Debug.Log("someone called me");
-
-        //keyCheck.handleInput();
-
-        //Debug.Log("Size of the list: " + list.size());
-
-        if (isKeyPressed) Debug.Log("key is pressed");
     }
 
     public void showWindow()
@@ -382,16 +306,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     {
 
     }
-
-//    private void playClicked()
-//    {
-//        gameEngine.menuButtonClicked(AsteroidsGame.MenuButton.MAIN_PLAY);
-//    }
-//
-//    private void exitClicked()
-//    {
-//
-//    }
 
     private void loadImages()
     {
@@ -536,5 +450,10 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
                 buttonsGameover.setVisible(true);
                 break;
         }
+    }
+
+    public void cleanUp()
+    {
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 }

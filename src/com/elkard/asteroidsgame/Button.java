@@ -11,6 +11,7 @@ public class Button
 
     public Vec2 position = new Vec2();
     public Vec2 size = new Vec2();
+    public Vec2 lastRealSize = new Vec2();
 
     public String text = "";
     public int fontSize = 20;
@@ -94,10 +95,10 @@ public class Button
         if (size.x > realSizeX) realSizeX = (int) size.x;
         if (size.y > realSizeY) realSizeY = (int) size.y;
 
+        lastRealSize.x = realSizeX;
+        lastRealSize.y = realSizeY;
+
         g.drawRect((int) (position.x + parentPos.x), (int) (position.y + parentPos.y), realSizeX, realSizeY);
-
-
-
         g.drawString(text, posX, (int) (position.y + size.y + boundary + parentPos.y));
     }
 }

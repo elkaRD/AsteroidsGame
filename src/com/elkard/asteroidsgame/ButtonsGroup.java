@@ -81,8 +81,8 @@ public class ButtonsGroup
 
         for (Button button : buttons)
         {
-            if (posX >= button.position.x && posX <= button.position.x + button.size.x
-                && posY >= button.position.y && posY <= button.position.y + button.size.y)
+            if (posX >= button.position.x && posX <= button.position.x + button.lastRealSize.x
+                && posY >= button.position.y && posY <= button.position.y + button.lastRealSize.y)
             {
                 listener.onButtonClicked(this, button);
                 break;

@@ -2,13 +2,13 @@ package com.elkard.asteroidsgame;
 
 public interface IGameController
 {
-    public void onAccelerate(float force);
-    public void onSlowDown(float force);
-    public void onTurn(float turn);
-    //public void onSingleShoot();
+    void onAccelerate(float force);
+    void onSlowDown(float force);
+    void onTurn(float turn);
+
     void onStartShooting();
     void onEndShooting();
-    public void onPause();
+    void onPause();
 
-    void onGameIsOver();
+    void onCloseGame();
 }

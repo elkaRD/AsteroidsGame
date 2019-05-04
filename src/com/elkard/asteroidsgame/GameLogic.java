@@ -1,8 +1,5 @@
 package com.elkard.asteroidsgame;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,6 +28,7 @@ public class GameLogic {
     }
 
     private boolean isPaused = false;
+    private boolean gameOver = false;
 
     public final int screenWidth = 1280;
     public final int screenHeight = 720;
@@ -61,54 +59,13 @@ public class GameLogic {
 
     private IGameState gameStateListener;
 
-//    public enum MenuButton{
-//        PLAY,
-//        EXIT,
-//        AGAIN,
-//        EXITGAMEOVER,
-//        MAINMENU
-//    }
-
-//    public enum GameoverButton
-//    {
-//        AGAIN,
-//        EXIT,
-//        MAINMENU
-//    }
-
     private GameState curState = GameState.MAINMENU;
     private GameState prevState = GameState.INIT;
 
     public GameLogic()
     {
-        //player = new PlayerSpaceship(this);
-
         launchPhysics();
-
-        //TODO: remove this; just testing
-//        for (int i = 0; i < 4; i++)
-//            for (int j = 0; j < 3; j++)
-//            {
-//                Asteroid temp = new Asteroid(this);
-//                temp.setPosition(150 + i*300, 50 + j*200);
-//            }
-
-//        int amountAsteroids = 5;
-//
-//        for (int i = 0; i < amountAsteroids; i++)
-//        {
-//            Vec2 pos = new Vec2(getWidth()/2, getHeight()/2);
-//            pos.x += (float) Math.cos(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
-//            pos.y += (float) Math.sin(Math.toRadians(360f/amountAsteroids * i)) * getHeight();
-//            Asteroid temp = new Asteroid(this, pos);
-//        }
-
-
-
-        //startGame();
         curState = GameState.MAINMENU;
-
-
     }
 
     private void launchPhysics()
@@ -120,11 +77,6 @@ public class GameLogic {
 
     public void onUpdate(float deltaTime)
     {
-//        player.update(deltaTime);
-//
-//        for (GameObject go : bullets)
-//            go.update(deltaTime);
-
         if (curState == GameState.PAUSED) deltaTime = 0;
 
         for (GameObject go : gameObjects)
@@ -139,15 +91,8 @@ public class GameLogic {
         newObjects.clear();
         objectsToRemove.clear();
 
-        ICollisionable[] tempArray = new ICollisionable[asteroids.size()];
-        for (int i = 0; i < asteroids.size(); i++)
-        {
-            tempArray[i] = asteroids.get(i);
-        }
-        //physics.checkCollisionWithGroup(player, tempArray);
-
         if (asteroids.size() == 0) nextLevel();
-        if (remainingLives == 0) onGameIsOver();
+        if (remainingLives == 0 && !gameOver) onGameIsOver();
 
         physics.updatePhysics(deltaTime);
 
@@ -169,7 +114,7 @@ public class GameLogic {
                 break;
 
             case MAIN_HIGHSCORES:
-                //TODO:
+                returnToMenu();
                 break;
 
             case MAIN_EXIT:
@@ -177,11 +122,11 @@ public class GameLogic {
                 break;
 
             case PAUSE_RESUME:
-                isPaused = false;
+                onPause();
                 break;
 
             case PAUSE_MENU:
-                //TODO:
+                returnToMenu();
                 break;
 
             case GAMEOVER_AGAIN:
@@ -189,7 +134,7 @@ public class GameLogic {
                 break;
 
             case GAMEOVER_RETURN:
-                //TODO:
+                returnToMenu();
                 break;
         }
     }
@@ -204,7 +149,13 @@ public class GameLogic {
 
     public void exitGame()
     {
+        curState = GameState.GOODBYE;
+        gameController.onCloseGame();
+    }
 
+    public void returnToMenu()
+    {
+        curState = GameState.MAINMENU;
     }
 
     public void onReset()
@@ -219,6 +170,9 @@ public class GameLogic {
         remainingLives = 3;
         curLevel = 5;
         curScore = 0;
+
+        isPaused = false;
+        gameOver = false;
     }
 
     public void onPause()
@@ -234,6 +188,7 @@ public class GameLogic {
 //        gameController.onGameIsOver();
 
         curState = GameState.GAMEOVER;
+        gameOver = true;
     }
 
     public void onAccelerate(float force)
@@ -344,113 +299,9 @@ public class GameLogic {
 
     }
 
-    public void onMenuButtonClicked(MenuButton buttonClicked)
-    {
-//        if (curState != GameState.MAINMENU) return;
-//
-
-//        if (buttonClicked == MainMenuButton.PLAY)
-//        {
-//
-//        }
-//        else if (buttonClicked == MainMenuButton.EXIT)
-//        {
-//
-//        }
-
-    }
-
-    public void onGameoverButtonClicked(MenuButton buttonClicked)
-    {
-//        if (curState != GameState.GAMEOVER) return;
-//
-//        if (buttonClicked == GameoverButton.AGAIN)
-//        {
-//            curState = GameState.GAMEPLAY;
-//            onReset();
-//        }
-//        else if (buttonClicked == GameoverButton.EXIT)
-//        {
-//            curState = GameState.GOODBYE;
-//
-//        }
-//        else if (buttonClicked == GameoverButton.MAINMENU)
-//        {
-//
-//        }
-    }
-
-    private void checkGameState()
-    {
-        GameState temp = curState;
-        getNextState();
-        if (temp != curState)
-        {
-            stateChanged();
-        }
-    }
-
-    private void getNextState()
-    {
-        if (curState == GameState.MAINMENU)
-        {
-
-        }
-        else if (curState == GameState.GAMEPLAY)
-        {
-
-        }
-        else if (curState == GameState.GAMEOVER)
-        {
-
-        }
-        else if (curState == GameState.PAUSED)
-        {
-
-        }
-        else if (curState == GameState.GOODBYE)
-        {
-
-        }
-    }
-
-    private void stateChanged()
-    {
-        if (curState == GameState.MAINMENU)
-        {
-
-        }
-        else if (curState == GameState.GAMEPLAY)
-        {
-
-        }
-        else if (curState == GameState.GAMEOVER)
-        {
-
-        }
-        else if (curState == GameState.PAUSED)
-        {
-
-        }
-        else if (curState == GameState.GOODBYE)
-        {
-
-        }
-    }
-
     public GameState getState()
     {
         return curState;
-    }
-
-    private void updateGameplay()
-    {
-
-    }
-
-    private void changedUpdate()
-    {
-
     }
 
     public void addBullet(Bullet bullet)

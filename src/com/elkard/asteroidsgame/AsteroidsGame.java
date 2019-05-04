@@ -7,9 +7,8 @@ public class AsteroidsGame implements IGameController{
     private GameLogic gameLogic;
     private GameRenderer gameRenderer;
 
-    long prevTime;
-
-
+    private long prevTime;
+    private boolean endGame;
 
     public AsteroidsGame() {
         startNewGame();
@@ -35,12 +34,10 @@ public class AsteroidsGame implements IGameController{
 //        long lastTime = System.nanoTime();
         prevTime = System.currentTimeMillis();
 
-        while (true) {
-//            long time = System.nanoTime();
-//            int deltaMillis = (int) ((time - lastTime) / 1000000);
-//            float deltaTime = (float) deltaMillis / 1000.0f;
-//            lastTime = time;
+        endGame = false;
 
+        while (true)
+        {
             float deltaTime = getDeltaTime();
 
             handleInput();
@@ -48,8 +45,12 @@ public class AsteroidsGame implements IGameController{
             gameRenderer.onUpdate(deltaTime);
             Debug.FlushLog();
 
+            if (endGame) break;
+
             //System.out.println("delta time: " + deltaTime);
         }
+
+        gameRenderer.cleanUp();
     }
 
     public void onGameIsOver()
@@ -112,11 +113,6 @@ public class AsteroidsGame implements IGameController{
         gameLogic.onTurn(turn);
     }
 
-//    public void onSingleShoot()
-//    {
-//        gameLogic.onSingleShoot();
-//    }
-
     public void onStartShooting()
     {
         gameLogic.onStartShooting();
@@ -130,5 +126,10 @@ public class AsteroidsGame implements IGameController{
     public void onPause()
     {
         gameLogic.onPause();
+    }
+
+    public void onCloseGame()
+    {
+        endGame = true;
     }
 }

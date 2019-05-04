@@ -178,6 +178,8 @@ public class GameObject implements ICollisionable{
         Line[] renderLines = new Line[definedPoints.length * positionsToRender.size()];
         int linesIter = 0;
 
+        Random generator = new Random();
+
         for (Vec2 renderPos : positionsToRender) {
 
             for (int i = 0; i < renderPoints.length; i++) {
@@ -192,22 +194,37 @@ public class GameObject implements ICollisionable{
                 renderLines[linesIter] = new Line();
                 renderLines[linesIter].b = renderPoints[i];
                 renderLines[linesIter].e = renderPoints[j];
+
+                if (isDestructing)
+                {
+
+                    float s = destructionTime / destructionDuration;
+                    Line line = renderLines[linesIter];
+
+                    //first kind of animation
+                    Vec2 destructionVector = line.getMiddle().sub(renderPos).normalize().mul(destructionScale).neg();
+                    //Vec2 destructionVector = Vec2.getNormalVector(generator.nextFloat() * 360f).mul(destructionScale);
+                    line.b = Vec2.lerp(line.b, Vec2.add(line.b, destructionVector), s);
+                    line.e = Vec2.lerp(line.e, Vec2.add(line.e, destructionVector), s);
+                }
             }
+
+
         }
 
-        if (isDestructing)
-        {
-            Random generator = new Random();
-            float s = destructionTime / destructionDuration;
-            for (Line line : renderLines)
-            {
-                //first king of animation
-                Vec2 destructionVector = line.getMiddle().sub(position).normalize().mul(destructionScale).neg();
-                //Vec2 destructionVector = Vec2.getNormalVector(generator.nextFloat() * 360f).mul(destructionScale);
-                line.b = Vec2.lerp(line.b, Vec2.add(line.b, destructionVector), s);
-                line.e = Vec2.lerp(line.e, Vec2.add(line.e, destructionVector), s);
-            }
-        }
+//        if (isDestructing)
+//        {
+//            Random generator = new Random();
+//            float s = destructionTime / destructionDuration;
+//            for (Line line : renderLines)
+//            {
+//                //first kind of animation
+//                Vec2 destructionVector = line.getMiddle().sub(position).normalize().mul(destructionScale).neg();
+//                //Vec2 destructionVector = Vec2.getNormalVector(generator.nextFloat() * 360f).mul(destructionScale);
+//                line.b = Vec2.lerp(line.b, Vec2.add(line.b, destructionVector), s);
+//                line.e = Vec2.lerp(line.e, Vec2.add(line.e, destructionVector), s);
+//            }
+//        }
 
         areLinesValid = true;
         return renderLines;
@@ -291,12 +308,11 @@ public class GameObject implements ICollisionable{
             return 0;
 
         float result = points[0].dst;
-        for (int i = 1; i < points.length; i++) {
-            //if (points ==  null) System.out.println("points is null " + i);
+        for (int i = 1; i < points.length; i++)
+        {
             if (points[i] == null) continue;
-            //wdif (points[i].dst == null) System.out.println("points[i].dst is null " + i);
 
-            if (points[i].dst < result)
+            if (points[i].dst > result)
                 result = points[i].dst;
         }
 
