@@ -112,21 +112,19 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
             drawMainMenu(g2);
         }
 
-        ButtonsManager.getInstance().draw(g2);
+        ButtonsManager.getInstance().draw(g2, this);
         g.drawImage(strona, 0, 0, this);
 
     }
 
     private void drawPauseMenu(Graphics g)
     {
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
-        g.drawString("PAUSED", 450, 400);
+        drawText(g, "PAUSED", screenWidth/2, screenHeight/2, 100, true);
     }
 
     private void drawGameoverMenu(Graphics g)
     {
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 100));
-        g.drawString("GAME OVER", 400, 400);
+        drawText(g, "GAME OVER", screenWidth/2, screenHeight/2, 100, true);
     }
 
     private void drawMainMenu(Graphics g)
@@ -157,13 +155,27 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         for (int i = 0; i < lives; i++)
             g.drawImage(image, 50 + 60*i, 50, this);
 
-        float factor = Math.min(screenWidthFactor, screenHeightFactor);
-
-        g.setFont(new Font("TimesRoman", Font.PLAIN, (int) (50 * factor)));
-        g.drawString("SCORE: " + gameEngine.getGameLogic().getCurScore(), (int)(screenWidth/2*screenWidthFactor), (int)(80*screenHeightFactor));
+        drawText(g, "SCORE: " + gameEngine.getGameLogic().getCurScore(), screenWidth/2, 120, 50, true);
     }
 
-    public ArrayList<String> list = new ArrayList<String>();
+    private void drawText(Graphics g, String msg, int posX, int posY, int size, boolean center)
+    {
+        float factor = Math.min(screenWidthFactor, screenHeightFactor);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, (int) (size * factor)));
+        if (center)
+        {
+            posX -= g.getFontMetrics().stringWidth(msg) / 2;
+            posY -= size / 2;
+        }
+        g.drawString(msg, (int)(posX*screenWidthFactor), (int)(posY*screenHeightFactor));
+    }
+
+    private void drawText(Graphics g, String msg, int posX, int posY, int size)
+    {
+        drawText(g, msg, posX, posY, size, false);
+    }
+
+    //public ArrayList<String> list = new ArrayList<String>();
 
     private JLabel debugBox;
 
@@ -473,6 +485,16 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     public float getScreenRatio()
     {
         return (float) curScreenWidth / curScreenHeight;
+    }
+
+    public float getScreenWidthFactor()
+    {
+        return screenWidthFactor;
+    }
+
+    public float getScreenHeightFactor()
+    {
+        return screenHeightFactor;
     }
 
     public void cleanUp()

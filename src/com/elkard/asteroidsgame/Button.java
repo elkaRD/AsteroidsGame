@@ -9,9 +9,9 @@ public class Button
 {
     public ButtonsGroup group = null;
 
-    public Vec2 position = new Vec2();
-    public Vec2 size = new Vec2();
-    public Vec2 lastRealSize = new Vec2();
+    public Vec2i position = new Vec2i();
+    public Vec2i size = new Vec2i();
+    public Vec2i lastRealSize = new Vec2i();
 
     public String text = "";
     public int fontSize = 20;
@@ -80,13 +80,15 @@ public class Button
         return tag;
     }
 
-    public void draw(Graphics g, Vec2 parentPos)
+    public void draw(Graphics g, GameRenderer gameRenderer, Vec2i parentPos)
     {
-        g.setFont(new Font("TimesRoman", Font.PLAIN, fontSize));
+        float factor = Math.min(gameRenderer.getScreenWidthFactor(), gameRenderer.getScreenHeightFactor());
+        g.setFont(new Font("TimesRoman", Font.PLAIN, (int) (fontSize * factor)));
 
         int realSizeX = g.getFontMetrics().stringWidth(text) + 2*boundary;
         int realSizeY = fontSize + 2*boundary;
         int posX = (int) (position.x + boundary + parentPos.x);
+        int posY = (int) (position.y + size.y + boundary + parentPos.y);
         if (centerText)
         {
             //TODO:
@@ -98,7 +100,18 @@ public class Button
         lastRealSize.x = realSizeX;
         lastRealSize.y = realSizeY;
 
-        g.drawRect((int) (position.x + parentPos.x), (int) (position.y + parentPos.y), realSizeX, realSizeY);
-        g.drawString(text, posX, (int) (position.y + size.y + boundary + parentPos.y));
+        Vec2i newPosition = new Vec2i();
+        newPosition.x = position.x + parentPos.x;
+        newPosition.y = position.y + parentPos.y;
+
+        newPosition.x *= gameRenderer.getScreenWidthFactor();
+        newPosition.y *= gameRenderer.getScreenHeightFactor();
+        realSizeX *= gameRenderer.getScreenWidthFactor();
+        realSizeY *= gameRenderer.getScreenHeightFactor();
+        posX *= gameRenderer.getScreenWidthFactor();
+        posY *= gameRenderer.getScreenHeightFactor();
+
+        g.drawRect(newPosition.x, newPosition.y, realSizeX, realSizeY);
+        g.drawString(text, posX, posY);
     }
 }

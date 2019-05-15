@@ -31,13 +31,13 @@ public class ButtonsManager extends JFrame implements MouseListener
         groups.remove(group);
     }
 
-    public void draw(Graphics g)
+    public void draw(Graphics g, GameRenderer gameRenderer)
     {
         for (ButtonsGroup group : groups)
         {
             if (group.getVisible())
             {
-                group.draw(g);
+                group.draw(g, gameRenderer);
             }
         }
     }

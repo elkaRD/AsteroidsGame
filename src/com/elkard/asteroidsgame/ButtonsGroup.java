@@ -10,7 +10,7 @@ public class ButtonsGroup
     private IButtonClickListener listener = null;
     private boolean isVisible = true;
 
-    public Vec2 position = new Vec2();
+    public Vec2i position = new Vec2i();
 
     public String tag = "";
 
@@ -64,11 +64,11 @@ public class ButtonsGroup
         return isVisible;
     }
 
-    public void draw(Graphics g)
+    public void draw(Graphics g, GameRenderer gameRenderer)
     {
         for (Button button : buttons)
         {
-            button.draw(g, position);
+            button.draw(g, gameRenderer, position);
         }
     }
 
