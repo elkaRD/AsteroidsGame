@@ -30,8 +30,8 @@ public class GameLogic {
     private boolean isPaused = false;
     private boolean gameOver = false;
 
-    public final int screenWidth = 1280;
-    public final int screenHeight = 720;
+    private int screenWidth = 1280;
+    private int screenHeight = 720;
 
     private ArrayList<GameObject> players = new ArrayList<>();
     private ArrayList<GameObject> bullets = new ArrayList<>();
@@ -70,7 +70,7 @@ public class GameLogic {
 
     private void launchPhysics()
     {
-        physics = new Physics(this);
+        physics = new Physics();
         physics.addGroupsToCheck(players, asteroids);
         physics.addGroupsToCheck(bullets, asteroids);
     }
@@ -142,6 +142,7 @@ public class GameLogic {
     public void startGame()
     {
         onReset();
+        gameController.onStartGame();
         curState = GameState.GAMEPLAY;
         player = new PlayerSpaceship(this);
         generateAsteroids();
@@ -173,6 +174,8 @@ public class GameLogic {
 
         isPaused = false;
         gameOver = false;
+
+        screenWidth = (int) (screenHeight * gameController.getScreenRatio());
     }
 
     public void onPause()

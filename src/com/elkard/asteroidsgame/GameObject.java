@@ -118,17 +118,17 @@ public class GameObject implements ICollisionable{
     private void checkPosition()
     {
         if (infinitySpace) {
-            while (position.x > gameEngine.screenWidth)
-                position.x -= gameEngine.screenWidth;
+            while (position.x > gameEngine.getWidth())
+                position.x -= gameEngine.getWidth();
 
             while (position.x < 0)
-                position.x += gameEngine.screenWidth;
+                position.x += gameEngine.getWidth();
 
-            while (position.y > gameEngine.screenHeight)
-                position.y -= gameEngine.screenHeight;
+            while (position.y > gameEngine.getHeight())
+                position.y -= gameEngine.getHeight();
 
             while (position.y < 0)
-                position.y += gameEngine.screenHeight;
+                position.y += gameEngine.getHeight();
         }
     }
 

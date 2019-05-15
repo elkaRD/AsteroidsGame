@@ -10,5 +10,8 @@ public interface IGameController
     void onEndShooting();
     void onPause();
 
+    void onStartGame();
     void onCloseGame();
+
+    float getScreenRatio();
 }

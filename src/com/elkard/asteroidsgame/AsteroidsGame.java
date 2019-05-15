@@ -71,8 +71,16 @@ public class AsteroidsGame implements IGameController{
                 Thread.sleep(toSleep);
 
             } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
+        //todo        Thread.currentThread().interrupt();
             }
+        }
+
+        //TODO:
+        try {
+            Thread.sleep(16);
+        }catch(Exception e)
+        {
+            e.printStackTrace();
         }
 
         if (deltaTime > 0.25f) deltaTime = 0.25f;
@@ -123,6 +131,11 @@ public class AsteroidsGame implements IGameController{
         gameLogic.onEndShooting();
     }
 
+    public void onStartGame()
+    {
+        gameRenderer.setScreenResolution();
+    }
+
     public void onPause()
     {
         gameLogic.onPause();
@@ -131,5 +144,10 @@ public class AsteroidsGame implements IGameController{
     public void onCloseGame()
     {
         endGame = true;
+    }
+
+    public float getScreenRatio()
+    {
+        return gameRenderer.getScreenRatio();
     }
 }

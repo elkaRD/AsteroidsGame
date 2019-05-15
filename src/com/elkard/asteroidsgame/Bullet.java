@@ -32,9 +32,6 @@ public class Bullet extends GameObject
 
         gameEngine.addBullet(this);
 
-//        System.out.println("My pos: " + getPosition() + ",  " + getRotation());
-//        System.out.println("weapon: " + weapon.getPosition() + ",  " + weapon.getRotation());
-
         debug = weapon;
 
         for (int i = 0; i < 2; i++)

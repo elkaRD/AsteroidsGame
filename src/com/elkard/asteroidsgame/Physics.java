@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 
 public final class Physics
 {
-    private GameLogic gameEngine;
+    //private GameLogic gameEngine;
 
 //    private GameObject player;
 //    private ArrayList<GameObject> asteroids;
@@ -30,9 +30,9 @@ public final class Physics
         public ArrayList<GameObject> g2;
     }
 
-    public Physics(GameLogic gl)
+    public Physics(/*GameLogic gl*/)
     {
-        gameEngine = gl;
+        //gameEngine = gl;
     }
 
     public void updatePhysics(float delta)
@@ -102,8 +102,9 @@ public final class Physics
     public boolean checkCollision(ICollisionable a, ICollisionable b)
     {
         Vec2 posDiff = Vec2.sub(a.getPosition(), b.getPosition());
-        if (posDiff.magnitude() < a.getCollisionRadius() + b.getCollisionRadius())
-            return false;
+        //TODO: fix this condition
+        //if (a.getCollisionRadius() + b.getCollisionRadius() > posDiff.magnitude())
+        //    return false;
 
         for (Line line1 : a.getCollisionLines())
         {

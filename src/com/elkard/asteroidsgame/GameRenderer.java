@@ -11,9 +11,13 @@ import java.util.ArrayList;
 
 public class GameRenderer extends JFrame implements IButtonClickListener, IGameState
 {
+    private int screenWidth = 1280;
+    private int screenHeight = 720;
 
-    private static final int screenWidth = 1280;
-    private static final int screenHeight = 720;
+    private int curScreenWidth = 1280;
+    private int curScreenHeight = 720;
+    private float screenWidthFactor = 1f;
+    private float screenHeightFactor = 1f;
 
     private static final String TAG_MENU_MAIN = "mainMenu";
     private static final String TAG_MENU_PAUSE = "pauseMenu";
@@ -55,6 +59,7 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         buildWindow(screenWidth, screenHeight);
 
         addMouseListener(ButtonsManager.getInstance());
+        addComponentListener(new ResizeListener());
 
         gameEngine.getGameLogic().setStateChangedListener(this);
 
@@ -139,7 +144,10 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     private void drawLines(Graphics g, Line[] lines)
     {
         for (Line line : lines)
-            g.drawLine((int) line.b.x, (int) line.b.y, (int) line.e.x, (int) line.e.y);
+            g.drawLine((int) (line.b.x * screenWidthFactor), (int) (line.b.y * screenHeightFactor),
+                       (int) (line.e.x * screenWidthFactor), (int) (line.e.y * screenHeightFactor));
+
+        System.out.println("factors: " + screenWidthFactor + " x " + screenHeightFactor);
     }
 
     private void drawUI(Graphics g)
@@ -149,8 +157,10 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         for (int i = 0; i < lives; i++)
             g.drawImage(image, 50 + 60*i, 50, this);
 
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
-        g.drawString("SCORE: " + gameEngine.getGameLogic().getCurScore(), screenWidth/2, 80);
+        float factor = Math.min(screenWidthFactor, screenHeightFactor);
+
+        g.setFont(new Font("TimesRoman", Font.PLAIN, (int) (50 * factor)));
+        g.drawString("SCORE: " + gameEngine.getGameLogic().getCurScore(), (int)(screenWidth/2*screenWidthFactor), (int)(80*screenHeightFactor));
     }
 
     public ArrayList<String> list = new ArrayList<String>();
@@ -179,7 +189,7 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
             public void keyPressed(KeyEvent event)
             {
                 getOuter().inputHandler.onKeyPressed(event.getKeyChar(), true);
-                getOuter().list.add("new");
+                //getOuter().list.add("new");
                 getOuter().isKeyPressed = true;
             }
 
@@ -452,8 +462,32 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         }
     }
 
+    public void setScreenResolution()
+    {
+        screenWidth = curScreenWidth;
+        screenHeight = curScreenHeight;
+        screenWidthFactor = 1f;
+        screenHeightFactor = 1f;
+    }
+
+    public float getScreenRatio()
+    {
+        return (float) curScreenWidth / curScreenHeight;
+    }
+
     public void cleanUp()
     {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+
+    private class ResizeListener extends ComponentAdapter
+    {
+        public void componentResized(ComponentEvent e)
+        {
+            getOuter().curScreenHeight = e.getComponent().getHeight();
+            getOuter().curScreenWidth = e.getComponent().getWidth();
+            getOuter().screenHeightFactor = (float) getOuter().curScreenHeight / getOuter().screenHeight;
+            getOuter().screenWidthFactor = (float) getOuter().curScreenWidth / getOuter().screenWidth;
+        }
     }
 }

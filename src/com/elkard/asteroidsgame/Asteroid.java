@@ -1,5 +1,7 @@
 package com.elkard.asteroidsgame;
 
+import com.sun.deploy.util.SyncFileAccess;
+
 import java.util.Random;
 
 public class Asteroid extends GameObject implements ICollisionable
@@ -16,6 +18,7 @@ public class Asteroid extends GameObject implements ICollisionable
 
     private PolarLayout[] boundaryPoints;
 
+    private float randomDirection;
     private Vec2 velocityDirection;
     private float speed;
 
@@ -23,7 +26,7 @@ public class Asteroid extends GameObject implements ICollisionable
     private int curScaleLevel;
 
 
-    protected Asteroid(GameLogic gl, Vec2 startPos, int scaleLevel)
+    protected Asteroid(GameLogic gl, Vec2 startPos, Float initDirection, int scaleLevel)
     {
         super(gl);
 
@@ -32,6 +35,9 @@ public class Asteroid extends GameObject implements ICollisionable
 
         gameEngine.addAsteroid(this);
         curScaleLevel = scaleLevel;
+
+        //TODO:
+       // curScaleLevel  =3;
 
         setPosition(startPos);
         setScale(scaleLevels[curScaleLevel]);
@@ -47,24 +53,21 @@ public class Asteroid extends GameObject implements ICollisionable
             boundaryPoints[i] = new PolarLayout();
             boundaryPoints[i].dst = asteroidRadius + (generator.nextFloat()*2 - 1) * diffBoundaries;
             boundaryPoints[i].rot = (360f / amountBoundary) * i + (generator.nextFloat()*2 - 1) * diffRot;
-
-            System.out.println("DST: " + boundaryPoints[i].dst + ",   ROT: " + boundaryPoints[i].rot);
         }
 
         speed = generator.nextFloat() * 50f + 50f;
-        float randomDirection = generator.nextFloat() * 360f;
+        if (initDirection != null) randomDirection = initDirection;
+        else randomDirection = generator.nextFloat() * 360f;
+
+        System.out.println("DIRECTION: " + randomDirection);
+
         velocityDirection = new Vec2();
         velocityDirection.x = (float) Math.cos(Math.toRadians(randomDirection));
         velocityDirection.y = (float) Math.sin(Math.toRadians(randomDirection));
     }
 
     public Asteroid(GameLogic gl, Vec2 startPos) {
-        this(gl, startPos, 0);
-    }
-
-    public Asteroid(GameLogic gl)
-    {
-        this(gl, new Vec2(), 0);
+        this(gl, startPos, null, 0);
     }
 
     public void cleanUp()
@@ -88,8 +91,10 @@ public class Asteroid extends GameObject implements ICollisionable
 
         if (curScaleLevel != scaleLevels.length-1)
         {
-            new Asteroid(gameEngine, getPosition(), curScaleLevel+1);
-            new Asteroid(gameEngine, getPosition(), curScaleLevel+1);
+            float diff = RandomGenerator.getFloat(20, 40);
+
+            new Asteroid(gameEngine, getPosition(), randomDirection + diff, curScaleLevel+1);
+            new Asteroid(gameEngine, getPosition(), randomDirection - diff, curScaleLevel+1);
         }
     }
 
