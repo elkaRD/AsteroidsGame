@@ -92,12 +92,6 @@ public final class Vec2i {
         return x*x + y*y;
     }
 
-    public Vec2i normalize()
-    {
-        div(magnitude());
-        return this;
-    }
-
     public static Vec2i add(Vec2i a, Vec2i b) {
         return new Vec2i(a.x + b.x, a.y + b.y);
     }
@@ -148,19 +142,14 @@ public final class Vec2i {
         return a.sqrMagnitude();
     }
 
-    public static Vec2i normal(Vec2i a)
-    {
-        return a.clone().normalize();
-    }
-
     public static Vec2i lerp(Vec2i b, Vec2i e, float s)
     {
         return new Vec2i(b.x + (e.x - b.x)*s, b.y + (e.y - b.y)*s);
     }
 
-    public static Vec2i getNormalVector(float angle)
+    public static Vec2 getNormalVector(float angle)
     {
-        return new Vec2i((int) Math.cos(Math.toRadians(angle)), (int) Math.sin(Math.toRadians(angle)));
+        return new Vec2((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle)));
     }
 
     public String toString() {
@@ -170,5 +159,20 @@ public final class Vec2i {
     public Vec2i clone()
     {
         return new Vec2i(this);
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof Vec2)
+        {
+            Vec2 o = (Vec2) other;
+            return o.x == x && o.y == y;
+        }
+
+        if (!(other instanceof Vec2i)) return false;
+
+        Vec2i o = (Vec2i) other;
+        return o.x == x && o.y == y;
     }
 }

@@ -151,12 +151,30 @@ public final class Vec2 {
         return new Vec2((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle)));
     }
 
+    @Override
     public String toString() {
         return new String("(" + x + ", " + y + ")");
     }
 
+    @Override
     public Vec2 clone()
     {
         return new Vec2(this);
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof Vec2i)
+        {
+            return other.equals(this);
+        }
+
+        if (!(other instanceof Vec2)) return false;
+
+        Vec2 o = (Vec2) other;
+        if (o.x == x && o.y == y) return true;
+
+        return false;
     }
 }

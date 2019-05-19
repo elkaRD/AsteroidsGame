@@ -49,14 +49,16 @@ public class GameObject implements ICollisionable{
 
     public final void setPosition(float x, float y)
     {
-        if (infinitySpace) checkPosition();
         position = new Vec2(x, y);
+        if (infinitySpace)
+            checkPosition();
     }
 
     public final void move(Vec2 deltaPosition)
     {
-        if (infinitySpace) checkPosition();
         position.add(deltaPosition);
+        if (infinitySpace)
+            checkPosition();
     }
 
     public final Vec2 getPosition() {

@@ -109,7 +109,7 @@ public class GameLogic {
 
         physics.updatePhysics(deltaTime);
 
-        if (prevState != curState)
+        if (prevState != curState && gameStateListener != null)
         {
             gameStateListener.onStateChanged(prevState, curState);
             prevState = curState;
