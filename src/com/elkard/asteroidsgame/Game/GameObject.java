@@ -31,26 +31,10 @@ public class GameObject implements ICollisionable{
     private boolean areLinesValid = false;
     private Line[] validLines;
 
-//    protected GameObject parent;
-//    private Vec2
-
-    //protected ArrayList<GameObject> additionalRender;
-
-    public GameObject(GameLogic gl, GameObject parentObject)
+    public GameObject(GameLogic gl)
     {
         gameEngine = gl;
         gameEngine.registerObject(this);
-
-//        parent = parentObject;
-//        if (parent != null)
-//        {
-//
-//        }
-    }
-
-    public GameObject(GameLogic gl)
-    {
-        this(gl, null);
     }
 
     public void cleanUp()
@@ -161,7 +145,6 @@ public class GameObject implements ICollisionable{
         PolarLayout[] definedPoints = renderPoints();
         Vec2[] renderPoints = new Vec2[definedPoints.length];
 
-//        float objectDimension = Collections.max(Arrays.asList(definedPoints)).dst; // actually half of the object dimension
         float objectDimension = getMaxDst(definedPoints);   // actually half of the object dimensiona
         halfOfDimension = objectDimension;
 
@@ -216,20 +199,6 @@ public class GameObject implements ICollisionable{
 
         }
 
-//        if (isDestructing)
-//        {
-//            Random generator = new Random();
-//            float s = destructionTime / destructionDuration;
-//            for (Line line : renderLines)
-//            {
-//                //first kind of animation
-//                Vec2 destructionVector = line.getMiddle().sub(position).normalize().mul(destructionScale).neg();
-//                //Vec2 destructionVector = Vec2.getNormalVector(generator.nextFloat() * 360f).mul(destructionScale);
-//                line.b = Vec2.lerp(line.b, Vec2.add(line.b, destructionVector), s);
-//                line.e = Vec2.lerp(line.e, Vec2.add(line.e, destructionVector), s);
-//            }
-//        }
-
         areLinesValid = true;
         return renderLines;
     }
@@ -256,7 +225,6 @@ public class GameObject implements ICollisionable{
 
     public Line[] getCollisionLines()
     {
-        //return getRenderLines(true);
         if (!areLinesValid)
             validLines = generateLines();
 
@@ -285,8 +253,7 @@ public class GameObject implements ICollisionable{
 
     public void onCollisionEnter(ICollisionable other)
     {
-//        GameObject o = (GameObject) other;
-//        System.out.println(getName() + ": collision with " + o.getName());
+
     }
 
     protected void animateDestruction(float duration, float destructScale)

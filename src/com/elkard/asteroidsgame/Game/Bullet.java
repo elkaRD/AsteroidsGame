@@ -34,7 +34,6 @@ public class Bullet extends GameObject
         bulletVelocity = bulletDirection.clone();
         bulletVelocity.mul(speed);
 
-        //gameEngine.addBullet(this);
         gameEngine.addObject(this, GameLogic.ObjectType.BULLET);
 
         debug = weapon;
@@ -76,7 +75,6 @@ public class Bullet extends GameObject
     {
         super.cleanUp();
 
-        //gameEngine.removeBullet(this);
         gameEngine.removeObject(this);
     }
 

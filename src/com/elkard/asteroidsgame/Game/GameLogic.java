@@ -43,9 +43,6 @@ public class GameLogic {
     private int screenWidth = 1280;
     private int screenHeight = 720;
 
-//    private ArrayList<GameObject> players = new ArrayList<>();
-//    private ArrayList<GameObject> bullets = new ArrayList<>();
-//    private ArrayList<GameObject> asteroids = new ArrayList<>();
     private HashMap<ObjectType, ArrayList<GameObject>> objects = new HashMap<>();
 
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
@@ -87,8 +84,6 @@ public class GameLogic {
     private void launchPhysics()
     {
         physics = new Physics();
-//        physics.addGroupsToCheck(players, asteroids);
-//        physics.addGroupsToCheck(bullets, asteroids);
         physics.addGroupsToCheck(objects.get(ObjectType.PLAYER), objects.get(ObjectType.ASTEROID));
         physics.addGroupsToCheck(objects.get(ObjectType.BULLET), objects.get(ObjectType.ASTEROID));
     }
@@ -109,7 +104,6 @@ public class GameLogic {
         newObjects.clear();
         objectsToRemove.clear();
 
-//        if (asteroids.size() == 0) nextLevel();
         if (objects.get(ObjectType.ASTEROID).size() == 0) nextLevel();
         if (remainingLives == 0 && !gameOver) onGameIsOver();
 
@@ -180,9 +174,6 @@ public class GameLogic {
 
     public void onReset()
     {
-//        players.clear();
-//        bullets.clear();
-//        asteroids.clear();
         clearObjects();
         gameObjects.clear();
         newObjects.clear();
@@ -207,9 +198,6 @@ public class GameLogic {
 
     public void onGameIsOver()
     {
-//        if (gameController == null) return;
-//        gameController.onGameIsOver();
-
         curState = GameState.GAMEOVER;
         gameOver = true;
     }
@@ -352,46 +340,14 @@ public class GameLogic {
         }
     }
 
-//    public void addBullet(Bullet bullet)
-//    {
-//        bullets.add(bullet);
-//    }
-//
-//    public void removeBullet(Bullet bullet)
-//    {
-//        bullets.remove(bullet);
-//    }
-//
-//    public void addAsteroid(Asteroid asteroid)
-//    {
-//        asteroids.add(asteroid);
-//    }
-//
-//    public void removeAsteroid(Asteroid asteroid)
-//    {
-//        asteroids.remove(asteroid);
-//        System.out.println("CALLED REMOVE ASTEROID, size: " + asteroids.size());
-//    }
-//
-//    public void addPlayer(PlayerSpaceship newPlayer)
-//    {
-//        players.add(newPlayer);
-//    }
-//
-//    public void removePlayer(PlayerSpaceship toRemove)
-//    {
-//        players.remove(toRemove);
-//    }
-
     public Line[] getPlayerRenderLines()
     {
         ArrayList<Line> result = new ArrayList<>();
-        //for (GameObject p : players)
         for (GameObject p : objects.get(ObjectType.PLAYER))
         {
             result.addAll(Arrays.asList(p.getRenderLines()));
         }
-        //result.addAll(Arrays.asList(player.getRenderLines()));
+
         result.addAll(Arrays.asList(player.booster.getRenderLines()));
 
         Line[] lines = new Line[result.size()];
@@ -402,15 +358,12 @@ public class GameLogic {
     public Line[] getBulletsRenderLines()
     {
         ArrayList<Line> renderLines = new ArrayList<>();
-        //for (GameObject bullet : bullets)
         for (GameObject bullet : objects.get(ObjectType.BULLET))
         {
             Line[] temp = bullet.getRenderLines();
             renderLines.add(temp[0]);
             renderLines.add(temp[1]);
         }
-        //TODO: check if this solution works
-        //TODO: think about switching from arrays to ArrayLists
 
         Line[] toReturn = new Line[renderLines.size()];
         for (int i = 0; i < renderLines.size(); i++)
@@ -422,15 +375,8 @@ public class GameLogic {
     public Line[] getAsteroidsRenderLines()
     {
         ArrayList<Line> renderLines = new ArrayList<>();
-//        for (GameObject asteroid : asteroids)
-//        {
-//            Line[] temp = asteroid.getRenderLines();
-//            for (Line line : temp)
-//            {
-//                renderLines.add(line);
-//            }
-//        }
         ArrayList<GameObject> asteroids = objects.get(ObjectType.ASTEROID);
+
         for (int i = 0; i < asteroids.size(); i++)
         {
             Line[] temp = asteroids.get(i).getRenderLines();
@@ -450,11 +396,6 @@ public class GameLogic {
     {
         newObjects.add(newObject);
     }
-
-//    public void removeObject(GameObject toRemove)
-//    {
-//        objectsToRemove.add(toRemove);
-//    }
 
     public void attachController(IGameController gc)
     {

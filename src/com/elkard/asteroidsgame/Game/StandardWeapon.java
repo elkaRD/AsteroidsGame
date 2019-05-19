@@ -14,7 +14,7 @@ public class StandardWeapon extends Weapon
         if (isShooting)
         {
             isShooting = false;
-            Bullet temp = new Bullet(gameEngine, this);
+            new Bullet(gameEngine, this);
         }
     }
 }

@@ -4,12 +4,10 @@ import com.elkard.asteroidsgame.View.GameRenderer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class ButtonsManager extends JFrame implements MouseListener
+public class ButtonsManager extends JFrame
 {
     private static ButtonsManager instance = new ButtonsManager();
     private ArrayList<ButtonsGroup> groups = new ArrayList<>();
@@ -45,32 +43,6 @@ public class ButtonsManager extends JFrame implements MouseListener
             }
         }
     }
-
-    @Override
-    public void mouseClicked(MouseEvent event)
-    {
-        System.out.println("Clicked: " + event.getX() + ", " + event.getY());
-
-        for (ButtonsGroup group : groups)
-        {
-            if (group.getVisible())
-            {
-                group.onClick(event.getX(), event.getY());
-            }
-        }
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent arg0) { }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) { }
-
-    @Override
-    public void mousePressed(MouseEvent arg0) { }
-
-    @Override
-    public void mouseReleased(MouseEvent arg0) { }
 
     public void nextButton()
     {

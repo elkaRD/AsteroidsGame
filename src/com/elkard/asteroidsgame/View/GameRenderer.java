@@ -41,16 +41,13 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     private static final String BUTTON_GAMEOVER_MENU = "RETURN";
 
     private final AsteroidsGame gameEngine;
-    //private KeyboardListener keyboardListener;
 
     public final InputHandler inputHandler;
 
-    private final KeyCheck keyCheck;
-
     public Boolean isKeyPressed = false;
 
-    private Image strona;
-    private Graphics g_str;
+    private Image frameBuffer;
+    private Graphics g_frameBuffer;
 
     private Image image;
 
@@ -62,18 +59,13 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     {
         gameEngine = ag;
         inputHandler = new InputHandler();
-        keyCheck = new KeyCheck(this);
         buildWindow(screenWidth, screenHeight);
 
-        addMouseListener(ButtonsManager.getInstance());
         addComponentListener(new ResizeListener());
 
         gameEngine.getGameLogic().setStateChangedListener(this);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        int w = getWidth();
-        int h = getHeight();
 
         loadImages();
     }
@@ -84,43 +76,42 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         repaint();
     }
 
-    public void paint(Graphics g) {
-        //super.paint(g);  // fixes the immediate problem.
-
-        if (strona == null)
+    public void paint(Graphics g)
+    {
+        if (frameBuffer == null)
         {
-            strona = createImage(getWidth(), getHeight());
-            g_str = strona.getGraphics();
+            frameBuffer = createImage(getWidth(), getHeight());
+            g_frameBuffer = frameBuffer.getGraphics();
         }
 
-        g_str.clearRect(0, 0, getWidth(), getHeight());
-        Graphics g2 = g_str;
+        g_frameBuffer.clearRect(0, 0, getWidth(), getHeight());
+        ((Graphics2D) g_frameBuffer).setStroke(new BasicStroke(2));
 
         GameLogic.GameState curState = gameEngine.getGameLogic().getState();
 
         if (curState == GameLogic.GameState.GAMEPLAY || curState == GameLogic.GameState.PAUSED || curState == GameLogic.GameState.GAMEOVER)
         {
-            drawGameplay(g2);
-            drawUI(g2);
+            drawGameplay(g_frameBuffer);
+            drawUI(g_frameBuffer);
         }
 
         if (curState == GameLogic.GameState.PAUSED)
         {
-            drawPauseMenu(g2);
+            drawPauseMenu(g_frameBuffer);
         }
 
         if (curState == GameLogic.GameState.GAMEOVER)
         {
-            drawGameoverMenu(g2);
+            drawGameoverMenu(g_frameBuffer);
         }
 
         if (curState == GameLogic.GameState.MAINMENU)
         {
-            drawMainMenu(g2);
+            drawMainMenu(g_frameBuffer);
         }
 
-        ButtonsManager.getInstance().draw(g2, this);
-        g.drawImage(strona, 0, 0, this);
+        ButtonsManager.getInstance().draw(g_frameBuffer, this);
+        g.drawImage(frameBuffer, 0, 0, this);
 
     }
 
@@ -151,8 +142,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         for (Line line : lines)
             g.drawLine((int) (line.b.x * screenWidthFactor), (int) (line.b.y * screenHeightFactor),
                        (int) (line.e.x * screenWidthFactor), (int) (line.e.y * screenHeightFactor));
-
-//        System.out.println("factors: " + screenWidthFactor + " x " + screenHeightFactor);
     }
 
     private void drawUI(Graphics g)
@@ -182,23 +171,11 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         drawText(g, msg, posX, posY, size, false);
     }
 
-    //public ArrayList<String> list = new ArrayList<String>();
-
-    private JLabel debugBox;
-
-    public void printMsg(String msg)
-    {
-        debugBox.setText("msg: " + msg);
-    }
-
     private void buildWindow(int w, int h)
     {
         JPanel panel = new JPanel();
         getContentPane().add(panel);
         setSize(w, h);
-
-        debugBox = new JLabel("DebugBox: ");
-        getContentPane().add(debugBox);
 
         setFocusable(true);
 
@@ -207,9 +184,7 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
             @Override
             public void keyPressed(KeyEvent event)
             {
-//                getOuter().inputHandler.onKeyPressed(event.getKeyChar(), true);
                 getOuter().inputHandler.onKeyPressed(event.getKeyCode(), true);
-//                getOuter().list.add("new");
                 getOuter().isKeyPressed = true;
             }
 
@@ -309,36 +284,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         setVisible(false);
     }
 
-    private void renderPlayer()
-    {
-
-    }
-
-    private void renderAsteroids()
-    {
-
-    }
-
-    private void renderBullets()
-    {
-
-    }
-
-    private void renderUI()
-    {
-
-    }
-
-    private void showMainMenu()
-    {
-
-    }
-
-    private void hideMainMenu()
-    {
-
-    }
-
     private void loadImages()
     {
         try {
@@ -347,54 +292,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         } catch (IOException ex) {
             System.out.println("Can't load the image");
             ex.printStackTrace();
-        }
-    }
-
-    class KeyCheck implements KeyListener
-    {
-        private GameRenderer gameRenderer;
-
-        private InputHandler inha;
-
-        public KeyCheck(GameRenderer gr)
-        {
-            gameRenderer = gr;
-            inha = new InputHandler();
-        }
-
-
-        @Override
-        public void keyPressed(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.VK_F11 && event.isAltDown()) {
-//                    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-            System.out.println("pressed");
-        }
-
-//        gameRenderer.inputHandler.onKeyPressed(event.getKeyChar(), true);
-        //gameRenderer.inputHandler.handleInput(gameEngine);
-        //GameRenderer.this.keyPressed(event.getKeyChar());
-
-            inha.onKeyPressed(event.getKeyChar(), true);
-    }
-
-        @Override
-        public void keyReleased(KeyEvent event) {
-        System.out.println("released");
-        gameRenderer.inputHandler.onKeyPressed(event.getKeyChar(), false);
-    }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-        System.out.println("typed");
-    }
-
-        public void handleInput()
-        {
-//            gameRenderer.inputHandler.handleInput(gameEngine);
-//            if (gameRenderer.inputHandler.acceleratePressed)
-//                Debug.Log("seems to be ok");
-
-            inha.handleInput(gameEngine);
         }
     }
 

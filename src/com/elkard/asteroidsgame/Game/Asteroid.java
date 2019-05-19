@@ -27,7 +27,6 @@ public class Asteroid extends GameObject implements ICollisionable
     private static final float[] scaleLevels = {0.7f, 0.4f, 0.25f, 0.1f};
     private int curScaleLevel;
 
-
     protected Asteroid(GameLogic gl, Vec2 startPos, Float initDirection, int scaleLevel)
     {
         super(gl);
@@ -35,12 +34,8 @@ public class Asteroid extends GameObject implements ICollisionable
         setName("asteroid" + asteroidsCounter);
         asteroidsCounter++;
 
-        //gameEngine.addAsteroid(this);
         gameEngine.addObject(this, GameLogic.ObjectType.ASTEROID);
         curScaleLevel = scaleLevel;
-
-        //TODO:
-       // curScaleLevel  =3;
 
         setPosition(startPos);
         setScale(scaleLevels[curScaleLevel]);
@@ -77,7 +72,6 @@ public class Asteroid extends GameObject implements ICollisionable
     {
         super.cleanUp();
 
-        //gameEngine.removeAsteroid(this);
         gameEngine.removeObject(this);
     }
 

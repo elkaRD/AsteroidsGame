@@ -18,7 +18,7 @@ public class MachineGun extends Weapon
 
         if (isShooting && timeSinceLastShoot > minTimeSinceLastShoot)
         {
-            Bullet temp = new Bullet(gameEngine, this);
+            new Bullet(gameEngine, this);
             timeSinceLastShoot = 0f;
         }
     }

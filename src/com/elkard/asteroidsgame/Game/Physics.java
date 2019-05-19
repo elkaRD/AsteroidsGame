@@ -7,12 +7,6 @@ import java.util.ArrayList;
 
 public final class Physics
 {
-    //private GameLogic gameEngine;
-
-//    private GameObject player;
-//    private ArrayList<GameObject> asteroids;
-//    private ArrayList<GameObject> bullets;
-
     private ArrayList<PairOfGroups> pairs = new ArrayList<>();
 
     private static class PairOfGroups
@@ -29,9 +23,9 @@ public final class Physics
         public ArrayList<GameObject> g2;
     }
 
-    public Physics(/*GameLogic gl*/)
+    public Physics()
     {
-        //gameEngine = gl;
+
     }
 
     public void updatePhysics(float delta)
@@ -53,12 +47,6 @@ public final class Physics
         temp.add(gameObject);
         pairs.add(new PairOfGroups(temp, g2));
     }
-
-//    public void checkCollisionWithGroup(ICollisionable object1, ICollisionable[] group)
-//    {
-//        ICollisionable[] temp = {object1};
-//        checkCollisionForGroups(temp, group);
-//    }
     
     private class PairOfObjects
     {
@@ -84,8 +72,6 @@ public final class Physics
                 if (!object2.isPhysicsEnabled()) continue;
                 if (checkCollision(object1, object2))
                 {
-//                    object1.onCollisionEnter(object2);
-//                    object2.onCollisionEnter(object1);
                     objectsToNotify.add(new PairOfObjects(object1, object2));
                 }
             }
@@ -117,15 +103,19 @@ public final class Physics
         return false;
     }
 
-    private float iloczyn_wektorowy(Vec2 X, Vec2 Y, Vec2 Z)
+    //methods below base on algorithm found on: http://www.algorytm.edu.pl/algorytmy-maturalne/dwa-odcinki.html
+    private float crossProduct(Vec2 X, Vec2 Y, Vec2 Z)
     {
-        float x1 = Z.x - X.x, y1 = Z.y - X.y,
-                x2 = Y.x - X.x, y2 = Y.y - X.y;
+        float x1 = Z.x - X.x;
+        float y1 = Z.y - X.y;
+        float x2 = Y.x - X.x;
+        float y2 = Y.y - X.y;
+
         return x1*y2 - x2*y1;
     }
-    //sprawdzenie, czy punkt Z(koniec odcinka pierwszego)
-//leży na odcinku XY
-    private boolean sprawdz(Vec2 X, Vec2 Y, Vec2 Z)
+
+    //sprawdzenie, czy punkt Z(koniec odcinka pierwszego) leży na odcinku XY
+    private boolean doesZBelongsToXY(Vec2 X, Vec2 Y, Vec2 Z)
     {
         return Math.min(X.x, Y.x) <= Z.x && Z.x <= Math.max(X.x, Y.x)
                 && Math.min(X.y, Y.y) <= Z.y && Z.y <= Math.max(X.y, Y.y);
@@ -133,22 +123,18 @@ public final class Physics
 
     private boolean doLinesCross(Vec2 A, Vec2 B, Vec2 C, Vec2 D)
     {
-        float v1 = iloczyn_wektorowy(C, D, A),
-                v2 = iloczyn_wektorowy(C, D, B),
-                v3 = iloczyn_wektorowy(A, B, C),
-                v4 = iloczyn_wektorowy(A, B, D);
+        float v1 = crossProduct(C, D, A);
+        float v2 = crossProduct(C, D, B);
+        float v3 = crossProduct(A, B, C);
+        float v4 = crossProduct(A, B, D);
 
-        //sprawdzenie czy się przecinają - dla niedużych liczb
-        //if(v1*v2 < 0 && v3*v4 < 0) return true;
-
-        //sprawdzenie czy się przecinają - dla większych liczb
-        if((v1>0&&v2<0||v1<0&&v2>0)&&(v3>0&&v4<0||v3<0&&v4>0)) return true;
+        if((v1>0 && v2<0 || v1<0 && v2>0) && (v3>0 && v4<0 || v3<0 && v4>0)) return true;
 
         //sprawdzenie, czy koniec odcinka leży na drugim
-        if(v1 == 0 && sprawdz(C, D, A)) return true;
-        if(v2 == 0 && sprawdz(C, D, B)) return true;
-        if(v3 == 0 && sprawdz(A, B, C)) return true;
-        if(v4 == 0 && sprawdz(A, B, D)) return true;
+        if(v1 == 0 && doesZBelongsToXY(C, D, A)) return true;
+        if(v2 == 0 && doesZBelongsToXY(C, D, B)) return true;
+        if(v3 == 0 && doesZBelongsToXY(A, B, C)) return true;
+        if(v4 == 0 && doesZBelongsToXY(A, B, D)) return true;
 
         //odcinki nie mają punktów wspólnych
         return false;

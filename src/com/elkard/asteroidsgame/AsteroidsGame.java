@@ -3,14 +3,16 @@ package com.elkard.asteroidsgame;
 import com.elkard.asteroidsgame.Game.GameLogic;
 import com.elkard.asteroidsgame.View.GameRenderer;
 
-public class AsteroidsGame implements IGameController{
+public class AsteroidsGame implements IGameController
+{
     private GameLogic gameLogic;
     private GameRenderer gameRenderer;
 
     private long prevTime;
     private boolean endGame;
 
-    public AsteroidsGame() {
+    public AsteroidsGame()
+    {
         startNewGame();
         gameRenderer = new GameRenderer(this);
     }
@@ -26,17 +28,17 @@ public class AsteroidsGame implements IGameController{
         return gameLogic;
     }
 
-    public void run() {
+    public void run()
+    {
         System.out.println("Game started");
 
         gameRenderer.showWindow();
 
-//        long lastTime = System.nanoTime();
         prevTime = System.currentTimeMillis();
 
         endGame = false;
 
-        while (true)
+        while (!endGame)
         {
             float deltaTime = getDeltaTime();
 
@@ -44,18 +46,9 @@ public class AsteroidsGame implements IGameController{
             gameLogic.onUpdate(deltaTime);
             gameRenderer.onUpdate(deltaTime);
             Debug.FlushLog();
-
-            if (endGame) break;
-
-            //System.out.println("delta time: " + deltaTime);
         }
 
         gameRenderer.cleanUp();
-    }
-
-    public void onGameIsOver()
-    {
-        startNewGame();
     }
 
     private float getDeltaTime()
@@ -65,17 +58,18 @@ public class AsteroidsGame implements IGameController{
         float deltaTime = elapsedTimeMillis/1000F;
         prevTime = curTime;
 
-        if (deltaTime < 0.013f) {
+        if (deltaTime < 0.013f)
+        {
             try {
                 int toSleep  = (int) (13 - deltaTime * 1000);
                 Thread.sleep(toSleep);
 
             } catch (InterruptedException ex) {
-        //todo        Thread.currentThread().interrupt();
+                ex.printStackTrace();
             }
         }
 
-        //TODO:
+        //TODO: just to  slow down main loop - to have cooler computer
         try {
             Thread.sleep(16);
         }catch(Exception e)
@@ -91,19 +85,6 @@ public class AsteroidsGame implements IGameController{
     private void handleInput()
     {
         gameRenderer.handleInput();
-    }
-
-
-
-    public void keyPressed(char key)
-    {
-        System.out.println("pressed " + key);
-    }
-
-    public void keyReleased(char key)
-    {
-        System.out.println(("released " + key));
-
     }
 
     public void onAccelerate(float force)

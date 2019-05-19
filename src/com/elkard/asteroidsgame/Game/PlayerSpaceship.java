@@ -50,19 +50,17 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         setName("player" + playersCounter);
         playersCounter++;
 
-        //gl.addPlayer(this);
         gl.addObject(this, GameLogic.ObjectType.PLAYER);
 
         enablePhysics(false);
 
         booster = new ShipBooster(gl, this);
-        //additionalRender.add(booster);
     }
 
     public void cleanUp()
     {
         super.cleanUp();
-        //gameLogic.removePlayer(this);
+
         gameLogic.removeObject(this);
     }
 
@@ -88,8 +86,6 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
 
     public void onRotate(float turn)
     {
-//        updateRotation(turn * rotateFactor);
-
         lastRotate = turn;
     }
 

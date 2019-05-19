@@ -23,27 +23,6 @@ public class InputHandler implements IInputHandler
 
     private boolean prevShootState = false;
 
-//    public void onAcceleratePressed(boolean isPressed)
-//    {
-//        upPressed = isPressed;
-//    }
-//
-//    public void onSlowDownPressed(boolean isPressed)
-//    {
-//        downPressed = isPressed;
-//
-//    }
-//
-//    public void onLeftPressed(boolean isPressed)
-//    {
-//        leftPressed = isPressed;
-//    }
-//
-//    public void onRightPressed(boolean isPressed)
-//    {
-//        rightPressed = isPressed;
-//    }
-
     public void onKeyPressed(int key, boolean isPressed)
     {
         Debug.Log("Pressed " + key + ", status: " + isPressed);
@@ -93,36 +72,18 @@ public class InputHandler implements IInputHandler
         }
     }
 
-    public void onPause(boolean isPaused)
-    {
-        escSinglePress = true;
-    }
-
-    public void onShoot()
-    {
-        spaceSinglePress = true;
-    }
-
     public void handleInput(IGameController asteroidsGame)
     {
-        //Debug.Log("input handler addr: " + this);
-        //Debug.Log("handling input");
-        if (this.upPressed) {
-            Debug.Log("testing");
+        if (upPressed)
             asteroidsGame.onAccelerate(1.0f);
-        }
-        if (downPressed) asteroidsGame.onSlowDown(1.0f);
+
+        if (downPressed)
+            asteroidsGame.onSlowDown(1.0f);
 
         float turnFactor = 0f;
         if (leftPressed) turnFactor -= 1f;
         if (rightPressed) turnFactor += 1f;
         asteroidsGame.onTurn(turnFactor);
-
-//        if (spaceSinglePress)
-//        {
-//            spaceSinglePress = false;
-//            asteroidsGame.onSingleShoot();
-//        }
 
         if (spacePressed != prevShootState)
         {
@@ -133,7 +94,6 @@ public class InputHandler implements IInputHandler
 
         if (escSinglePress)
         {
-//            escSinglePress = false;
             asteroidsGame.onPause();
         }
     }
@@ -142,15 +102,11 @@ public class InputHandler implements IInputHandler
     {
         if (upSinglePress || leftSinglePress)
         {
-//            upSinglePress = false;
-//            rightSinglePress = false;
             buttonsManager.prevButton();
         }
         
         if (downSinglePress || rightSinglePress)
         {
-//            downSinglePress = false;
-//            rightSinglePress = false;
             buttonsManager.nextButton();
         }
 
