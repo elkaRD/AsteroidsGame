@@ -1,7 +1,10 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Game;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.elkard.asteroidsgame.IGameController;
+import com.elkard.asteroidsgame.Line;
+import com.elkard.asteroidsgame.Vec2;
+
+import java.util.*;
 
 public class GameLogic {
 
@@ -27,15 +30,23 @@ public class GameLogic {
         PAUSE_MENU
     }
 
+    public enum ObjectType
+    {
+        PLAYER,
+        BULLET,
+        ASTEROID
+    }
+
     private boolean isPaused = false;
     private boolean gameOver = false;
 
     private int screenWidth = 1280;
     private int screenHeight = 720;
 
-    private ArrayList<GameObject> players = new ArrayList<>();
-    private ArrayList<GameObject> bullets = new ArrayList<>();
-    private ArrayList<GameObject> asteroids = new ArrayList<>();
+//    private ArrayList<GameObject> players = new ArrayList<>();
+//    private ArrayList<GameObject> bullets = new ArrayList<>();
+//    private ArrayList<GameObject> asteroids = new ArrayList<>();
+    private HashMap<ObjectType, ArrayList<GameObject>> objects = new HashMap<>();
 
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
     private ArrayList<GameObject> newObjects = new ArrayList<>();
@@ -64,15 +75,22 @@ public class GameLogic {
 
     public GameLogic()
     {
+        for (ObjectType type : ObjectType.values())
+        {
+            objects.put(type, new ArrayList<>());
+        }
         launchPhysics();
+
         curState = GameState.MAINMENU;
     }
 
     private void launchPhysics()
     {
         physics = new Physics();
-        physics.addGroupsToCheck(players, asteroids);
-        physics.addGroupsToCheck(bullets, asteroids);
+//        physics.addGroupsToCheck(players, asteroids);
+//        physics.addGroupsToCheck(bullets, asteroids);
+        physics.addGroupsToCheck(objects.get(ObjectType.PLAYER), objects.get(ObjectType.ASTEROID));
+        physics.addGroupsToCheck(objects.get(ObjectType.BULLET), objects.get(ObjectType.ASTEROID));
     }
 
     public void onUpdate(float deltaTime)
@@ -91,7 +109,8 @@ public class GameLogic {
         newObjects.clear();
         objectsToRemove.clear();
 
-        if (asteroids.size() == 0) nextLevel();
+//        if (asteroids.size() == 0) nextLevel();
+        if (objects.get(ObjectType.ASTEROID).size() == 0) nextLevel();
         if (remainingLives == 0 && !gameOver) onGameIsOver();
 
         physics.updatePhysics(deltaTime);
@@ -161,9 +180,10 @@ public class GameLogic {
 
     public void onReset()
     {
-        players.clear();
-        bullets.clear();
-        asteroids.clear();
+//        players.clear();
+//        bullets.clear();
+//        asteroids.clear();
+        clearObjects();
         gameObjects.clear();
         newObjects.clear();
         objectsToRemove.clear();
@@ -307,41 +327,68 @@ public class GameLogic {
         return curState;
     }
 
-    public void addBullet(Bullet bullet)
+    public void clearObjects()
     {
-        bullets.add(bullet);
+        for (ArrayList<GameObject> list : objects.values())
+        {
+            list.clear();
+        }
     }
 
-    public void removeBullet(Bullet bullet)
+    public void addObject(GameObject gameObject, ObjectType objectType)
     {
-        bullets.remove(bullet);
+        objects.get(objectType).add(gameObject);
     }
 
-    public void addAsteroid(Asteroid asteroid)
+    public void removeObject(GameObject gameObject)
     {
-        asteroids.add(asteroid);
+        for (ArrayList<GameObject> list : objects.values())
+        {
+            if (list.contains(gameObject))
+            {
+                list.remove(gameObject);
+                break;
+            }
+        }
     }
 
-    public void removeAsteroid(Asteroid asteroid)
-    {
-        asteroids.remove(asteroid);
-        System.out.println("CALLED REMOVE ASTEROID, size: " + asteroids.size());
-    }
-
-    public void addPlayer(PlayerSpaceship newPlayer)
-    {
-        players.add(newPlayer);
-    }
-
-    public void removePlayer(PlayerSpaceship toRemove)
-    {
-        players.remove(toRemove);
-    }
+//    public void addBullet(Bullet bullet)
+//    {
+//        bullets.add(bullet);
+//    }
+//
+//    public void removeBullet(Bullet bullet)
+//    {
+//        bullets.remove(bullet);
+//    }
+//
+//    public void addAsteroid(Asteroid asteroid)
+//    {
+//        asteroids.add(asteroid);
+//    }
+//
+//    public void removeAsteroid(Asteroid asteroid)
+//    {
+//        asteroids.remove(asteroid);
+//        System.out.println("CALLED REMOVE ASTEROID, size: " + asteroids.size());
+//    }
+//
+//    public void addPlayer(PlayerSpaceship newPlayer)
+//    {
+//        players.add(newPlayer);
+//    }
+//
+//    public void removePlayer(PlayerSpaceship toRemove)
+//    {
+//        players.remove(toRemove);
+//    }
 
     public Line[] getPlayerRenderLines()
     {
         ArrayList<Line> result = new ArrayList<>();
-        for (GameObject p : players) {
+        //for (GameObject p : players)
+        for (GameObject p : objects.get(ObjectType.PLAYER))
+        {
             result.addAll(Arrays.asList(p.getRenderLines()));
         }
         //result.addAll(Arrays.asList(player.getRenderLines()));
@@ -355,7 +402,8 @@ public class GameLogic {
     public Line[] getBulletsRenderLines()
     {
         ArrayList<Line> renderLines = new ArrayList<>();
-        for (GameObject bullet : bullets)
+        //for (GameObject bullet : bullets)
+        for (GameObject bullet : objects.get(ObjectType.BULLET))
         {
             Line[] temp = bullet.getRenderLines();
             renderLines.add(temp[0]);
@@ -382,6 +430,7 @@ public class GameLogic {
 //                renderLines.add(line);
 //            }
 //        }
+        ArrayList<GameObject> asteroids = objects.get(ObjectType.ASTEROID);
         for (int i = 0; i < asteroids.size(); i++)
         {
             Line[] temp = asteroids.get(i).getRenderLines();
@@ -402,10 +451,10 @@ public class GameLogic {
         newObjects.add(newObject);
     }
 
-    public void removeObject(GameObject toRemove)
-    {
-        objectsToRemove.add(toRemove);
-    }
+//    public void removeObject(GameObject toRemove)
+//    {
+//        objectsToRemove.add(toRemove);
+//    }
 
     public void attachController(IGameController gc)
     {

@@ -1,4 +1,4 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Game;
 
 public abstract class Weapon extends GameObject implements IWeapon
 {

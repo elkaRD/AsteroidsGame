@@ -1,4 +1,6 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.View.UI;
+
+import com.elkard.asteroidsgame.View.GameRenderer;
 
 import javax.swing.*;
 import java.awt.*;

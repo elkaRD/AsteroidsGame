@@ -1,6 +1,8 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Game;
 
-import com.sun.deploy.util.SyncFileAccess;
+import com.elkard.asteroidsgame.PolarLayout;
+import com.elkard.asteroidsgame.RandomGenerator;
+import com.elkard.asteroidsgame.Vec2;
 
 import java.util.Random;
 
@@ -33,7 +35,8 @@ public class Asteroid extends GameObject implements ICollisionable
         setName("asteroid" + asteroidsCounter);
         asteroidsCounter++;
 
-        gameEngine.addAsteroid(this);
+        //gameEngine.addAsteroid(this);
+        gameEngine.addObject(this, GameLogic.ObjectType.ASTEROID);
         curScaleLevel = scaleLevel;
 
         //TODO:
@@ -74,7 +77,8 @@ public class Asteroid extends GameObject implements ICollisionable
     {
         super.cleanUp();
 
-        gameEngine.removeAsteroid(this);
+        //gameEngine.removeAsteroid(this);
+        gameEngine.removeObject(this);
     }
 
     public void update(float delta)

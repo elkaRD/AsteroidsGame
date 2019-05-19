@@ -1,4 +1,8 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Game;
+
+import com.elkard.asteroidsgame.Line;
+import com.elkard.asteroidsgame.PolarLayout;
+import com.elkard.asteroidsgame.Vec2;
 
 public class Bullet extends GameObject
 {
@@ -30,7 +34,8 @@ public class Bullet extends GameObject
         bulletVelocity = bulletDirection.clone();
         bulletVelocity.mul(speed);
 
-        gameEngine.addBullet(this);
+        //gameEngine.addBullet(this);
+        gameEngine.addObject(this, GameLogic.ObjectType.BULLET);
 
         debug = weapon;
 
@@ -71,7 +76,8 @@ public class Bullet extends GameObject
     {
         super.cleanUp();
 
-        gameEngine.removeBullet(this);
+        //gameEngine.removeBullet(this);
+        gameEngine.removeObject(this);
     }
 
     @Override

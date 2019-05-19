@@ -1,4 +1,6 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Game;
+
+import com.elkard.asteroidsgame.PolarLayout;
 
 public class ShipBooster extends GameObject
 {

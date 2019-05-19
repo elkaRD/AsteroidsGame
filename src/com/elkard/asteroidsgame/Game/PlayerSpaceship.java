@@ -1,9 +1,7 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Game;
 
-import java.security.PolicySpi;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.elkard.asteroidsgame.PolarLayout;
+import com.elkard.asteroidsgame.Vec2;
 
 public class PlayerSpaceship extends GameObject implements IControllable, ICollisionable {
 
@@ -52,7 +50,8 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         setName("player" + playersCounter);
         playersCounter++;
 
-        gl.addPlayer(this);
+        //gl.addPlayer(this);
+        gl.addObject(this, GameLogic.ObjectType.PLAYER);
 
         enablePhysics(false);
 
@@ -63,7 +62,8 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     public void cleanUp()
     {
         super.cleanUp();
-        gameLogic.removePlayer(this);
+        //gameLogic.removePlayer(this);
+        gameLogic.removeObject(this);
     }
 
     public void reset()

@@ -1,4 +1,8 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.View.UI;
+
+import com.elkard.asteroidsgame.View.GameRenderer;
+import com.elkard.asteroidsgame.View.IButtonClickListener;
+import com.elkard.asteroidsgame.Vec2i;
 
 import java.awt.*;
 import java.util.ArrayList;

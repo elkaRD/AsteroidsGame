@@ -1,4 +1,7 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.View;
+
+import com.elkard.asteroidsgame.Debug;
+import com.elkard.asteroidsgame.IGameController;
 
 public class InputHandler implements IInputHandler
 {

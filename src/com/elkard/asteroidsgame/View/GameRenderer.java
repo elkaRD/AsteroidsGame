@@ -1,4 +1,12 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.View;
+
+import com.elkard.asteroidsgame.AsteroidsGame;
+import com.elkard.asteroidsgame.Game.GameLogic;
+import com.elkard.asteroidsgame.Game.IGameState;
+import com.elkard.asteroidsgame.Line;
+import com.elkard.asteroidsgame.View.UI.Button;
+import com.elkard.asteroidsgame.View.UI.ButtonsGroup;
+import com.elkard.asteroidsgame.View.UI.ButtonsManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -7,7 +15,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class GameRenderer extends JFrame implements IButtonClickListener, IGameState
 {

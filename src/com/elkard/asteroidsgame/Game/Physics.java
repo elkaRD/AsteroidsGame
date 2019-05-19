@@ -1,11 +1,11 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Game;
 
-import com.sun.tools.corba.se.idl.PragmaEntry;
-import javafx.util.Pair;
+import com.elkard.asteroidsgame.Game.GameObject;
+import com.elkard.asteroidsgame.Game.ICollisionable;
+import com.elkard.asteroidsgame.Line;
+import com.elkard.asteroidsgame.Vec2;
 
-import javax.crypto.AEADBadTagException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 public final class Physics
 {

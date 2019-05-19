@@ -1,4 +1,8 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Game;
+
+import com.elkard.asteroidsgame.Line;
+import com.elkard.asteroidsgame.PolarLayout;
+import com.elkard.asteroidsgame.Vec2;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Game;
 
 public class StandardWeapon extends Weapon
 {

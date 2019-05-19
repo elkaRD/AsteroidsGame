@@ -1,4 +1,7 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Game;
+
+import com.elkard.asteroidsgame.Line;
+import com.elkard.asteroidsgame.Vec2;
 
 public interface ICollisionable
 {

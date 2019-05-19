@@ -1,7 +1,7 @@
 package com.elkard.asteroidsgame;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.elkard.asteroidsgame.Game.GameLogic;
+import com.elkard.asteroidsgame.View.GameRenderer;
 
 public class AsteroidsGame implements IGameController{
     private GameLogic gameLogic;

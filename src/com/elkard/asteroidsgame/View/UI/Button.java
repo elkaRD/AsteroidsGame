@@ -1,9 +1,9 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.View.UI;
 
-import javax.swing.*;
+import com.elkard.asteroidsgame.View.GameRenderer;
+import com.elkard.asteroidsgame.Vec2i;
+
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class Button
 {

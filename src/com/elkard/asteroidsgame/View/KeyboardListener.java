@@ -1,4 +1,6 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.View;
+
+import com.elkard.asteroidsgame.AsteroidsGame;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;

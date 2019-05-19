@@ -1,5 +1,7 @@
 package com.elkard.asteroidsgame;
 
+import com.elkard.asteroidsgame.Game.ICollisionable;
+import com.elkard.asteroidsgame.Game.Physics;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
