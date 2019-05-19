@@ -12,17 +12,20 @@ public abstract class Weapon extends GameObject implements IWeapon
         parent = parentObject;
     }
 
+    @Override
     public void update(float delta)
     {
         setPosition(parent.getPosition());
         setRotation(parent.getRotation());
     }
 
+    @Override
     public final void onStartShooting()
     {
         isShooting = true;
     }
 
+    @Override
     public final void onEndShooting()
     {
         isShooting = false;

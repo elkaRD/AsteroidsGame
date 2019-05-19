@@ -3,6 +3,7 @@ package com.elkard.asteroidsgame.View;
 import com.elkard.asteroidsgame.Debug;
 import com.elkard.asteroidsgame.IGameController;
 import com.elkard.asteroidsgame.View.UI.ButtonsManager;
+import com.elkard.asteroidsgame.View.UI.IButtonsManager;
 
 public class InputHandler implements IInputHandler
 {
@@ -23,6 +24,7 @@ public class InputHandler implements IInputHandler
 
     private boolean prevShootState = false;
 
+    @Override
     public void onKeyPressed(int key, boolean isPressed)
     {
         Debug.Log("Pressed " + key + ", status: " + isPressed);
@@ -72,6 +74,7 @@ public class InputHandler implements IInputHandler
         }
     }
 
+    @Override
     public void handleInput(IGameController asteroidsGame)
     {
         if (upPressed)
@@ -98,7 +101,8 @@ public class InputHandler implements IInputHandler
         }
     }
 
-    public void handleInput(ButtonsManager buttonsManager)
+    @Override
+    public void handleInput(IButtonsManager buttonsManager)
     {
         if (upSinglePress || leftSinglePress)
         {
@@ -115,7 +119,8 @@ public class InputHandler implements IInputHandler
             buttonsManager.pickButton();
         }
     }
-    
+
+    @Override
     public void refresh()
     {
         upSinglePress = false;

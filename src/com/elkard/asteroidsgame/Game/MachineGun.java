@@ -10,6 +10,7 @@ public class MachineGun extends Weapon
         super(gl, parentObject);
     }
 
+    @Override
     public void update(float delta)
     {
         super.update(delta);
@@ -18,7 +19,7 @@ public class MachineGun extends Weapon
 
         if (isShooting && timeSinceLastShoot > minTimeSinceLastShoot)
         {
-            new Bullet(gameEngine, this);
+            new Bullet(gameLogic, this);
             timeSinceLastShoot = 0f;
         }
     }

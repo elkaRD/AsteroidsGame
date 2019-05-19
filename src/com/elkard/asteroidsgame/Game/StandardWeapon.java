@@ -7,6 +7,7 @@ public class StandardWeapon extends Weapon
         super(gl, parentObject);
     }
 
+    @Override
     public void update(float delta)
     {
         super.update(delta);
@@ -14,7 +15,7 @@ public class StandardWeapon extends Weapon
         if (isShooting)
         {
             isShooting = false;
-            new Bullet(gameEngine, this);
+            new Bullet(gameLogic, this);
         }
     }
 }

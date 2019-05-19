@@ -3,6 +3,7 @@ package com.elkard.asteroidsgame.View;
 import com.elkard.asteroidsgame.AsteroidsGame;
 import com.elkard.asteroidsgame.Game.GameLogic;
 import com.elkard.asteroidsgame.Game.IGameState;
+import com.elkard.asteroidsgame.IGameController;
 import com.elkard.asteroidsgame.Line;
 import com.elkard.asteroidsgame.View.UI.Button;
 import com.elkard.asteroidsgame.View.UI.ButtonsGroup;
@@ -40,9 +41,9 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     private static final String BUTTON_GAMEOVER_AGAIN = "AGAIN";
     private static final String BUTTON_GAMEOVER_MENU = "RETURN";
 
-    private final AsteroidsGame gameEngine;
+    private final IGameController gameEngine;
 
-    public final InputHandler inputHandler;
+    public final IInputHandler inputHandler;
 
     public Boolean isKeyPressed = false;
 
@@ -211,6 +212,13 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
 
     private void prepareButtons()
     {
+        prepareMainMenuButtons();
+        preparePauseMenuButtons();
+        prepareGameoverMenuButtons();
+    }
+
+    private void prepareMainMenuButtons()
+    {
         buttonsMain = new ButtonsGroup()
                 .setPosition(300,300)
                 .setListener(this)
@@ -231,8 +239,10 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
                 .setPosition(0, 120)
                 .setSize(200,20)
                 .setText(BUTTON_MAIN_EXIT));
+    }
 
-
+    private void preparePauseMenuButtons()
+    {
         buttonsPause = new ButtonsGroup()
                 .setPosition(400,500)
                 .setListener(this)
@@ -248,8 +258,10 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
                 .setPosition(240, 0)
                 .setSize(200,20)
                 .setText(BUTTON_PAUSE_MENU));
+    }
 
-
+    private void prepareGameoverMenuButtons()
+    {
         buttonsGameover = new ButtonsGroup()
                 .setPosition(400,500)
                 .setListener(this)

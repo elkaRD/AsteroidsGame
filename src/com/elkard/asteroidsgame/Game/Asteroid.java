@@ -4,8 +4,6 @@ import com.elkard.asteroidsgame.PolarLayout;
 import com.elkard.asteroidsgame.RandomGenerator;
 import com.elkard.asteroidsgame.Vec2;
 
-import java.util.Random;
-
 public class Asteroid extends GameObject implements ICollisionable
 {
     private static int asteroidsCounter = 0;
@@ -34,14 +32,13 @@ public class Asteroid extends GameObject implements ICollisionable
         setName("asteroid" + asteroidsCounter);
         asteroidsCounter++;
 
-        gameEngine.addObject(this, GameLogic.ObjectType.ASTEROID);
+        gameLogic.addObject(this, GameLogic.ObjectType.ASTEROID);
         curScaleLevel = scaleLevel;
 
         setPosition(startPos);
         setScale(scaleLevels[curScaleLevel]);
 
-        Random generator = new Random();
-        int amountBoundary = generator.nextInt(maxBoundaries - minBoundaries) + minBoundaries;
+        int amountBoundary = RandomGenerator.getInt(minBoundaries, maxBoundaries);
         boundaryPoints = new PolarLayout[amountBoundary];
 
         diffRot = 360 / amountBoundary / 2;
@@ -49,15 +46,13 @@ public class Asteroid extends GameObject implements ICollisionable
         for (int i = 0; i < amountBoundary; i++)
         {
             boundaryPoints[i] = new PolarLayout();
-            boundaryPoints[i].dst = asteroidRadius + (generator.nextFloat()*2 - 1) * diffBoundaries;
-            boundaryPoints[i].rot = (360f / amountBoundary) * i + (generator.nextFloat()*2 - 1) * diffRot;
+            boundaryPoints[i].dst = asteroidRadius + RandomGenerator.getFloat(-1, 1) * diffBoundaries;
+            boundaryPoints[i].rot = (360f / amountBoundary) * i + RandomGenerator.getFloat(-1, 1) * diffRot;
         }
 
-        speed = generator.nextFloat() * 50f + 50f;
+        speed = RandomGenerator.getFloat(50 ,100);
         if (initDirection != null) randomDirection = initDirection;
-        else randomDirection = generator.nextFloat() * 360f;
-
-        System.out.println("DIRECTION: " + randomDirection);
+        else randomDirection = RandomGenerator.getFloat() * 360f;
 
         velocityDirection = new Vec2();
         velocityDirection.x = (float) Math.cos(Math.toRadians(randomDirection));
@@ -68,13 +63,15 @@ public class Asteroid extends GameObject implements ICollisionable
         this(gl, startPos, null, 0);
     }
 
+    @Override
     public void cleanUp()
     {
         super.cleanUp();
 
-        gameEngine.removeObject(this);
+        gameLogic.removeObject(this);
     }
 
+    @Override
     public void update(float delta)
     {
         super.update(delta);
@@ -91,16 +88,18 @@ public class Asteroid extends GameObject implements ICollisionable
         {
             float diff = RandomGenerator.getFloat(20, 40);
 
-            new Asteroid(gameEngine, getPosition(), randomDirection + diff, curScaleLevel+1);
-            new Asteroid(gameEngine, getPosition(), randomDirection - diff, curScaleLevel+1);
+            new Asteroid(gameLogic, getPosition(), randomDirection + diff, curScaleLevel+1);
+            new Asteroid(gameLogic, getPosition(), randomDirection - diff, curScaleLevel+1);
         }
     }
 
+    @Override
     public float getCollisionRadius()
     {
         return collisionRadius;
     }
 
+    @Override
     protected PolarLayout[] renderPoints()
     {
         return boundaryPoints;
@@ -113,7 +112,7 @@ public class Asteroid extends GameObject implements ICollisionable
         if (other instanceof Bullet)
         {
             destroy();
-            gameEngine.onAsteroidDestroyed(this, curScaleLevel);
+            gameLogic.onAsteroidDestroyed(this, curScaleLevel);
         }
     }
 }

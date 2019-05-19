@@ -18,7 +18,7 @@ public class GameObject implements ICollisionable{
 
     private float halfOfDimension = 0;
 
-    protected GameLogic gameEngine;
+    protected GameLogic gameLogic;
 
     private boolean isDestructing = false;
     private float destructionDuration = 2f;
@@ -33,13 +33,13 @@ public class GameObject implements ICollisionable{
 
     public GameObject(GameLogic gl)
     {
-        gameEngine = gl;
-        gameEngine.registerObject(this);
+        gameLogic = gl;
+        gameLogic.registerObject(this);
     }
 
     public void cleanUp()
     {
-        gameEngine.removeObject(this);
+        gameLogic.removeObject(this);
     }
 
     public final void setPosition(Vec2 newPosition)
@@ -108,17 +108,17 @@ public class GameObject implements ICollisionable{
     private void checkPosition()
     {
         if (infinitySpace) {
-            while (position.x > gameEngine.getWidth())
-                position.x -= gameEngine.getWidth();
+            while (position.x > gameLogic.getWidth())
+                position.x -= gameLogic.getWidth();
 
             while (position.x < 0)
-                position.x += gameEngine.getWidth();
+                position.x += gameLogic.getWidth();
 
-            while (position.y > gameEngine.getHeight())
-                position.y -= gameEngine.getHeight();
+            while (position.y > gameLogic.getHeight())
+                position.y -= gameLogic.getHeight();
 
             while (position.y < 0)
-                position.y += gameEngine.getHeight();
+                position.y += gameLogic.getHeight();
         }
     }
 
@@ -155,19 +155,17 @@ public class GameObject implements ICollisionable{
 
         if (infinitySpace) {
             if (position.x < objectDimension)
-                positionsToRender.add(Vec2.add(position, new Vec2(gameEngine.getWidth(), 0)));
+                positionsToRender.add(Vec2.add(position, new Vec2(gameLogic.getWidth(), 0)));
             if (position.y < objectDimension)
-                positionsToRender.add(Vec2.add(position, new Vec2(0, gameEngine.getHeight())));
-            if (position.x > gameEngine.getWidth() - objectDimension)
-                positionsToRender.add(Vec2.add(position, new Vec2(-gameEngine.getWidth(), 0)));
-            if (position.y > gameEngine.getHeight() - objectDimension)
-                positionsToRender.add(Vec2.add(position, new Vec2(0, -gameEngine.getHeight())));
+                positionsToRender.add(Vec2.add(position, new Vec2(0, gameLogic.getHeight())));
+            if (position.x > gameLogic.getWidth() - objectDimension)
+                positionsToRender.add(Vec2.add(position, new Vec2(-gameLogic.getWidth(), 0)));
+            if (position.y > gameLogic.getHeight() - objectDimension)
+                positionsToRender.add(Vec2.add(position, new Vec2(0, -gameLogic.getHeight())));
         }
 
         Line[] renderLines = new Line[definedPoints.length * positionsToRender.size()];
         int linesIter = 0;
-
-        Random generator = new Random();
 
         for (Vec2 renderPos : positionsToRender) {
 

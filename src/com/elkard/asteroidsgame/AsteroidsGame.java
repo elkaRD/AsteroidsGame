@@ -23,11 +23,13 @@ public class AsteroidsGame implements IGameController
         gameLogic.attachController(this);
     }
 
+    @Override
     public GameLogic getGameLogic()
     {
         return gameLogic;
     }
 
+    @Override
     public void run()
     {
         System.out.println("Game started");
@@ -87,46 +89,55 @@ public class AsteroidsGame implements IGameController
         gameRenderer.handleInput();
     }
 
+    @Override
     public void onAccelerate(float force)
     {
         gameLogic.onAccelerate(force);
     }
 
+    @Override
     public void onSlowDown(float force)
     {
         gameLogic.onSlowDown(force);
     }
 
+    @Override
     public void onTurn(float turn)
     {
         gameLogic.onTurn(turn);
     }
 
+    @Override
     public void onStartShooting()
     {
         gameLogic.onStartShooting();
     }
 
+    @Override
     public void onEndShooting()
     {
         gameLogic.onEndShooting();
     }
 
+    @Override
     public void onStartGame()
     {
         gameRenderer.setScreenResolution();
     }
 
+    @Override
     public void onPause()
     {
         gameLogic.onPause();
     }
 
+    @Override
     public void onCloseGame()
     {
         endGame = true;
     }
 
+    @Override
     public float getScreenRatio()
     {
         return gameRenderer.getScreenRatio();

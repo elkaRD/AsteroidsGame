@@ -6,7 +6,7 @@ import com.elkard.asteroidsgame.Vec2;
 public class PlayerSpaceship extends GameObject implements IControllable, ICollisionable {
 
     private Vec2 curVelocity;
-    private float accelarationFactor = 300f;
+    private float accelerationFactor = 300f;
     private float frictionFactor = 0.995f;
     private float slowingDownFactor = 0.5f;
     private float rotationFactor = 100f;
@@ -25,7 +25,7 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     private float untouchedTickDuration = 0.5f;
     private int untouchedTicks = 6;
 
-    private Weapon curWeapon;
+    private IWeapon curWeapon;
 
     private static int playersCounter = 0;
 
@@ -38,10 +38,10 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         super(gl);
         gameLogic = gl;
 
-        curWeapon = new StandardWeapon(gameEngine, this);
-        //curWeapon = new MachineGun(gameEngine, this);
-        //curWeapon = new ShotGun(gameEngine, this);
-        //curWeapon = new RoundGun(gameEngine, this);
+        curWeapon = new StandardWeapon(this.gameLogic, this);
+        //curWeapon = new MachineGun(gameLogic, this);
+        //curWeapon = new ShotGun(gameLogic, this);
+        //curWeapon = new RoundGun(gameLogic, this);
 
         resetX = gl.getWidth() / 2;
         resetY = gl.getHeight() / 2;
@@ -57,6 +57,7 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         booster = new ShipBooster(gl, this);
     }
 
+    @Override
     public void cleanUp()
     {
         super.cleanUp();
@@ -72,28 +73,33 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         setPosition(resetX, resetY);
     }
 
+    @Override
     public void onAccelerate(float force)
     {
         lastAccelerate += force;
         booster.onAccelerate(force);
     }
 
+    @Override
     public void onSlowDown(float force)
     {
         onAccelerate(-force/2);
         booster.onSlowDown(force/2);
     }
 
+    @Override
     public void onRotate(float turn)
     {
         lastRotate = turn;
     }
 
+    @Override
     public void onStartShooting()
     {
         startedShooting = true;
     }
 
+    @Override
     public void onEndShooting()
     {
         stoppedShooting = true;
@@ -137,8 +143,8 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         lastAccelerate *= delta;
 
         Vec2 deltaVelocity = new Vec2();
-        deltaVelocity.x = (float) Math.cos(Math.toRadians(getRotation())) * accelarationFactor * lastAccelerate;
-        deltaVelocity.y = (float) Math.sin(Math.toRadians(getRotation())) * accelarationFactor * lastAccelerate;
+        deltaVelocity.x = (float) Math.cos(Math.toRadians(getRotation())) * accelerationFactor * lastAccelerate;
+        deltaVelocity.y = (float) Math.sin(Math.toRadians(getRotation())) * accelerationFactor * lastAccelerate;
 
         curVelocity.add(deltaVelocity);
         curVelocity.mul(frictionFactor);
@@ -171,6 +177,7 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         }
     }
 
+    @Override
     protected PolarLayout[] renderPoints()
     {
         PolarLayout[] points = new PolarLayout[4];
@@ -194,7 +201,7 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         {
             enablePhysics(false);
             animateDestruction();
-            gameEngine.onDeath();
+            this.gameLogic.onDeath();
         }
     }
 }

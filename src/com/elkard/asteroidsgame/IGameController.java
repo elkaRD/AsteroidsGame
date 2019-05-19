@@ -1,5 +1,7 @@
 package com.elkard.asteroidsgame;
 
+import com.elkard.asteroidsgame.Game.GameLogic;
+
 public interface IGameController
 {
     void onAccelerate(float force);
@@ -14,4 +16,8 @@ public interface IGameController
     void onCloseGame();
 
     float getScreenRatio();
+
+    void run();
+
+    GameLogic getGameLogic();
 }

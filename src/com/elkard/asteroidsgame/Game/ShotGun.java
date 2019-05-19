@@ -12,6 +12,7 @@ public class ShotGun extends Weapon
         super(gl, parentObject);
     }
 
+    @Override
     public void update(float delta)
     {
         super.update(delta);
@@ -20,9 +21,9 @@ public class ShotGun extends Weapon
 
         if (isShooting && timeSinceLastShoot > minTimeSinceLastShoot)
         {
-            new Bullet(gameEngine, this);
-            new Bullet(gameEngine, this, bulletRange);
-            new Bullet(gameEngine, this, -bulletRange);
+            new Bullet(gameLogic, this);
+            new Bullet(gameLogic, this, bulletRange);
+            new Bullet(gameLogic, this, -bulletRange);
             timeSinceLastShoot = 0f;
         }
     }

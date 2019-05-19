@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class ButtonsManager extends JFrame
+public class ButtonsManager extends JFrame implements IButtonsManager
 {
     private static ButtonsManager instance = new ButtonsManager();
     private ArrayList<ButtonsGroup> groups = new ArrayList<>();
@@ -44,6 +44,7 @@ public class ButtonsManager extends JFrame
         }
     }
 
+    @Override
     public void nextButton()
     {
         if (activeGroup.size() == 0) return;
@@ -51,6 +52,7 @@ public class ButtonsManager extends JFrame
         activeGroup.lastElement().nextButton();
     }
 
+    @Override
     public void prevButton()
     {
         if (activeGroup.size() == 0) return;
@@ -58,6 +60,7 @@ public class ButtonsManager extends JFrame
         activeGroup.lastElement().prevButton();
     }
 
+    @Override
     public void pickButton()
     {
         if (activeGroup.size() == 0) return;

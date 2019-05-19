@@ -14,6 +14,7 @@ public class ShipBooster extends GameObject
         parent = parentObject;
     }
 
+    @Override
     public void update(float delta)
     {
         super.update(delta);
@@ -37,6 +38,7 @@ public class ShipBooster extends GameObject
         if (thrust < 0) thrust = 0;
     }
 
+    @Override
     protected PolarLayout[] renderPoints()
     {
         if (thrust > 0)

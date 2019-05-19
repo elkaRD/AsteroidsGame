@@ -12,6 +12,7 @@ public class RoundGun extends Weapon
         super(gl, parentObject);
     }
 
+    @Override
     public void update(float delta)
     {
         super.update(delta);
@@ -22,7 +23,7 @@ public class RoundGun extends Weapon
         {
             for (int i = 0; i < amountOfBullets; i++)
             {
-                new Bullet(gameEngine, this, 360f/amountOfBullets*i)
+                new Bullet(gameLogic, this, 360f/amountOfBullets*i)
                         .setRemainingDst(150)
                         .setSpeedMultiplier(2f);
             }

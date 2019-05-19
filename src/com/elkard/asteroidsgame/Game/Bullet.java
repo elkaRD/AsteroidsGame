@@ -34,7 +34,7 @@ public class Bullet extends GameObject
         bulletVelocity = bulletDirection.clone();
         bulletVelocity.mul(speed);
 
-        gameEngine.addObject(this, GameLogic.ObjectType.BULLET);
+        gameLogic.addObject(this, GameLogic.ObjectType.BULLET);
 
         debug = weapon;
 
@@ -75,7 +75,7 @@ public class Bullet extends GameObject
     {
         super.cleanUp();
 
-        gameEngine.removeObject(this);
+        gameLogic.removeObject(this);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class Bullet extends GameObject
     @Override
     public Line[] getCollisionLines()
     {
-        if (Math.abs(getPosition().x - prevPos.x) > gameEngine.getWidth()/2)
+        if (Math.abs(getPosition().x - prevPos.x) > gameLogic.getWidth()/2)
         {
             Vec2 smallerX = getPosition();
             Vec2 greaterX = prevPos;
@@ -117,7 +117,7 @@ public class Bullet extends GameObject
             }
 
             Vec2 help1 = new Vec2(0, smallerX.y);
-            Vec2 help2 = new Vec2(gameEngine.getWidth(), greaterX.y);
+            Vec2 help2 = new Vec2(gameLogic.getWidth(), greaterX.y);
 
             Line[] temp = new Line[2];
             temp[0] = new Line(help1, smallerX);
@@ -125,7 +125,7 @@ public class Bullet extends GameObject
             return temp;
         }
 
-        if (Math.abs(getPosition().y - prevPos.y) > gameEngine.getHeight()/2)
+        if (Math.abs(getPosition().y - prevPos.y) > gameLogic.getHeight()/2)
         {
             Vec2 smallerY = getPosition();
             Vec2 greaterY = prevPos;
@@ -136,7 +136,7 @@ public class Bullet extends GameObject
             }
 
             Vec2 help1 = new Vec2(smallerY.x, 0);
-            Vec2 help2 = new Vec2(greaterY.x, gameEngine.getHeight());
+            Vec2 help2 = new Vec2(greaterY.x, gameLogic.getHeight());
 
             Line[] temp = new Line[2];
             temp[0] = new Line(help1, smallerY);
