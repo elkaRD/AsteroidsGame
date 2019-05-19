@@ -152,7 +152,7 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
             g.drawLine((int) (line.b.x * screenWidthFactor), (int) (line.b.y * screenHeightFactor),
                        (int) (line.e.x * screenWidthFactor), (int) (line.e.y * screenHeightFactor));
 
-        System.out.println("factors: " + screenWidthFactor + " x " + screenHeightFactor);
+//        System.out.println("factors: " + screenWidthFactor + " x " + screenHeightFactor);
     }
 
     private void drawUI(Graphics g)
@@ -207,15 +207,16 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
             @Override
             public void keyPressed(KeyEvent event)
             {
-                getOuter().inputHandler.onKeyPressed(event.getKeyChar(), true);
-                //getOuter().list.add("new");
+//                getOuter().inputHandler.onKeyPressed(event.getKeyChar(), true);
+                getOuter().inputHandler.onKeyPressed(event.getKeyCode(), true);
+//                getOuter().list.add("new");
                 getOuter().isKeyPressed = true;
             }
 
             @Override
             public void keyReleased(KeyEvent event)
             {
-                inputHandler.onKeyPressed(event.getKeyChar(), false);
+                inputHandler.onKeyPressed(event.getKeyCode(), false);
             }
 
             @Override
@@ -294,6 +295,8 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     public void handleInput()
     {
         inputHandler.handleInput(gameEngine);
+        inputHandler.handleInput(ButtonsManager.getInstance());
+        inputHandler.refresh();
     }
 
     public void showWindow()

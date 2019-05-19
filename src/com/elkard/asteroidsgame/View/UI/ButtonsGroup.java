@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class ButtonsGroup
 {
     private ArrayList<Button> buttons = new ArrayList<>();
+    private Button selectedButton = null;
 
     private IButtonClickListener listener = null;
     private boolean isVisible = true;
@@ -21,17 +22,19 @@ public class ButtonsGroup
     public ButtonsGroup()
     {
         ButtonsManager.getInstance().registerGroup(this);
+        setVisible(true);
     }
 
     public void add(Button newButton)
     {
         if (newButton.group != null)
-        {
             newButton.group.remove(newButton);
-        }
+
         newButton.group = this;
         buttons.add(newButton);
 
+        if (buttons.size() == 0)
+            selectedButton = newButton;
     }
 
     public void remove(Button toRemove)
@@ -42,7 +45,13 @@ public class ButtonsGroup
 
     public ButtonsGroup setVisible(boolean isVisible)
     {
+        if (this.isVisible != isVisible && buttons.size() > 0)
+            changeSelected(0);
+
+
         this.isVisible = isVisible;
+        ButtonsManager.getInstance().groupChangedVisible(this, isVisible);
+
         return this;
     }
 
@@ -85,8 +94,8 @@ public class ButtonsGroup
 
         for (Button button : buttons)
         {
-            if (posX >= button.position.x && posX <= button.position.x + button.lastRealSize.x
-                && posY >= button.position.y && posY <= button.position.y + button.lastRealSize.y)
+            if (posX >= button.lastRealPosition.x && posX <= button.lastRealPosition.x + button.lastRealSize.x
+                && posY >= button.lastRealPosition.y && posY <= button.lastRealPosition.y + button.lastRealSize.y)
             {
                 listener.onButtonClicked(this, button);
                 break;
@@ -99,5 +108,34 @@ public class ButtonsGroup
         position.x = x;
         position.y = y;
         return this;
+    }
+
+    private void changeSelected(int index)
+    {
+        if (selectedButton != null)
+            selectedButton.setSelected(false);
+
+        selectedButton = buttons.get(index);
+        selectedButton.setSelected(true);
+    }
+
+    public void nextButton()
+    {
+        int index = buttons.indexOf(selectedButton) + 1;
+        index %= buttons.size();
+        changeSelected(index);
+    }
+
+    public void prevButton()
+    {
+        int index = buttons.indexOf(selectedButton) - 1;
+        if (index < 0) index = buttons.size() - 1;
+        changeSelected(index);
+    }
+
+    public void pickButton()
+    {
+        if (listener == null || selectedButton == null) return;
+        listener.onButtonClicked(this, selectedButton);
     }
 }

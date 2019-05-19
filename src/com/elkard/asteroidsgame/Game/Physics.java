@@ -1,7 +1,5 @@
 package com.elkard.asteroidsgame.Game;
 
-import com.elkard.asteroidsgame.Game.GameObject;
-import com.elkard.asteroidsgame.Game.ICollisionable;
 import com.elkard.asteroidsgame.Line;
 import com.elkard.asteroidsgame.Vec2;
 
@@ -15,12 +13,13 @@ public final class Physics
 //    private ArrayList<GameObject> asteroids;
 //    private ArrayList<GameObject> bullets;
 
-    private ArrayList<PairOfGruops> pairs = new ArrayList<>();
+    private ArrayList<PairOfGroups> pairs = new ArrayList<>();
 
-    private static class PairOfGruops
+    private static class PairOfGroups
     {
-        public PairOfGruops(){}
-        public PairOfGruops(ArrayList<GameObject> group1, ArrayList<GameObject> group2)
+        public PairOfGroups(){}
+
+        public PairOfGroups(ArrayList<GameObject> group1, ArrayList<GameObject> group2)
         {
             g1 = group1;
             g2 = group2;
@@ -37,7 +36,7 @@ public final class Physics
 
     public void updatePhysics(float delta)
     {
-        for (PairOfGruops pair : pairs)
+        for (PairOfGroups pair : pairs)
         {
             checkCollisionForGroups(pair.g1, pair.g2);
         }
@@ -45,14 +44,14 @@ public final class Physics
 
     public void addGroupsToCheck(ArrayList<GameObject> g1, ArrayList<GameObject> g2)
     {
-        pairs.add(new PairOfGruops(g1, g2));
+        pairs.add(new PairOfGroups(g1, g2));
     }
 
     public void addGroupsToCheck(GameObject gameObject, ArrayList<GameObject> g2)
     {
         ArrayList<GameObject> temp = new ArrayList<>();
         temp.add(gameObject);
-        pairs.add(new PairOfGruops(temp, g2));
+        pairs.add(new PairOfGroups(temp, g2));
     }
 
 //    public void checkCollisionWithGroup(ICollisionable object1, ICollisionable[] group)

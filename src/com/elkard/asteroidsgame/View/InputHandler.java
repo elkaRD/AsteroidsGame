@@ -2,119 +2,173 @@ package com.elkard.asteroidsgame.View;
 
 import com.elkard.asteroidsgame.Debug;
 import com.elkard.asteroidsgame.IGameController;
+import com.elkard.asteroidsgame.View.UI.ButtonsManager;
 
 public class InputHandler implements IInputHandler
 {
-    public Boolean acceleratePressed = false;
-    private boolean slowDownPressed = false;
-    private boolean leftTurnPressed = false;
-    private boolean rightTurnPressed = false;
-    private boolean shootHeld = false;
+    private boolean upPressed = false;
+    private boolean downPressed = false;
+    private boolean leftPressed = false;
+    private boolean rightPressed = false;
+    private boolean spacePressed = false;
 
-    private boolean pressedShoot = false;
-    private boolean pressedPause = false;
+    private boolean upSinglePress = false;
+    private boolean downSinglePress = false;
+    private boolean leftSinglePress = false;
+    private boolean rightSinglePress = false;
+
+    private boolean enterSinglePress = false;
+    private boolean spaceSinglePress = false;
+    private boolean escSinglePress = false;
 
     private boolean prevShootState = false;
 
 //    public void onAcceleratePressed(boolean isPressed)
 //    {
-//        acceleratePressed = isPressed;
+//        upPressed = isPressed;
 //    }
 //
 //    public void onSlowDownPressed(boolean isPressed)
 //    {
-//        slowDownPressed = isPressed;
+//        downPressed = isPressed;
 //
 //    }
 //
 //    public void onLeftPressed(boolean isPressed)
 //    {
-//        leftTurnPressed = isPressed;
+//        leftPressed = isPressed;
 //    }
 //
 //    public void onRightPressed(boolean isPressed)
 //    {
-//        rightTurnPressed = isPressed;
+//        rightPressed = isPressed;
 //    }
 
-    public void onKeyPressed(char key, boolean isPressed)
+    public void onKeyPressed(int key, boolean isPressed)
     {
         Debug.Log("Pressed " + key + ", status: " + isPressed);
 
         switch(key)
         {
             case 'w':
-                this.acceleratePressed = isPressed;
-                //acceleratePressed = true;
+            case 'W':
+            case 38:
+                upPressed = isPressed;
+                upSinglePress = isPressed || upSinglePress;
                 break;
 
             case 's':
-                slowDownPressed = isPressed;
+            case 'S':
+            case 40:
+                downPressed = isPressed;
+                downSinglePress = isPressed || downSinglePress;
                 break;
 
             case 'a':
-                leftTurnPressed = isPressed;
+            case 'A':
+            case 37:
+                leftPressed = isPressed;
+                leftSinglePress = isPressed || leftSinglePress;
                 break;
 
             case 'd':
-                rightTurnPressed = isPressed;
+            case 'D':
+            case 39:
+                rightPressed = isPressed;
+                rightSinglePress = isPressed || rightSinglePress;
                 break;
 
             case 27:
-                pressedPause = isPressed || pressedPause;
+                escSinglePress = isPressed || escSinglePress;
                 break;
 
             case 32:
-                pressedShoot = isPressed || pressedShoot;
-                shootHeld = isPressed;
+                spaceSinglePress = isPressed || spaceSinglePress;
+                spacePressed = isPressed;
+                break;
+
+            case 10:
+                enterSinglePress = isPressed || enterSinglePress;
                 break;
         }
     }
 
     public void onPause(boolean isPaused)
     {
-        pressedPause = true;
+        escSinglePress = true;
     }
 
     public void onShoot()
     {
-        pressedShoot = true;
+        spaceSinglePress = true;
     }
 
     public void handleInput(IGameController asteroidsGame)
     {
         //Debug.Log("input handler addr: " + this);
         //Debug.Log("handling input");
-        if (this.acceleratePressed) {
+        if (this.upPressed) {
             Debug.Log("testing");
             asteroidsGame.onAccelerate(1.0f);
         }
-        if (slowDownPressed) asteroidsGame.onSlowDown(1.0f);
+        if (downPressed) asteroidsGame.onSlowDown(1.0f);
 
         float turnFactor = 0f;
-        if (leftTurnPressed) turnFactor -= 1f;
-        if (rightTurnPressed) turnFactor += 1f;
+        if (leftPressed) turnFactor -= 1f;
+        if (rightPressed) turnFactor += 1f;
         asteroidsGame.onTurn(turnFactor);
 
-//        if (pressedShoot)
+//        if (spaceSinglePress)
 //        {
-//            pressedShoot = false;
+//            spaceSinglePress = false;
 //            asteroidsGame.onSingleShoot();
 //        }
 
-        if (shootHeld != prevShootState)
+        if (spacePressed != prevShootState)
         {
-            prevShootState = shootHeld;
-            if (shootHeld) asteroidsGame.onStartShooting();
+            prevShootState = spacePressed;
+            if (spacePressed) asteroidsGame.onStartShooting();
             else asteroidsGame.onEndShooting();
         }
 
-        if (pressedPause)
+        if (escSinglePress)
         {
-            pressedPause = false;
+//            escSinglePress = false;
             asteroidsGame.onPause();
         }
     }
 
+    public void handleInput(ButtonsManager buttonsManager)
+    {
+        if (upSinglePress || leftSinglePress)
+        {
+//            upSinglePress = false;
+//            rightSinglePress = false;
+            buttonsManager.prevButton();
+        }
+        
+        if (downSinglePress || rightSinglePress)
+        {
+//            downSinglePress = false;
+//            rightSinglePress = false;
+            buttonsManager.nextButton();
+        }
 
+        if (spaceSinglePress || enterSinglePress)
+        {
+            buttonsManager.pickButton();
+        }
+    }
+    
+    public void refresh()
+    {
+        upSinglePress = false;
+        downSinglePress = false;
+        leftSinglePress = false;
+        rightSinglePress = false;
+
+        spaceSinglePress = false;
+        escSinglePress = false;
+        enterSinglePress = false;
+    }
 }

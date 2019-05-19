@@ -8,10 +8,12 @@ import java.awt.*;
 public class Button
 {
     public ButtonsGroup group = null;
+    public boolean selected = false;
 
     public Vec2i position = new Vec2i();
     public Vec2i size = new Vec2i();
     public Vec2i lastRealSize = new Vec2i();
+    public Vec2i lastRealPosition = new Vec2i();
 
     public String text = "";
     public int fontSize = 20;
@@ -80,6 +82,11 @@ public class Button
         return tag;
     }
 
+    public void setSelected(boolean isSelected)
+    {
+        selected = isSelected;
+    }
+
     public void draw(Graphics g, GameRenderer gameRenderer, Vec2i parentPos)
     {
         float factor = Math.min(gameRenderer.getScreenWidthFactor(), gameRenderer.getScreenHeightFactor());
@@ -97,21 +104,38 @@ public class Button
         if (size.x > realSizeX) realSizeX = (int) size.x;
         if (size.y > realSizeY) realSizeY = (int) size.y;
 
-        lastRealSize.x = realSizeX;
-        lastRealSize.y = realSizeY;
+//        lastRealSize.x = realSizeX;
+//        lastRealSize.y = realSizeY;
 
-        Vec2i newPosition = new Vec2i();
-        newPosition.x = position.x + parentPos.x;
-        newPosition.y = position.y + parentPos.y;
+        //Vec2i lastRealPosition = new Vec2i();
+        lastRealPosition.x = position.x + parentPos.x;
+        lastRealPosition.y = position.y + parentPos.y;
 
-        newPosition.x *= gameRenderer.getScreenWidthFactor();
-        newPosition.y *= gameRenderer.getScreenHeightFactor();
+        lastRealPosition.x *= gameRenderer.getScreenWidthFactor();
+        lastRealPosition.y *= gameRenderer.getScreenHeightFactor();
         realSizeX *= gameRenderer.getScreenWidthFactor();
         realSizeY *= gameRenderer.getScreenHeightFactor();
         posX *= gameRenderer.getScreenWidthFactor();
         posY *= gameRenderer.getScreenHeightFactor();
 
-        g.drawRect(newPosition.x, newPosition.y, realSizeX, realSizeY);
+        lastRealSize.x = realSizeX;
+        lastRealSize.y = realSizeY;
+
+        Stroke prevStroke = null;
+        if (selected)
+        {
+            Graphics2D g2 = (Graphics2D) g;
+            prevStroke = g2.getStroke();
+            g2.setStroke(new BasicStroke(10));
+        }
+
+        g.drawRect(lastRealPosition.x, lastRealPosition.y, realSizeX, realSizeY);
         g.drawString(text, posX, posY);
+
+        if (selected)
+        {
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setStroke(prevStroke);
+        }
     }
 }

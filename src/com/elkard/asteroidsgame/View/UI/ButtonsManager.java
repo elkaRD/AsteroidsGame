@@ -7,11 +7,13 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class ButtonsManager extends JFrame implements MouseListener
 {
     private static ButtonsManager instance = new ButtonsManager();
     private ArrayList<ButtonsGroup> groups = new ArrayList<>();
+    private Stack<ButtonsGroup> activeGroup = new Stack<>();
 
     public static ButtonsManager getInstance()
     {
@@ -47,7 +49,7 @@ public class ButtonsManager extends JFrame implements MouseListener
     @Override
     public void mouseClicked(MouseEvent event)
     {
-        System.out.println("Clicked");
+        System.out.println("Clicked: " + event.getX() + ", " + event.getY());
 
         for (ButtonsGroup group : groups)
         {
@@ -69,4 +71,34 @@ public class ButtonsManager extends JFrame implements MouseListener
 
     @Override
     public void mouseReleased(MouseEvent arg0) { }
+
+    public void nextButton()
+    {
+        if (activeGroup.size() == 0) return;
+
+        activeGroup.lastElement().nextButton();
+    }
+
+    public void prevButton()
+    {
+        if (activeGroup.size() == 0) return;
+
+        activeGroup.lastElement().prevButton();
+    }
+
+    public void pickButton()
+    {
+        if (activeGroup.size() == 0) return;
+
+        activeGroup.lastElement().pickButton();
+    }
+
+    public void groupChangedVisible(ButtonsGroup group, boolean isVisible)
+    {
+        if (activeGroup.contains(group))
+            activeGroup.remove(group);
+
+        if (isVisible)
+            activeGroup.add(group);
+    }
 }
