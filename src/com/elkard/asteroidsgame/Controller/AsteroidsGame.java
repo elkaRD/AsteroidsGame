@@ -16,6 +16,7 @@ package com.elkard.asteroidsgame.Controller;
 
 import com.elkard.asteroidsgame.Logic.GameLogic;
 import com.elkard.asteroidsgame.View.GameRenderer;
+import com.elkard.asteroidsgame.View.UI.ButtonsManager;
 
 public class AsteroidsGame implements IGameController
 {
@@ -25,10 +26,12 @@ public class AsteroidsGame implements IGameController
     private long prevTime;
     private boolean endGame;
 
+    public final IInputHandler inputHandler = new InputHandler();
+
     public AsteroidsGame()
     {
         startNewGame();
-        gameRenderer = new GameRenderer(this);
+        gameRenderer = new GameRenderer(this, inputHandler);
     }
 
     private void startNewGame()
@@ -99,7 +102,9 @@ public class AsteroidsGame implements IGameController
 
     private void handleInput()
     {
-        gameRenderer.handleInput();
+        inputHandler.handleInput(this);
+        inputHandler.handleInput(ButtonsManager.getInstance());
+        inputHandler.refresh();
     }
 
     @Override

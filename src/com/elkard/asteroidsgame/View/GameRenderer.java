@@ -16,7 +16,6 @@ package com.elkard.asteroidsgame.View;
 
 import com.elkard.asteroidsgame.Controller.AsteroidsGame;
 import com.elkard.asteroidsgame.Controller.IInputHandler;
-import com.elkard.asteroidsgame.Controller.InputHandler;
 import com.elkard.asteroidsgame.Logic.GameLogic;
 import com.elkard.asteroidsgame.Logic.IGameState;
 import com.elkard.asteroidsgame.Controller.IGameController;
@@ -58,8 +57,7 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     private static final String BUTTON_GAMEOVER_MENU = "RETURN";
 
     private final IGameController gameEngine;
-
-    public final IInputHandler inputHandler;
+    private final IInputHandler inputHandler;
 
     public Boolean isKeyPressed = false;
 
@@ -72,10 +70,11 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     private ButtonsGroup buttonsPause;
     private ButtonsGroup buttonsGameover;
 
-    public GameRenderer(AsteroidsGame ag)
+    public GameRenderer(AsteroidsGame controller, IInputHandler inputHandler)
     {
-        gameEngine = ag;
-        inputHandler = new InputHandler();
+        gameEngine = controller;
+        this.inputHandler = inputHandler;
+
         buildWindow(screenWidth, screenHeight);
 
         addComponentListener(new ResizeListener());
@@ -293,13 +292,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
                 .setPosition(240, 0)
                 .setSize(200,20)
                 .setText(BUTTON_GAMEOVER_MENU));
-    }
-
-    public void handleInput()
-    {
-        inputHandler.handleInput(gameEngine);
-        inputHandler.handleInput(ButtonsManager.getInstance());
-        inputHandler.refresh();
     }
 
     public void showWindow()

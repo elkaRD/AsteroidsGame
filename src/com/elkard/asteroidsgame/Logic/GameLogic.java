@@ -295,7 +295,7 @@ public class GameLogic {
 
     private void generateAsteroids()
     {
-        float screenPerimeter = 2*screenHeight + 2*screenWidth;
+        float screenPerimeter = screenHeight + screenWidth;
         for (int i = 0; i < curLevel; i++)
         {
             float whereToSpot = screenPerimeter * i/curLevel + screenWidth / 2;
@@ -312,16 +312,16 @@ public class GameLogic {
                 posToSpot.x = screenWidth;
                 posToSpot.y = whereToSpot - screenWidth;
             }
-            else if (whereToSpot < 2*screenWidth + screenHeight)
-            {
-                posToSpot.x = whereToSpot - screenWidth - screenHeight;
-                posToSpot.y = screenHeight;
-            }
-            else
-            {
-                posToSpot.x = 0;
-                posToSpot.y = whereToSpot - 2*screenWidth - screenHeight;
-            }
+//            else if (whereToSpot < 2*screenWidth + screenHeight)
+//            {
+//                posToSpot.x = whereToSpot - screenWidth - screenHeight;
+//                posToSpot.y = screenHeight;
+//            }
+//            else
+//            {
+//                posToSpot.x = 0;
+//                posToSpot.y = whereToSpot - 2*screenWidth - screenHeight;
+//            }
 
             Asteroid temp = new Asteroid(this, posToSpot);
         }

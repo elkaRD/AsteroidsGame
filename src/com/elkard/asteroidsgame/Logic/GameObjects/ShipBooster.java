@@ -28,6 +28,7 @@ public class ShipBooster extends GameObject
     {
         super(gl);
         parent = parentObject;
+        setStaticLines(false);
     }
 
     @Override
