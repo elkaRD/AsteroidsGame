@@ -22,25 +22,23 @@ import java.util.*;
 
 public class GameObject implements ICollisionable
 {
+    protected final GameLogic gameLogic;
+
     private Vec2 position = new Vec2();
     private float rotation = 0f;
     private float scale = 1f;
-
     private String name = "";
 
     private boolean infinitySpace = true;
-
-    private float halfOfDimension = 0;
-
-    protected final GameLogic gameLogic;
+    private boolean physicsEnabled = true;
+    private boolean isVisible = true;
 
     private boolean isDestructing = false;
     private float destructionDuration = 2f;
     private float destructionTime = 0;
     private float destructionScale = 100;
 
-    private boolean physicsEnabled = true;
-    private boolean isVisible = true;
+    private float halfOfDimension = 0;
 
     private boolean areLinesValid = false;
     private Line[] validLines;

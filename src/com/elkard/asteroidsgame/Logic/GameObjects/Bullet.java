@@ -24,45 +24,30 @@ import com.elkard.asteroidsgame.Vec2;
 
 public class Bullet extends GameObject
 {
-    private Vec2 bulletVelocity;
-    private Vec2 bulletDirection = new Vec2();
     private float speed = 500;
     private final float originalSpeed = 500;
     private float bulletLen = 20;
-
     private float remainingDst = 500;
 
-    private GameObject debug;
-
-    private PolarLayout[] points = new PolarLayout[2];
-
+    private Vec2 bulletVelocity;
+    private Vec2 bulletDirection = new Vec2();
     private Vec2 prevPos;
 
     public Bullet(GameLogic gl, Weapon weapon, float speedMultiplier, float deltaRotation)
     {
         super(gl);
 
+        gameLogic.addObject(this, GameLogic.ObjectType.BULLET);
+
         setPosition(weapon.getPosition());
         setRotation(weapon.getRotation() + deltaRotation);
+        prevPos = getPosition();
 
         speed = originalSpeed * speedMultiplier;
         bulletDirection.x = (float) Math.cos(Math.toRadians(getRotation()));
         bulletDirection.y = (float) Math.sin(Math.toRadians(getRotation()));
-
         bulletVelocity = bulletDirection.clone();
         bulletVelocity.mul(speed);
-
-        gameLogic.addObject(this, GameLogic.ObjectType.BULLET);
-
-        debug = weapon;
-
-        for (int i = 0; i < 2; i++)
-            points[i] = new PolarLayout();
-
-        points[0].dst = 0;          points[0].rot = 0;
-        points[1].dst = bulletLen;  points[1].rot = 180;
-
-        prevPos = getPosition();
     }
 
     public Bullet(GameLogic gl, Weapon weapon)
@@ -112,6 +97,14 @@ public class Bullet extends GameObject
     @Override
     protected PolarLayout[] renderPoints()
     {
+        PolarLayout[] points = new PolarLayout[2];
+
+        for (int i = 0; i < 2; i++)
+            points[i] = new PolarLayout();
+
+        points[0].dst = 0;          points[0].rot = 0;
+        points[1].dst = bulletLen;  points[1].rot = 180;
+
         return points;
     }
 

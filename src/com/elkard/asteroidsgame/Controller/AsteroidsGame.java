@@ -16,6 +16,7 @@ package com.elkard.asteroidsgame.Controller;
 
 import com.elkard.asteroidsgame.Logic.GameLogic;
 import com.elkard.asteroidsgame.View.GameRenderer;
+import com.elkard.asteroidsgame.View.MenuManager;
 import com.elkard.asteroidsgame.View.UI.ButtonsManager;
 
 public class AsteroidsGame implements IGameController
@@ -26,18 +27,18 @@ public class AsteroidsGame implements IGameController
     private long prevTime;
     private boolean endGame;
 
-    public final IInputHandler inputHandler = new InputHandler();
+    private final IInputHandler inputHandler;
 
     public AsteroidsGame()
     {
-        startNewGame();
-        gameRenderer = new GameRenderer(this, inputHandler);
-    }
-
-    private void startNewGame()
-    {
         gameLogic = new GameLogic();
         gameLogic.attachController(this);
+
+        inputHandler = new InputHandler();
+
+        gameRenderer = new GameRenderer(this, inputHandler);
+
+        MenuManager.getInstance().setGameLogic(gameLogic);
     }
 
     @Override
@@ -49,17 +50,13 @@ public class AsteroidsGame implements IGameController
     @Override
     public void run()
     {
-        System.out.println("Logic started");
-
         gameRenderer.showWindow();
-
         prevTime = System.currentTimeMillis();
-
         endGame = false;
 
         while (!endGame)
         {
-            float deltaTime = getDeltaTime();
+            float deltaTime = updateDeltaTime();
 
             handleInput();
             gameLogic.onUpdate(deltaTime);
@@ -69,7 +66,7 @@ public class AsteroidsGame implements IGameController
         gameRenderer.cleanUp();
     }
 
-    private float getDeltaTime()
+    private float updateDeltaTime()
     {
         long curTime = System.currentTimeMillis();
         long elapsedTimeMillis = curTime - prevTime;
@@ -78,19 +75,23 @@ public class AsteroidsGame implements IGameController
 
         if (deltaTime < 0.013f)
         {
-            try {
+            try
+            {
                 int toSleep  = (int) (13 - deltaTime * 1000);
                 Thread.sleep(toSleep);
-
-            } catch (InterruptedException ex) {
+            }
+            catch (InterruptedException ex)
+            {
                 ex.printStackTrace();
             }
         }
 
         //TODO: just to  slow down main loop - to have cooler computer
-        try {
+        try
+        {
             Thread.sleep(16);
-        }catch(Exception e)
+        }
+        catch(Exception e)
         {
             e.printStackTrace();
         }

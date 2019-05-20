@@ -51,20 +51,17 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     {
         super(gl);
 
-        curWeapon = gameLogic.weaponsFactory.getWeapon(this);
+        setName("player" + playersCounter);
+        playersCounter++;
+
+        gameLogic.addObject(this, GameLogic.ObjectType.PLAYER);
+        enablePhysics(false);
+
+        booster = new ShipBooster(gl, this);
 
         resetX = gl.getWidth() / 2;
         resetY = gl.getHeight() / 2;
         reset();
-
-        setName("player" + playersCounter);
-        playersCounter++;
-
-        gl.addObject(this, GameLogic.ObjectType.PLAYER);
-
-        enablePhysics(false);
-
-        booster = new ShipBooster(gl, this);
     }
 
     @Override
@@ -83,7 +80,8 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
 
         setPosition(resetX, resetY);
 
-        curWeapon.onEndShooting();
+        if (curWeapon != null)
+            curWeapon.onEndShooting();
         curWeapon = gameLogic.weaponsFactory.getWeapon(this);
     }
 

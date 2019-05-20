@@ -27,10 +27,9 @@ public class ButtonsGroup
     private Button selectedButton = null;
 
     private IButtonClickListener listener = null;
+
     private boolean isVisible = true;
-
     public Vec2i position = new Vec2i();
-
     public String tag = "";
 
     public ButtonsGroup()
@@ -96,24 +95,6 @@ public class ButtonsGroup
         for (Button button : buttons)
         {
             button.draw(g, gameRenderer, position);
-        }
-    }
-
-    public void onClick(int posX, int posY)
-    {
-        if (listener == null) return;
-
-        posX -= position.x;
-        posY -= position.y;
-
-        for (Button button : buttons)
-        {
-            if (posX >= button.lastRealPosition.x && posX <= button.lastRealPosition.x + button.lastRealSize.x
-                && posY >= button.lastRealPosition.y && posY <= button.lastRealPosition.y + button.lastRealSize.y)
-            {
-                listener.onButtonClicked(this, button);
-                break;
-            }
         }
     }
 

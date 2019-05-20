@@ -32,7 +32,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class GameRenderer extends JFrame implements IButtonClickListener, IGameState
+public class GameRenderer extends JFrame
 {
     private int screenWidth = 1280;
     private int screenHeight = 720;
@@ -42,33 +42,13 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
     private float screenWidthFactor = 1f;
     private float screenHeightFactor = 1f;
 
-    private static final String TAG_MENU_MAIN = "mainMenu";
-    private static final String TAG_MENU_PAUSE = "pauseMenu";
-    private static final String TAG_MENU_GAMEOVER = "gameoverMenu";
-
-    private static final String BUTTON_MAIN_PLAY = "PLAY";
-    private static final String BUTTON_MAIN_HIGHSCORES = "HI-SCORES";
-    private static final String BUTTON_MAIN_EXIT = "EXIT";
-    
-    private static final String BUTTON_PAUSE_RESUME = "RESUME";
-    private static final String BUTTON_PAUSE_MENU = "EXIT";
-
-    private static final String BUTTON_GAMEOVER_AGAIN = "AGAIN";
-    private static final String BUTTON_GAMEOVER_MENU = "RETURN";
-
     private final IGameController gameEngine;
     private final IInputHandler inputHandler;
-
-    public Boolean isKeyPressed = false;
 
     private Image frameBuffer;
     private Graphics g_frameBuffer;
 
     private Image image;
-
-    private ButtonsGroup buttonsMain;
-    private ButtonsGroup buttonsPause;
-    private ButtonsGroup buttonsGameover;
 
     public GameRenderer(AsteroidsGame controller, IInputHandler inputHandler)
     {
@@ -78,8 +58,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         buildWindow(screenWidth, screenHeight);
 
         addComponentListener(new ResizeListener());
-
-        gameEngine.getGameLogic().setStateChangedListener(this);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -128,7 +106,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
 
         ButtonsManager.getInstance().draw(g_frameBuffer, this);
         g.drawImage(frameBuffer, 0, 0, this);
-
     }
 
     private void drawPauseMenu(Graphics g)
@@ -201,7 +178,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
             public void keyPressed(KeyEvent event)
             {
                 getOuter().inputHandler.onKeyPressed(event.getKeyCode(), true);
-                getOuter().isKeyPressed = true;
             }
 
             @Override
@@ -216,82 +192,11 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
 
             }
         });
-
-        prepareButtons();
     }
 
     public GameRenderer getOuter()
     {
         return this;
-    }
-
-    private void prepareButtons()
-    {
-        prepareMainMenuButtons();
-        preparePauseMenuButtons();
-        prepareGameoverMenuButtons();
-    }
-
-    private void prepareMainMenuButtons()
-    {
-        buttonsMain = new ButtonsGroup()
-                .setPosition(300,300)
-                .setListener(this)
-                .setTag(TAG_MENU_MAIN)
-                .setVisible(false);
-
-        buttonsMain.add(new Button()
-                .setPosition(0, 0)
-                .setSize(200,20)
-                .setText(BUTTON_MAIN_PLAY));
-
-        buttonsMain.add(new Button()
-                .setPosition(0, 60)
-                .setSize(200,20)
-                .setText(BUTTON_MAIN_HIGHSCORES));
-
-        buttonsMain.add(new Button()
-                .setPosition(0, 120)
-                .setSize(200,20)
-                .setText(BUTTON_MAIN_EXIT));
-    }
-
-    private void preparePauseMenuButtons()
-    {
-        buttonsPause = new ButtonsGroup()
-                .setPosition(400,500)
-                .setListener(this)
-                .setTag(TAG_MENU_PAUSE)
-                .setVisible(false);
-
-        buttonsPause.add(new Button()
-                .setPosition(0, 0)
-                .setSize(200,20)
-                .setText(BUTTON_PAUSE_RESUME));
-
-        buttonsPause.add(new Button()
-                .setPosition(240, 0)
-                .setSize(200,20)
-                .setText(BUTTON_PAUSE_MENU));
-    }
-
-    private void prepareGameoverMenuButtons()
-    {
-        buttonsGameover = new ButtonsGroup()
-                .setPosition(400,500)
-                .setListener(this)
-                .setTag(TAG_MENU_GAMEOVER)
-                .setVisible(false);
-
-        buttonsGameover.add(new Button()
-                .setPosition(0, 0)
-                .setSize(200,20)
-                .setText(BUTTON_GAMEOVER_AGAIN));
-
-        buttonsGameover.add(new Button()
-                .setPosition(240, 0)
-                .setSize(200,20)
-                .setText(BUTTON_GAMEOVER_MENU));
     }
 
     public void showWindow()
@@ -312,92 +217,6 @@ public class GameRenderer extends JFrame implements IButtonClickListener, IGameS
         } catch (IOException ex) {
             System.out.println("Can't load the image");
             ex.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onButtonClicked(ButtonsGroup group, Button clicked)
-    {
-        if (group.getTag().equals(TAG_MENU_MAIN))
-        {
-            if (clicked.getText().equals(BUTTON_MAIN_PLAY))
-            {
-                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.MAIN_PLAY);
-            }
-            else if (clicked.getText().equals(BUTTON_MAIN_HIGHSCORES))
-            {
-                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.MAIN_HIGHSCORES);
-            }
-            else if (clicked.getText().equals(BUTTON_MAIN_EXIT))
-            {
-                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.MAIN_EXIT);
-            }
-            
-            return;
-        }
-        
-        if (group.getTag().equals(TAG_MENU_PAUSE))
-        {
-            if (clicked.getText().equals(BUTTON_PAUSE_RESUME))
-            {
-                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.PAUSE_RESUME);
-            }
-            else if  (clicked.getText().equals(BUTTON_PAUSE_MENU))
-            {
-                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.PAUSE_MENU);
-            }
-            
-            return;
-        }
-
-        if (group.getTag().equals(TAG_MENU_GAMEOVER))
-        {
-            if (clicked.getText().equals(BUTTON_GAMEOVER_AGAIN))
-            {
-                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.GAMEOVER_AGAIN);
-            }
-            else if  (clicked.getText().equals(BUTTON_GAMEOVER_MENU))
-            {
-                gameEngine.getGameLogic().menuButtonClicked(GameLogic.MenuButton.GAMEOVER_RETURN);
-            }
-
-            return;
-        }
-    }
-
-    @Override
-    public void onStateChanged(GameLogic.GameState prevState, GameLogic.GameState curState)
-    {
-        System.out.println("State changed from " + prevState + " to " + curState);
-
-        switch (prevState)
-        {
-            case MAINMENU:
-                buttonsMain.setVisible(false);
-                break;
-
-            case PAUSED:
-                buttonsPause.setVisible(false);
-                break;
-
-            case GAMEOVER:
-                buttonsGameover.setVisible(false);
-                break;
-        }
-
-        switch (curState)
-        {
-            case MAINMENU:
-                buttonsMain.setVisible(true);
-                break;
-
-            case PAUSED:
-                buttonsPause.setVisible(true);
-                break;
-
-            case GAMEOVER:
-                buttonsGameover.setVisible(true);
-                break;
         }
     }
 

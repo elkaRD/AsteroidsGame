@@ -40,28 +40,24 @@ public class InputHandler implements IInputHandler
     {
         switch(key)
         {
-            case 'w':
             case 'W':
             case 38:
                 upPressed = isPressed;
                 upSinglePress = isPressed || upSinglePress;
                 break;
 
-            case 's':
             case 'S':
             case 40:
                 downPressed = isPressed;
                 downSinglePress = isPressed || downSinglePress;
                 break;
 
-            case 'a':
             case 'A':
             case 37:
                 leftPressed = isPressed;
                 leftSinglePress = isPressed || leftSinglePress;
                 break;
 
-            case 'd':
             case 'D':
             case 39:
                 rightPressed = isPressed;
@@ -83,50 +79,51 @@ public class InputHandler implements IInputHandler
         }
     }
 
-    @Override
-    public void handleInput(IGameController asteroidsGame)
+    private void handleMovement(IGameController controller)
     {
         if (upPressed)
-            asteroidsGame.onAccelerate(1.0f);
+            controller.onAccelerate(1.0f);
 
         if (downPressed)
-            asteroidsGame.onSlowDown(1.0f);
+            controller.onSlowDown(1.0f);
 
         float turnFactor = 0f;
         if (leftPressed) turnFactor -= 1f;
         if (rightPressed) turnFactor += 1f;
-        asteroidsGame.onTurn(turnFactor);
+        controller.onTurn(turnFactor);
+    }
 
+    private void handleShooting(IGameController controller)
+    {
         if (spacePressed != prevShootState)
         {
             prevShootState = spacePressed;
-            if (spacePressed) asteroidsGame.onStartShooting();
-            else asteroidsGame.onEndShooting();
+            if (spacePressed) controller.onStartShooting();
+            else controller.onEndShooting();
         }
+    }
+
+    @Override
+    public void handleInput(IGameController controller)
+    {
+        handleMovement(controller);
+        handleShooting(controller);
 
         if (escSinglePress)
-        {
-            asteroidsGame.onPause();
-        }
+            controller.onPause();
     }
 
     @Override
     public void handleInput(IButtonsManager buttonsManager)
     {
         if (upSinglePress || leftSinglePress)
-        {
             buttonsManager.prevButton();
-        }
         
         if (downSinglePress || rightSinglePress)
-        {
             buttonsManager.nextButton();
-        }
 
         if (spaceSinglePress || enterSinglePress)
-        {
             buttonsManager.pickButton();
-        }
     }
 
     @Override

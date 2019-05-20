@@ -26,8 +26,6 @@ public class Button
 
     public Vec2i position = new Vec2i();
     public Vec2i size = new Vec2i();
-    public Vec2i lastRealSize = new Vec2i();
-    public Vec2i lastRealPosition = new Vec2i();
 
     public String text = "";
     public int fontSize = 20;
@@ -106,34 +104,9 @@ public class Button
         float factor = Math.min(gameRenderer.getScreenWidthFactor(), gameRenderer.getScreenHeightFactor());
         g.setFont(new Font("TimesRoman", Font.PLAIN, (int) (fontSize * factor)));
 
-        int realSizeX = g.getFontMetrics().stringWidth(text) + 2*boundary;
-        int realSizeY = fontSize + 2*boundary;
-        int posX = (int) (position.x + boundary + parentPos.x);
-        int posY = (int) (position.y + size.y + boundary + parentPos.y);
-        if (centerText)
-        {
-            //TODO:
-            //posX +=
-        }
-        if (size.x > realSizeX) realSizeX = (int) size.x;
-        if (size.y > realSizeY) realSizeY = (int) size.y;
-
-//        lastRealSize.x = realSizeX;
-//        lastRealSize.y = realSizeY;
-
-        //Vec2i lastRealPosition = new Vec2i();
-        lastRealPosition.x = position.x + parentPos.x;
-        lastRealPosition.y = position.y + parentPos.y;
-
-        lastRealPosition.x *= gameRenderer.getScreenWidthFactor();
-        lastRealPosition.y *= gameRenderer.getScreenHeightFactor();
-        realSizeX *= gameRenderer.getScreenWidthFactor();
-        realSizeY *= gameRenderer.getScreenHeightFactor();
-        posX *= gameRenderer.getScreenWidthFactor();
-        posY *= gameRenderer.getScreenHeightFactor();
-
-        lastRealSize.x = realSizeX;
-        lastRealSize.y = realSizeY;
+        Vec2i borderSize = calcBorderSize(g, gameRenderer);
+        Vec2i borderPosition = calcBorderPosition(gameRenderer, parentPos);
+        Vec2i textPosition = calcTextPosition(gameRenderer, parentPos);
 
         Stroke prevStroke = null;
         if (selected)
@@ -143,13 +116,52 @@ public class Button
             g2.setStroke(new BasicStroke(10));
         }
 
-        g.drawRect(lastRealPosition.x, lastRealPosition.y, realSizeX, realSizeY);
-        g.drawString(text, posX, posY);
+        g.drawRect(borderPosition.x, borderPosition.y, borderSize.x, borderSize.y);
+        g.drawString(text, textPosition.x, textPosition.y);
 
         if (selected)
         {
             Graphics2D g2 = (Graphics2D) g;
             g2.setStroke(prevStroke);
         }
+    }
+
+    private Vec2i calcBorderSize(Graphics g, GameRenderer gameRenderer)
+    {
+        Vec2i borderSize = new Vec2i();
+        borderSize.x = g.getFontMetrics().stringWidth(text) + 2*boundary;
+        borderSize.y = fontSize + 2*boundary;
+        if (size.x > borderSize.x) borderSize.x = (int) size.x;
+        if (size.y > borderSize.y) borderSize.y = (int) size.y;
+        borderSize.x *= gameRenderer.getScreenWidthFactor();
+        borderSize.y *= gameRenderer.getScreenHeightFactor();
+
+        return borderSize;
+    }
+
+    private Vec2i calcBorderPosition(GameRenderer gameRenderer, Vec2i parentPos)
+    {
+        Vec2i borderPosition = new Vec2i();
+        borderPosition.x = position.x + parentPos.x;
+        borderPosition.y = position.y + parentPos.y;
+        borderPosition.x *= gameRenderer.getScreenWidthFactor();
+        borderPosition.y *= gameRenderer.getScreenHeightFactor();
+
+        return borderPosition;
+    }
+
+    private Vec2i calcTextPosition(GameRenderer gameRenderer, Vec2i parentPos)
+    {
+        Vec2i textPosition = new Vec2i();
+        textPosition.x = (int) (position.x + boundary + parentPos.x);
+        textPosition.y = (int) (position.y + size.y + boundary + parentPos.y);
+        if (centerText)
+        {
+            //TODO: future feature
+        }
+        textPosition.x *= gameRenderer.getScreenWidthFactor();
+        textPosition.y *= gameRenderer.getScreenHeightFactor();
+
+        return textPosition;
     }
 }
