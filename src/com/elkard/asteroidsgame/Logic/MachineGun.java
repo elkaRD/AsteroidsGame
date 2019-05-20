@@ -1,13 +1,11 @@
-package com.elkard.asteroidsgame.Game;
+package com.elkard.asteroidsgame.Logic;
 
-public class ShotGun extends Weapon
+public class MachineGun extends Weapon
 {
-    private final float minTimeSinceLastShoot = 0.3f;
+    private final float minTimeSinceLastShoot = 0.05f;
     private float timeSinceLastShoot = 0f;
 
-    private float bulletRange = 5f;
-
-    public ShotGun(GameLogic gl, GameObject parentObject)
+    public MachineGun(GameLogic gl, GameObject parentObject)
     {
         super(gl, parentObject);
     }
@@ -22,8 +20,6 @@ public class ShotGun extends Weapon
         if (isShooting && timeSinceLastShoot > minTimeSinceLastShoot)
         {
             new Bullet(gameLogic, this);
-            new Bullet(gameLogic, this, bulletRange);
-            new Bullet(gameLogic, this, -bulletRange);
             timeSinceLastShoot = 0f;
         }
     }

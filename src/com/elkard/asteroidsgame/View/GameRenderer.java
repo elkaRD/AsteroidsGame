@@ -1,9 +1,11 @@
 package com.elkard.asteroidsgame.View;
 
-import com.elkard.asteroidsgame.AsteroidsGame;
-import com.elkard.asteroidsgame.Game.GameLogic;
-import com.elkard.asteroidsgame.Game.IGameState;
-import com.elkard.asteroidsgame.IGameController;
+import com.elkard.asteroidsgame.Controller.AsteroidsGame;
+import com.elkard.asteroidsgame.Controller.IInputHandler;
+import com.elkard.asteroidsgame.Controller.InputHandler;
+import com.elkard.asteroidsgame.Logic.GameLogic;
+import com.elkard.asteroidsgame.Logic.IGameState;
+import com.elkard.asteroidsgame.Controller.IGameController;
 import com.elkard.asteroidsgame.Line;
 import com.elkard.asteroidsgame.View.UI.Button;
 import com.elkard.asteroidsgame.View.UI.ButtonsGroup;

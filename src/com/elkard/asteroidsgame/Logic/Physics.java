@@ -1,4 +1,4 @@
-package com.elkard.asteroidsgame.Game;
+package com.elkard.asteroidsgame.Logic;
 
 import com.elkard.asteroidsgame.Line;
 import com.elkard.asteroidsgame.Vec2;
@@ -47,7 +47,7 @@ public final class Physics
         temp.add(gameObject);
         pairs.add(new PairOfGroups(temp, g2));
     }
-    
+
     private class PairOfObjects
     {
         public PairOfObjects(){}

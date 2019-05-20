@@ -1,6 +1,6 @@
-package com.elkard.asteroidsgame.Game;
+package com.elkard.asteroidsgame.Logic;
 
-import com.elkard.asteroidsgame.IGameController;
+import com.elkard.asteroidsgame.Controller.IGameController;
 import com.elkard.asteroidsgame.Line;
 import com.elkard.asteroidsgame.Vec2;
 
@@ -191,6 +191,8 @@ public class GameLogic {
 
     public void onPause()
     {
+        if  (curState != GameState.GAMEPLAY && curState != GameState.PAUSED) return;
+
         isPaused = !isPaused;
         if (isPaused) curState = GameState.PAUSED;
         else curState = GameState.GAMEPLAY;

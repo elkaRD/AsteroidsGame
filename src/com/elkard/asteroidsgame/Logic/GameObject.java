@@ -1,4 +1,4 @@
-package com.elkard.asteroidsgame.Game;
+package com.elkard.asteroidsgame.Logic;
 
 import com.elkard.asteroidsgame.Line;
 import com.elkard.asteroidsgame.PolarLayout;
@@ -6,8 +6,8 @@ import com.elkard.asteroidsgame.Vec2;
 
 import java.util.*;
 
-public class GameObject implements ICollisionable{
-
+public class GameObject implements ICollisionable
+{
     private Vec2 position = new Vec2();
     private float rotation = 0f;
     private float scale = 1f;
@@ -18,7 +18,7 @@ public class GameObject implements ICollisionable{
 
     private float halfOfDimension = 0;
 
-    protected GameLogic gameLogic;
+    protected final GameLogic gameLogic;
 
     private boolean isDestructing = false;
     private float destructionDuration = 2f;
@@ -30,6 +30,10 @@ public class GameObject implements ICollisionable{
 
     private boolean areLinesValid = false;
     private Line[] validLines;
+
+    private PolarLayout[] definedPoints;
+    private boolean areLinesStatic = true;
+    private boolean refreshLines = true;
 
     public GameObject(GameLogic gl)
     {
@@ -88,6 +92,17 @@ public class GameObject implements ICollisionable{
         name = newName;
     }
 
+    protected void setStaticLines(boolean areStatic)
+    {
+        areLinesStatic = areStatic;
+        refreshLines = true;
+    }
+
+    protected void updateLines()
+    {
+        refreshLines = true;
+    }
+
     public final float getScale()
     {
         return scale;
@@ -107,7 +122,8 @@ public class GameObject implements ICollisionable{
 
     private void checkPosition()
     {
-        if (infinitySpace) {
+        if (infinitySpace)
+        {
             while (position.x > gameLogic.getWidth())
                 position.x -= gameLogic.getWidth();
 
@@ -130,7 +146,8 @@ public class GameObject implements ICollisionable{
 
     public void update(float delta)
     {
-        if (isDestructing) {
+        if (isDestructing)
+        {
             destructionTime += delta;
             if (destructionTime >= destructionDuration)
                 cleanUp();
@@ -144,16 +161,23 @@ public class GameObject implements ICollisionable{
 
     private Line[] generateLines()
     {
-        PolarLayout[] definedPoints = renderPoints();
-        Vec2[] renderPoints = new Vec2[definedPoints.length];
+        if (!areLinesStatic || refreshLines)
+        {
+            refreshLines = false;
+            definedPoints = renderPoints();
+        }
+        if (definedPoints == null)
+            return new Line[0];
 
+        Vec2[] renderPoints = new Vec2[definedPoints.length];
         float objectDimension = getMaxDst(definedPoints);   // actually half of the object dimensiona
         halfOfDimension = objectDimension;
 
         ArrayList<Vec2> positionsToRender = new ArrayList<>();
         positionsToRender.add(position);
 
-        if (infinitySpace) {
+        if (infinitySpace)
+        {
             if (position.x < objectDimension)
                 positionsToRender.add(Vec2.add(position, new Vec2(gameLogic.getWidth(), 0)));
             if (position.y < objectDimension)
@@ -167,16 +191,18 @@ public class GameObject implements ICollisionable{
         Line[] renderLines = new Line[definedPoints.length * positionsToRender.size()];
         int linesIter = 0;
 
-        for (Vec2 renderPos : positionsToRender) {
-
-            for (int i = 0; i < renderPoints.length; i++) {
+        for (Vec2 renderPos : positionsToRender)
+        {
+            for (int i = 0; i < renderPoints.length; i++)
+            {
                 renderPoints[i] = renderPos.clone();
                 if (definedPoints[i] == null) continue;
                 renderPoints[i].x += (float) Math.cos(Math.toRadians(definedPoints[i].rot + getRotation())) * definedPoints[i].dst * scale;
                 renderPoints[i].y += (float) Math.sin(Math.toRadians(definedPoints[i].rot + getRotation())) * definedPoints[i].dst * scale;
             }
 
-            for (int i = 0; i < renderPoints.length; i++, linesIter++) {
+            for (int i = 0; i < renderPoints.length; i++, linesIter++)
+            {
                 int j = (i + 1) % renderPoints.length;
                 renderLines[linesIter] = new Line();
                 renderLines[linesIter].b = renderPoints[i];
@@ -184,7 +210,6 @@ public class GameObject implements ICollisionable{
 
                 if (isDestructing)
                 {
-
                     float s = destructionTime / destructionDuration;
                     Line line = renderLines[linesIter];
 
@@ -195,8 +220,6 @@ public class GameObject implements ICollisionable{
                     line.e = Vec2.lerp(line.e, Vec2.add(line.e, destructionVector), s);
                 }
             }
-
-
         }
 
         areLinesValid = true;

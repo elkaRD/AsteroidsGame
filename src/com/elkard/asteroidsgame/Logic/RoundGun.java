@@ -1,4 +1,4 @@
-package com.elkard.asteroidsgame.Game;
+package com.elkard.asteroidsgame.Logic;
 
 public class RoundGun extends Weapon
 {

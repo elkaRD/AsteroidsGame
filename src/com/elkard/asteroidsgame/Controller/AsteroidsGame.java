@@ -1,6 +1,7 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Controller;
 
-import com.elkard.asteroidsgame.Game.GameLogic;
+import com.elkard.asteroidsgame.Debug;
+import com.elkard.asteroidsgame.Logic.GameLogic;
 import com.elkard.asteroidsgame.View.GameRenderer;
 
 public class AsteroidsGame implements IGameController
@@ -32,7 +33,7 @@ public class AsteroidsGame implements IGameController
     @Override
     public void run()
     {
-        System.out.println("Game started");
+        System.out.println("Logic started");
 
         gameRenderer.showWindow();
 

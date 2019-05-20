@@ -1,6 +1,6 @@
-package com.elkard.asteroidsgame;
+package com.elkard.asteroidsgame.Controller;
 
-import com.elkard.asteroidsgame.Game.GameLogic;
+import com.elkard.asteroidsgame.Logic.GameLogic;
 
 public interface IGameController
 {

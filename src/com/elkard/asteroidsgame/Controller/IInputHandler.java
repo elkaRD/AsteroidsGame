@@ -1,6 +1,5 @@
-package com.elkard.asteroidsgame.View;
+package com.elkard.asteroidsgame.Controller;
 
-import com.elkard.asteroidsgame.IGameController;
 import com.elkard.asteroidsgame.View.UI.IButtonsManager;
 
 public interface IInputHandler

@@ -1,11 +1,10 @@
 package com.elkard.asteroidsgame;
 
-import com.elkard.asteroidsgame.Game.GameLogic;
-import com.elkard.asteroidsgame.Game.GameObject;
-import com.elkard.asteroidsgame.Game.ICollisionable;
-import com.elkard.asteroidsgame.Game.Physics;
+import com.elkard.asteroidsgame.Logic.GameLogic;
+import com.elkard.asteroidsgame.Logic.GameObject;
+import com.elkard.asteroidsgame.Logic.ICollisionable;
+import com.elkard.asteroidsgame.Logic.Physics;
 import org.junit.Test;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.elkard.asteroidsgame.Game;
+package com.elkard.asteroidsgame.Logic;
 
 import com.elkard.asteroidsgame.Line;
 import com.elkard.asteroidsgame.PolarLayout;

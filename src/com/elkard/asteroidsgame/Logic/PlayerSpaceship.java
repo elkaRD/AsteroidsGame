@@ -1,4 +1,4 @@
-package com.elkard.asteroidsgame.Game;
+package com.elkard.asteroidsgame.Logic;
 
 import com.elkard.asteroidsgame.PolarLayout;
 import com.elkard.asteroidsgame.Vec2;
@@ -29,14 +29,11 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
 
     private static int playersCounter = 0;
 
-    private GameLogic gameLogic;
-
     public ShipBooster booster;
 
     public PlayerSpaceship(GameLogic gl)
     {
         super(gl);
-        gameLogic = gl;
 
         curWeapon = new StandardWeapon(this.gameLogic, this);
         //curWeapon = new MachineGun(gameLogic, this);
