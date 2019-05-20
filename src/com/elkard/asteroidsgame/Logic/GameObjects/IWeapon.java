@@ -1,4 +1,4 @@
-package com.elkard.asteroidsgame.Logic;
+package com.elkard.asteroidsgame.Logic.GameObjects;
 
 public interface IWeapon
 {

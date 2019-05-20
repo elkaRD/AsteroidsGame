@@ -2,6 +2,9 @@ package com.elkard.asteroidsgame.Logic;
 
 import com.elkard.asteroidsgame.Controller.IGameController;
 import com.elkard.asteroidsgame.Line;
+import com.elkard.asteroidsgame.Logic.GameObjects.Asteroid;
+import com.elkard.asteroidsgame.Logic.GameObjects.PlayerSpaceship;
+import com.elkard.asteroidsgame.Logic.GameObjects.Weapons.WeaponsFactory;
 import com.elkard.asteroidsgame.Vec2;
 
 import java.util.*;
@@ -70,6 +73,8 @@ public class GameLogic {
     private GameState curState = GameState.MAINMENU;
     private GameState prevState = GameState.INIT;
 
+    public final WeaponsFactory weaponsFactory = new WeaponsFactory(this);
+
     public GameLogic()
     {
         for (ObjectType type : ObjectType.values())
@@ -104,8 +109,11 @@ public class GameLogic {
         newObjects.clear();
         objectsToRemove.clear();
 
-        if (objects.get(ObjectType.ASTEROID).size() == 0) nextLevel();
-        if (remainingLives == 0 && !gameOver) onGameIsOver();
+        if (curState == GameState.GAMEPLAY)
+        {
+            if (objects.get(ObjectType.ASTEROID).size() == 0) nextLevel();
+            if (remainingLives == 0 && !gameOver) onGameIsOver();
+        }
 
         physics.updatePhysics(deltaTime);
 
@@ -178,6 +186,8 @@ public class GameLogic {
         gameObjects.clear();
         newObjects.clear();
         objectsToRemove.clear();
+
+        weaponsFactory.reset();
 
         remainingLives = 3;
         curLevel = 5;
@@ -264,6 +274,8 @@ public class GameLogic {
         if (curLevel % 2 == 0 && remainingLives < 5);
             remainingLives++;
 
+        weaponsFactory.nextLevel();
+        player.reset();
         generateAsteroids();
     }
 

@@ -1,5 +1,7 @@
-package com.elkard.asteroidsgame.Logic;
+package com.elkard.asteroidsgame.Logic.GameObjects;
 
+import com.elkard.asteroidsgame.Logic.*;
+import com.elkard.asteroidsgame.Logic.GameObjects.Weapons.StandardWeapon;
 import com.elkard.asteroidsgame.PolarLayout;
 import com.elkard.asteroidsgame.Vec2;
 
@@ -35,10 +37,11 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     {
         super(gl);
 
-        curWeapon = new StandardWeapon(this.gameLogic, this);
+        //curWeapon = new StandardWeapon(this.gameLogic, this);
         //curWeapon = new MachineGun(gameLogic, this);
         //curWeapon = new ShotGun(gameLogic, this);
         //curWeapon = new RoundGun(gameLogic, this);
+        curWeapon = gameLogic.weaponsFactory.getWeapon(this);
 
         resetX = gl.getWidth() / 2;
         resetY = gl.getHeight() / 2;
@@ -59,6 +62,7 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
     {
         super.cleanUp();
 
+        onEndShooting();
         gameLogic.removeObject(this);
     }
 
@@ -68,6 +72,9 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         resetTransform();
 
         setPosition(resetX, resetY);
+
+        curWeapon.onEndShooting();
+        curWeapon = gameLogic.weaponsFactory.getWeapon(this);
     }
 
     @Override

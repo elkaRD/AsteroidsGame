@@ -1,6 +1,10 @@
-package com.elkard.asteroidsgame.Logic;
+package com.elkard.asteroidsgame.Logic.GameObjects;
 
 import com.elkard.asteroidsgame.Line;
+import com.elkard.asteroidsgame.Logic.GameLogic;
+import com.elkard.asteroidsgame.Logic.GameObject;
+import com.elkard.asteroidsgame.Logic.GameObjects.Weapons.Weapon;
+import com.elkard.asteroidsgame.Logic.ICollisionable;
 import com.elkard.asteroidsgame.PolarLayout;
 import com.elkard.asteroidsgame.Vec2;
 

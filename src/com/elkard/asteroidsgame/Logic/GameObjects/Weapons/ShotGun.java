@@ -1,4 +1,8 @@
-package com.elkard.asteroidsgame.Logic;
+package com.elkard.asteroidsgame.Logic.GameObjects.Weapons;
+
+import com.elkard.asteroidsgame.Logic.GameLogic;
+import com.elkard.asteroidsgame.Logic.GameObject;
+import com.elkard.asteroidsgame.Logic.GameObjects.Bullet;
 
 public class ShotGun extends Weapon
 {
