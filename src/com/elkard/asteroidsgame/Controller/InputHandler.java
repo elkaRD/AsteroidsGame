@@ -1,6 +1,19 @@
+///
+/// EN: Project for the Event-Driven Programming course
+///     Warsaw University of Technology
+///     Java Asteroids Game
+///
+/// PL: Projekt PROZ (Programowanie zdarzeniowe)
+///     PW WEiTI 19L
+///     Gra typu Asteroids napisana w Javie
+///
+/// Copyright (C) Robert Dudzinski 2019
+///
+/// File: InputHandler.java
+
+
 package com.elkard.asteroidsgame.Controller;
 
-import com.elkard.asteroidsgame.Debug;
 import com.elkard.asteroidsgame.View.UI.IButtonsManager;
 
 public class InputHandler implements IInputHandler
@@ -25,8 +38,6 @@ public class InputHandler implements IInputHandler
     @Override
     public void onKeyPressed(int key, boolean isPressed)
     {
-        Debug.Log("Pressed " + key + ", status: " + isPressed);
-
         switch(key)
         {
             case 'w':

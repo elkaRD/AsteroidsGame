@@ -1,6 +1,19 @@
+///
+/// EN: Project for the Event-Driven Programming course
+///     Warsaw University of Technology
+///     Java Asteroids Game
+///
+/// PL: Projekt PROZ (Programowanie zdarzeniowe)
+///     PW WEiTI 19L
+///     Gra typu Asteroids napisana w Javie
+///
+/// Copyright (C) Robert Dudzinski 2019
+///
+/// File: AsteroidsGame.java
+
+
 package com.elkard.asteroidsgame.Controller;
 
-import com.elkard.asteroidsgame.Debug;
 import com.elkard.asteroidsgame.Logic.GameLogic;
 import com.elkard.asteroidsgame.View.GameRenderer;
 
@@ -48,7 +61,6 @@ public class AsteroidsGame implements IGameController
             handleInput();
             gameLogic.onUpdate(deltaTime);
             gameRenderer.onUpdate(deltaTime);
-            Debug.FlushLog();
         }
 
         gameRenderer.cleanUp();
