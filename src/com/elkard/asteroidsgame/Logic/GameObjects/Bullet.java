@@ -48,6 +48,8 @@ public class Bullet extends GameObject
         bulletDirection.y = (float) Math.sin(Math.toRadians(getRotation()));
         bulletVelocity = bulletDirection.clone();
         bulletVelocity.mul(speed);
+
+        move(Vec2.mul(bulletDirection, 50));
     }
 
     public Bullet(GameLogic gl, Weapon weapon)
@@ -161,7 +163,8 @@ public class Bullet extends GameObject
     }
 
     @Override
-    public void onCollisionEnter(ICollisionable other) {
+    public void onCollisionEnter(ICollisionable other)
+    {
         super.onCollisionEnter(other);
 
         cleanUp();

@@ -114,8 +114,8 @@ public class Asteroid extends GameObject implements ICollisionable
         {
             float diff = RandomGenerator.getFloat(20, 40);
 
-//            new Asteroid(gameLogic, getPosition(), randomDirection + diff, curScaleLevel+1);
-//            new Asteroid(gameLogic, getPosition(), randomDirection - diff, curScaleLevel+1);
+            new Asteroid(gameLogic, getPosition(), randomDirection + diff, curScaleLevel+1);
+            new Asteroid(gameLogic, getPosition(), randomDirection - diff, curScaleLevel+1);
         }
     }
 
