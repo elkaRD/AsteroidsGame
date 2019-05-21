@@ -18,6 +18,10 @@ import com.elkard.asteroidsgame.View.UI.IButtonsManager;
 
 public class InputHandler implements IInputHandler
 {
+    public static final int KEY_ESC = 27;
+    public static final int KEY_SPACE = 32;
+    public static final int KEY_ENTER = 10;
+
     private boolean upPressed = false;
     private boolean downPressed = false;
     private boolean leftPressed = false;
@@ -41,39 +45,39 @@ public class InputHandler implements IInputHandler
         switch(key)
         {
             case 'W':
-            case 38:
+            //case 38:
                 upPressed = isPressed;
                 upSinglePress = isPressed || upSinglePress;
                 break;
 
             case 'S':
-            case 40:
+            //case 40:
                 downPressed = isPressed;
                 downSinglePress = isPressed || downSinglePress;
                 break;
 
             case 'A':
-            case 37:
+            //case 37:
                 leftPressed = isPressed;
                 leftSinglePress = isPressed || leftSinglePress;
                 break;
 
             case 'D':
-            case 39:
+            //case 39:
                 rightPressed = isPressed;
                 rightSinglePress = isPressed || rightSinglePress;
                 break;
 
-            case 27:
+            case KEY_ESC:
                 escSinglePress = isPressed || escSinglePress;
                 break;
 
-            case 32:
+            case KEY_SPACE:
                 spaceSinglePress = isPressed || spaceSinglePress;
                 spacePressed = isPressed;
                 break;
 
-            case 10:
+            case KEY_ENTER:
                 enterSinglePress = isPressed || enterSinglePress;
                 break;
         }

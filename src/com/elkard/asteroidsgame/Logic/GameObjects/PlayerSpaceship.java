@@ -15,7 +15,6 @@
 package com.elkard.asteroidsgame.Logic.GameObjects;
 
 import com.elkard.asteroidsgame.Logic.*;
-import com.elkard.asteroidsgame.Logic.GameObjects.Weapons.StandardWeapon;
 import com.elkard.asteroidsgame.PolarLayout;
 import com.elkard.asteroidsgame.Vec2;
 
