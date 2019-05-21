@@ -23,12 +23,10 @@ import com.elkard.asteroidsgame.Vec2;
 
 import java.util.*;
 
-public class GameLogic {
-
-    private PlayerSpaceship player;
-    private Physics physics;
-
-    public enum GameState{
+public class GameLogic
+{
+    public enum GameState
+    {
         INIT,
         MAINMENU,
         GAMEPLAY,
@@ -37,7 +35,8 @@ public class GameLogic {
         GOODBYE
     }
 
-    public enum MenuButton{
+    public enum MenuButton
+    {
         MAIN_PLAY,
         MAIN_HIGHSCORES,
         MAIN_EXIT,
@@ -54,11 +53,12 @@ public class GameLogic {
         ASTEROID
     }
 
-    private boolean isPaused = false;
-    private boolean gameOver = false;
+    private PlayerSpaceship player;
+    private Physics physics;
+    private IGameController gameController;
+    private IGameState gameStateListener;
 
-    private int screenWidth = 1280;
-    private int screenHeight = 720;
+    public final WeaponsFactory weaponsFactory = new WeaponsFactory(this);
 
     private HashMap<ObjectType, ArrayList<GameObject>> objects = new HashMap<>();
 
@@ -66,28 +66,18 @@ public class GameLogic {
     private ArrayList<GameObject> newObjects = new ArrayList<>();
     private ArrayList<GameObject> objectsToRemove = new ArrayList<>();
 
-    public int getWidth()
-    {
-        return screenWidth;
-    }
+    private boolean isPaused = false;
+    private boolean gameOver = false;
 
-    public int getHeight()
-    {
-        return screenHeight;
-    }
-
-    private IGameController gameController;
+    private int screenWidth = 1280;
+    private int screenHeight = 720;
 
     private int remainingLives;
     private int curLevel;
     private int curScore;
 
-    private IGameState gameStateListener;
-
     private GameState curState = GameState.MAINMENU;
     private GameState prevState = GameState.INIT;
-
-    public final WeaponsFactory weaponsFactory = new WeaponsFactory(this);
 
     public GameLogic()
     {
@@ -111,6 +101,14 @@ public class GameLogic {
     {
         if (curState == GameState.PAUSED) deltaTime = 0;
 
+        updateObjects(deltaTime);
+        checkGameState();
+        physics.updatePhysics(deltaTime);
+        handleStateChanged();
+    }
+
+    private void updateObjects(float deltaTime)
+    {
         for (GameObject go : gameObjects)
             go.updateObject(deltaTime);
 
@@ -122,20 +120,34 @@ public class GameLogic {
 
         newObjects.clear();
         objectsToRemove.clear();
+    }
 
+    private void checkGameState()
+    {
         if (curState == GameState.GAMEPLAY)
         {
             if (objects.get(ObjectType.ASTEROID).size() == 0) nextLevel();
             if (remainingLives == 0 && !gameOver) onGameIsOver();
         }
+    }
 
-        physics.updatePhysics(deltaTime);
-
+    private void handleStateChanged()
+    {
         if (prevState != curState && gameStateListener != null)
         {
             gameStateListener.onStateChanged(prevState, curState);
             prevState = curState;
         }
+    }
+
+    public int getWidth()
+    {
+        return screenWidth;
+    }
+
+    public int getHeight()
+    {
+        return screenHeight;
     }
 
     public void menuButtonClicked(MenuButton buttonClicked)
@@ -145,10 +157,13 @@ public class GameLogic {
         switch (buttonClicked)
         {
             case MAIN_PLAY:
+            case GAMEOVER_AGAIN:
                 startGame();
                 break;
 
             case MAIN_HIGHSCORES:
+            case GAMEOVER_RETURN:
+            case PAUSE_MENU:
                 returnToMenu();
                 break;
 
@@ -158,18 +173,6 @@ public class GameLogic {
 
             case PAUSE_RESUME:
                 onPause();
-                break;
-
-            case PAUSE_MENU:
-                returnToMenu();
-                break;
-
-            case GAMEOVER_AGAIN:
-                startGame();
-                break;
-
-            case GAMEOVER_RETURN:
-                returnToMenu();
                 break;
         }
     }
@@ -285,7 +288,7 @@ public class GameLogic {
     {
         curLevel++;
         curScore += 200 * curLevel;
-        if (curLevel % 2 == 0 && remainingLives < 5);
+        if (curLevel % 2 == 0 && remainingLives < 5)
             remainingLives++;
 
         weaponsFactory.nextLevel();
@@ -295,11 +298,11 @@ public class GameLogic {
 
     private void generateAsteroids()
     {
-        float screenPerimeter = screenHeight + screenWidth;
+        float screenHalfPerimeter = screenHeight + screenWidth;
         for (int i = 0; i < curLevel; i++)
         {
-            float whereToSpot = screenPerimeter * i/curLevel + screenWidth / 2;
-            whereToSpot %= screenPerimeter;
+            float whereToSpot = screenHalfPerimeter * i/curLevel + screenWidth / 2;
+            whereToSpot %= screenHalfPerimeter;
             Vec2 posToSpot = new Vec2();
 
             if (whereToSpot < screenWidth)
@@ -312,30 +315,14 @@ public class GameLogic {
                 posToSpot.x = screenWidth;
                 posToSpot.y = whereToSpot - screenWidth;
             }
-//            else if (whereToSpot < 2*screenWidth + screenHeight)
-//            {
-//                posToSpot.x = whereToSpot - screenWidth - screenHeight;
-//                posToSpot.y = screenHeight;
-//            }
-//            else
-//            {
-//                posToSpot.x = 0;
-//                posToSpot.y = whereToSpot - 2*screenWidth - screenHeight;
-//            }
 
-            Asteroid temp = new Asteroid(this, posToSpot);
+            new Asteroid(this, posToSpot);
         }
-    }
-
-    public PlayerSpaceship getPlayer()
-    {
-        return player;
     }
 
     public void onAsteroidDestroyed(Asteroid asteroid, int asteroidSize)
     {
         curScore += (asteroidSize + 1) * 10;
-
     }
 
     public GameState getState()

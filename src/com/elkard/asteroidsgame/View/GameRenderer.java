@@ -17,11 +17,8 @@ package com.elkard.asteroidsgame.View;
 import com.elkard.asteroidsgame.Controller.AsteroidsGame;
 import com.elkard.asteroidsgame.Controller.IInputHandler;
 import com.elkard.asteroidsgame.Logic.GameLogic;
-import com.elkard.asteroidsgame.Logic.IGameState;
 import com.elkard.asteroidsgame.Controller.IGameController;
 import com.elkard.asteroidsgame.Line;
-import com.elkard.asteroidsgame.View.UI.Button;
-import com.elkard.asteroidsgame.View.UI.ButtonsGroup;
 import com.elkard.asteroidsgame.View.UI.ButtonsManager;
 
 import javax.imageio.ImageIO;
@@ -48,7 +45,8 @@ public class GameRenderer extends JFrame
     private Image frameBuffer;
     private Graphics g_frameBuffer;
 
-    private Image image;
+    private Image imageLive;
+    private String imageLiveFilename = "heart.png";
 
     public GameRenderer(AsteroidsGame controller, IInputHandler inputHandler)
     {
@@ -58,7 +56,6 @@ public class GameRenderer extends JFrame
         buildWindow(screenWidth, screenHeight);
 
         addComponentListener(new ResizeListener());
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         loadImages();
@@ -142,7 +139,7 @@ public class GameRenderer extends JFrame
         int lives = gameEngine.getGameLogic().getRemainingLives();
 
         for (int i = 0; i < lives; i++)
-            g.drawImage(image, 50 + 60*i, 50, this);
+            g.drawImage(imageLive, 50 + 60*i, 50, this);
 
         drawText(g, "SCORE: " + gameEngine.getGameLogic().getCurScore(), screenWidth/2, 120, 50, true);
     }
@@ -212,10 +209,10 @@ public class GameRenderer extends JFrame
     private void loadImages()
     {
         try {
-            BufferedImage temp = ImageIO.read(new File("heart2.png"));
-            image = temp.getScaledInstance(48, 48, Image.SCALE_DEFAULT);
+            BufferedImage temp = ImageIO.read(new File(imageLiveFilename));
+            imageLive = temp.getScaledInstance(48, 48, Image.SCALE_DEFAULT);
         } catch (IOException ex) {
-            System.out.println("Can't load the image");
+            System.out.println("Can't load the imageLive");
             ex.printStackTrace();
         }
     }

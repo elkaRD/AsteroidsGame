@@ -34,6 +34,8 @@ public class ShotGun extends Weapon
 
         if (isShooting)
         {
+            isShooting = false;
+
             new Bullet(gameLogic, this);
             new Bullet(gameLogic, this, bulletRange);
             new Bullet(gameLogic, this, -bulletRange);
