@@ -1,11 +1,11 @@
 package com.elkard.asteroidsgame.Controller;
 
 import com.elkard.asteroidsgame.Logic.GameLogic;
+import com.elkard.asteroidsgame.View.UI.IButtonsManager;
 import jdk.internal.util.xml.impl.Input;
 import org.junit.Test;
 
-import static com.elkard.asteroidsgame.Controller.InputHandler.KEY_ESC;
-import static com.elkard.asteroidsgame.Controller.InputHandler.KEY_SPACE;
+import static com.elkard.asteroidsgame.Controller.InputHandler.*;
 import static org.junit.Assert.*;
 
 public class InputTest
@@ -238,6 +238,121 @@ public class InputTest
             fail("detected event when in idle after release");
     }
 
+    @Test
+    public void checkMenuPrev()
+    {
+        checkMenuPrev(KEY_LEFT);
+        checkMenuPrev(KEY_UP);
+        checkMenuPrev('W');
+        checkMenuPrev('A');
+    }
+
+    @Test
+    public void checkMenuNext()
+    {
+        checkMenuNext(KEY_DOWN);
+        checkMenuNext(KEY_RIGHT);
+        checkMenuNext('S');
+        checkMenuNext('D');
+    }
+
+    @Test
+    public void checkMenuPick()
+    {
+        checkMenuPick(KEY_ENTER);
+        checkMenuPick(KEY_SPACE);
+    }
+
+    private void checkMenuPrev(int key)
+    {
+        String tag = "prev: key=" + key + ": ";
+        InputHandler inputHandler = new InputHandler();
+        TestButtonsManager buttonsManager = new TestButtonsManager();
+
+        pressKey(key, inputHandler, buttonsManager);
+
+        if (!buttonsManager.detectedPrev)
+            fail(tag + "did not detect event");
+
+        if (buttonsManager.detectedNext || buttonsManager.detectedPick)
+            fail(tag + "got wrong events");
+
+        refresh(inputHandler, buttonsManager);
+
+        if (buttonsManager.detectedNext || buttonsManager.detectedPrev || buttonsManager.detectedPick)
+            fail(tag + "got events after refresh");
+
+        releaseKey(key, inputHandler, buttonsManager);
+
+        if (buttonsManager.detectedNext || buttonsManager.detectedPrev || buttonsManager.detectedPick)
+            fail(tag + "got events after release");
+
+        refresh(inputHandler, buttonsManager);
+
+        if (buttonsManager.detectedNext || buttonsManager.detectedPrev || buttonsManager.detectedPick)
+            fail(tag + "got events after release after refresh");
+    }
+
+    private void checkMenuNext(int key)
+    {
+        String tag = "next: key=" + key + ": ";
+        InputHandler inputHandler = new InputHandler();
+        TestButtonsManager buttonsManager = new TestButtonsManager();
+
+        pressKey(key, inputHandler, buttonsManager);
+
+        if (!buttonsManager.detectedNext)
+            fail(tag + "did not detect event");
+
+        if (buttonsManager.detectedPrev || buttonsManager.detectedPick)
+            fail(tag + "got wrong events");
+
+        refresh(inputHandler, buttonsManager);
+
+        if (buttonsManager.detectedNext || buttonsManager.detectedPrev || buttonsManager.detectedPick)
+            fail(tag + "got events after refresh");
+
+        releaseKey(key, inputHandler, buttonsManager);
+
+        if (buttonsManager.detectedNext || buttonsManager.detectedPrev || buttonsManager.detectedPick)
+            fail(tag + "got events after release");
+
+        refresh(inputHandler, buttonsManager);
+
+        if (buttonsManager.detectedNext || buttonsManager.detectedPrev || buttonsManager.detectedPick)
+            fail(tag + "got events after release after refresh");
+    }
+
+    private void checkMenuPick(int key)
+    {
+        String tag = "pick: key=" + key + ": ";
+        InputHandler inputHandler = new InputHandler();
+        TestButtonsManager buttonsManager = new TestButtonsManager();
+
+        pressKey(key, inputHandler, buttonsManager);
+
+        if (!buttonsManager.detectedPick)
+            fail(tag + "did not detect event");
+
+        if (buttonsManager.detectedPrev || buttonsManager.detectedNext)
+            fail(tag + "got wrong events");
+
+        refresh(inputHandler, buttonsManager);
+
+        if (buttonsManager.detectedNext || buttonsManager.detectedPrev || buttonsManager.detectedPick)
+            fail(tag + "got events after refresh");
+
+        releaseKey(key, inputHandler, buttonsManager);
+
+        if (buttonsManager.detectedNext || buttonsManager.detectedPrev || buttonsManager.detectedPick)
+            fail(tag + "got events after release");
+
+        refresh(inputHandler, buttonsManager);
+
+        if (buttonsManager.detectedNext || buttonsManager.detectedPrev || buttonsManager.detectedPick)
+            fail(tag + "got events after release after refresh");
+    }
+
     private void pressKey(int key, InputHandler inputHandler, TestController controller)
     {
         controller.reset();
@@ -261,6 +376,29 @@ public class InputTest
         inputHandler.refresh();
     }
 
+    private void pressKey(int key, InputHandler inputHandler, TestButtonsManager buttonsManager)
+    {
+        buttonsManager.reset();
+        inputHandler.onKeyPressed(key, true);
+        inputHandler.handleInput(buttonsManager);
+        inputHandler.refresh();
+    }
+
+    private void releaseKey(int key, InputHandler inputHandler, TestButtonsManager buttonsManager)
+    {
+        buttonsManager.reset();
+        inputHandler.onKeyPressed(key, false);
+        inputHandler.handleInput(buttonsManager);
+        inputHandler.refresh();
+    }
+
+    private void refresh(InputHandler inputHandler, TestButtonsManager buttonsManager)
+    {
+        buttonsManager.reset();
+        inputHandler.handleInput(buttonsManager);
+        inputHandler.refresh();
+    }
+
     private class TestController implements IGameController
     {
         public boolean detectedAccelerate;
@@ -275,12 +413,12 @@ public class InputTest
         public float gotAccelerate;
         public float gotSlowDown;
         public float gotTurn;
-        
+
         public TestController()
         {
             reset();
         }
-        
+
         public void reset()
         {
             detectedAccelerate = false;
@@ -296,7 +434,7 @@ public class InputTest
             gotSlowDown = 0f;
             gotTurn = 0f;
         }
-        
+
         @Override
         public void onAccelerate(float force)
         {
@@ -357,13 +495,50 @@ public class InputTest
         @Override
         public void run()
         {
-            
+
         }
 
         @Override
         public GameLogic getGameLogic()
         {
             return null;
+        }
+    }
+
+    private class TestButtonsManager implements IButtonsManager
+    {
+        public boolean detectedNext;
+        public boolean detectedPrev;
+        public boolean detectedPick;
+
+        public TestButtonsManager()
+        {
+            reset();
+        }
+
+        public void reset()
+        {
+            detectedNext = false;
+            detectedPrev = false;
+            detectedPick = false;
+        }
+
+        @Override
+        public void nextButton()
+        {
+            detectedNext = true;
+        }
+
+        @Override
+        public void prevButton()
+        {
+            detectedPrev = true;
+        }
+
+        @Override
+        public void pickButton()
+        {
+            detectedPick = true;
         }
     }
 }

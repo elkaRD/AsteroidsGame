@@ -22,6 +22,11 @@ public class InputHandler implements IInputHandler
     public static final int KEY_SPACE = 32;
     public static final int KEY_ENTER = 10;
 
+    public static final int KEY_UP = 38;
+    public static final int KEY_DOWN = 40;
+    public static final int KEY_LEFT = 37;
+    public static final int KEY_RIGHT = 39;
+
     private boolean upPressed = false;
     private boolean downPressed = false;
     private boolean leftPressed = false;
@@ -45,26 +50,38 @@ public class InputHandler implements IInputHandler
         switch(key)
         {
             case 'W':
-            //case 38:
                 upPressed = isPressed;
                 upSinglePress = isPressed || upSinglePress;
                 break;
 
             case 'S':
-            //case 40:
                 downPressed = isPressed;
                 downSinglePress = isPressed || downSinglePress;
                 break;
 
             case 'A':
-            //case 37:
                 leftPressed = isPressed;
                 leftSinglePress = isPressed || leftSinglePress;
                 break;
 
             case 'D':
-            //case 39:
                 rightPressed = isPressed;
+                rightSinglePress = isPressed || rightSinglePress;
+                break;
+
+            case KEY_UP:
+                upSinglePress = isPressed || upSinglePress;
+                break;
+
+            case KEY_DOWN:
+                downSinglePress = isPressed || downSinglePress;
+                break;
+
+            case KEY_LEFT:
+                leftSinglePress = isPressed || leftSinglePress;
+                break;
+
+            case KEY_RIGHT:
                 rightSinglePress = isPressed || rightSinglePress;
                 break;
 

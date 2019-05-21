@@ -75,6 +75,12 @@ public class Bullet extends GameObject
         return this;
     }
 
+    public Bullet setBulletLength(float bulletLen)
+    {
+        this.bulletLen = bulletLen;
+        return this;
+    }
+
     @Override
     public void cleanUp()
     {

@@ -20,7 +20,7 @@ import com.elkard.asteroidsgame.Logic.GameObjects.Bullet;
 
 public class MachineGun extends Weapon
 {
-    private final float minTimeSinceLastShoot = 0.05f;
+    private final float minTimeSinceLastShoot = 0.08f;
     private float timeSinceLastShoot = 0f;
 
     public MachineGun(GameLogic gl, GameObject parentObject)
@@ -37,7 +37,8 @@ public class MachineGun extends Weapon
 
         if (isShooting && timeSinceLastShoot > minTimeSinceLastShoot)
         {
-            new Bullet(gameLogic, this);
+            new Bullet(gameLogic, this)
+                    .setBulletLength(10);
             timeSinceLastShoot = 0f;
         }
     }

@@ -50,7 +50,8 @@ public class GameLogic
     {
         PLAYER,
         BULLET,
-        ASTEROID
+        ASTEROID,
+        BOOSTER
     }
 
     private PlayerSpaceship player;
@@ -82,9 +83,8 @@ public class GameLogic
     public GameLogic()
     {
         for (ObjectType type : ObjectType.values())
-        {
             objects.put(type, new ArrayList<>());
-        }
+
         launchPhysics();
 
         curState = GameState.MAINMENU;
@@ -355,46 +355,14 @@ public class GameLogic
         }
     }
 
-    public Line[] getPlayerRenderLines()
-    {
-        ArrayList<Line> result = new ArrayList<>();
-        for (GameObject p : objects.get(ObjectType.PLAYER))
-        {
-            result.addAll(Arrays.asList(p.getRenderLines()));
-        }
-
-        result.addAll(Arrays.asList(player.booster.getRenderLines()));
-
-        Line[] lines = new Line[result.size()];
-        lines = result.toArray(lines);
-        return lines;
-    }
-
-    public Line[] getBulletsRenderLines()
+    public Line[] getObjectsRenderLines(ObjectType objectType)
     {
         ArrayList<Line> renderLines = new ArrayList<>();
-        for (GameObject bullet : objects.get(ObjectType.BULLET))
+        ArrayList<GameObject> objectsToRender = objects.get(objectType);
+
+        for (int i = 0; i < objectsToRender.size(); i++)
         {
-            Line[] temp = bullet.getRenderLines();
-            renderLines.add(temp[0]);
-            renderLines.add(temp[1]);
-        }
-
-        Line[] toReturn = new Line[renderLines.size()];
-        for (int i = 0; i < renderLines.size(); i++)
-            toReturn[i] = renderLines.get(i);
-
-        return toReturn;
-    }
-
-    public Line[] getAsteroidsRenderLines()
-    {
-        ArrayList<Line> renderLines = new ArrayList<>();
-        ArrayList<GameObject> asteroids = objects.get(ObjectType.ASTEROID);
-
-        for (int i = 0; i < asteroids.size(); i++)
-        {
-            Line[] temp = asteroids.get(i).getRenderLines();
+            Line[] temp = objectsToRender.get(i).getRenderLines();
             for (Line line : temp)
             {
                 renderLines.add(line);

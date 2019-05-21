@@ -37,9 +37,9 @@ public class WeaponsFactory
     {
         switch (curIndex)
         {
-            case 1: return new MachineGun(gameLogic, parent);
-            case 2: return new ShotGun(gameLogic, parent);
-            case 3: return new RoundGun(gameLogic, parent);
+            case 0: return new MachineGun(gameLogic, parent);
+            case 1: return new ShotGun(gameLogic, parent);
+            case 2: return new RoundGun(gameLogic, parent);
         }
 
         return new StandardWeapon(gameLogic, parent);

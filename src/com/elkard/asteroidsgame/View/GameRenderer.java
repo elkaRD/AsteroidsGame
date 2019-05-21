@@ -122,9 +122,8 @@ public class GameRenderer extends JFrame
 
     private void drawGameplay(Graphics g)
     {
-        drawLines(g, gameEngine.getGameLogic().getPlayerRenderLines());
-        drawLines(g, gameEngine.getGameLogic().getBulletsRenderLines());
-        drawLines(g, gameEngine.getGameLogic().getAsteroidsRenderLines());
+        for (GameLogic.ObjectType type : GameLogic.ObjectType.values())
+            drawLines(g, gameEngine.getGameLogic().getObjectsRenderLines(type));
     }
 
     private void drawLines(Graphics g, Line[] lines)

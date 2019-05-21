@@ -182,7 +182,7 @@ public class GameObject implements ICollisionable
             return new Line[0];
 
         Vec2[] renderPoints = new Vec2[definedPoints.length];
-        float objectDimension = getMaxDst(definedPoints);   // actually half of the object dimensiona
+        float objectDimension = getMaxDst(definedPoints);   // actually half of the object dimension
         halfOfDimension = objectDimension;
 
         ArrayList<Vec2> positionsToRender = new ArrayList<>();

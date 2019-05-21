@@ -29,6 +29,15 @@ public class ShipBooster extends GameObject
         super(gl);
         parent = parentObject;
         setStaticLines(false);
+
+        gameLogic.addObject(this, GameLogic.ObjectType.BOOSTER);
+    }
+
+    @Override
+    public void cleanUp()
+    {
+        super.cleanUp();
+        gameLogic.removeObject(this);
     }
 
     @Override
