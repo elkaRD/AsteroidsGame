@@ -186,6 +186,20 @@ public class GameLogic
         generateAsteroids();
     }
 
+    public void startTestGame(boolean enabledAsteroids, boolean godMode)
+    {
+        onReset();
+        gameController.onStartGame();
+        curState = GameState.GAMEPLAY;
+        player = new PlayerSpaceship(this);
+
+        if (godMode)
+            player.enablePhysics(false);
+
+        if (enabledAsteroids)
+            generateAsteroids();
+    }
+
     public void exitGame()
     {
         curState = GameState.GOODBYE;
@@ -388,5 +402,10 @@ public class GameLogic
     public void setStateChangedListener(IGameState listener)
     {
         gameStateListener = listener;
+    }
+
+    public PlayerSpaceship getCurPlayer()
+    {
+        return player;
     }
 }
