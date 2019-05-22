@@ -186,15 +186,19 @@ public class GameLogic
         generateAsteroids();
     }
 
-    public void startTestGame(boolean enabledAsteroids, boolean godMode)
+    public void startTestGame(boolean enabledAsteroids, boolean godMode, boolean playerCollisionAtStart, boolean createPlayer)
     {
         onReset();
         gameController.onStartGame();
         curState = GameState.GAMEPLAY;
-        player = new PlayerSpaceship(this);
 
-        if (godMode)
-            player.enablePhysics(false);
+        if (createPlayer)
+        {
+            player = new PlayerSpaceship(this, playerCollisionAtStart);
+
+            if (godMode)
+                player.enablePhysics(false);
+        }
 
         if (enabledAsteroids)
             generateAsteroids();
@@ -387,6 +391,11 @@ public class GameLogic
             toReturn[i] = renderLines.get(i);
 
         return toReturn;
+    }
+
+    public ArrayList<GameObject> getObjectsByType(ObjectType type)
+    {
+        return objects.get(type);
     }
 
     public void registerObject(GameObject newObject)

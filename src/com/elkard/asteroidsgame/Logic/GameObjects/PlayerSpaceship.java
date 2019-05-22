@@ -63,6 +63,13 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         reset();
     }
 
+    public PlayerSpaceship(GameLogic gl, boolean collisionAtStart)
+    {
+        this(gl);
+        if (collisionAtStart)
+            enablePhysics(true);
+    }
+
     @Override
     public void cleanUp()
     {
@@ -212,6 +219,7 @@ public class PlayerSpaceship extends GameObject implements IControllable, IColli
         {
             enablePhysics(false);
             animateDestruction();
+            onEndShooting();
             this.gameLogic.onDeath();
         }
     }

@@ -32,6 +32,7 @@ public class GameObject implements ICollisionable
     private boolean infinitySpace = true;
     private boolean physicsEnabled = true;
     private boolean isVisible = true;
+    private boolean isStatic = false;
 
     private boolean isDestructing = false;
     private float destructionDuration = 2f;
@@ -58,20 +59,25 @@ public class GameObject implements ICollisionable
         gameLogic.removeObject(this);
     }
 
-    public final void setPosition(Vec2 newPosition)
+    public final GameObject setPosition(Vec2 newPosition)
     {
         position = new Vec2(newPosition);
+        return this;
     }
 
-    public final void setPosition(float x, float y)
+    public final GameObject setPosition(float x, float y)
     {
         position = new Vec2(x, y);
         if (infinitySpace)
             checkPosition();
+
+        return this;
     }
 
     public final void move(Vec2 deltaPosition)
     {
+        if (isStatic) return;
+
         position.add(deltaPosition);
         if (infinitySpace)
             checkPosition();
@@ -81,8 +87,10 @@ public class GameObject implements ICollisionable
         return position.clone();
     }
 
-    public final void setRotation(float newRotation) {
+    public final GameObject setRotation(float newRotation)
+    {
         rotation = newRotation;
+        return this;
     }
 
     public final void updateRotation(float deltaRotation)
@@ -99,15 +107,17 @@ public class GameObject implements ICollisionable
         return name;
     }
 
-    protected void setName(String newName)
+    protected GameObject setName(String newName)
     {
         name = newName;
+        return this;
     }
 
-    protected void setStaticLines(boolean areStatic)
+    protected GameObject setStaticLines(boolean areStatic)
     {
         areLinesStatic = areStatic;
         refreshLines = true;
+        return this;
     }
 
     protected void updateLines()
@@ -120,9 +130,10 @@ public class GameObject implements ICollisionable
         return scale;
     }
 
-    public final void setScale(float newScale)
+    public final GameObject setScale(float newScale)
     {
         scale = newScale;
+        return this;
     }
 
     public void resetTransform()
@@ -198,6 +209,22 @@ public class GameObject implements ICollisionable
                 positionsToRender.add(Vec2.add(position, new Vec2(-gameLogic.getWidth(), 0)));
             if (position.y > gameLogic.getHeight() - objectDimension)
                 positionsToRender.add(Vec2.add(position, new Vec2(0, -gameLogic.getHeight())));
+
+            if (positionsToRender.size() == 3)
+            {
+                Vec2 opposedPosition = position.clone();
+
+                if (position.x < objectDimension)
+                    opposedPosition.x += gameLogic.getWidth();
+                else
+                    opposedPosition.x -= gameLogic.getWidth();
+                if (position.y < objectDimension)
+                    opposedPosition.y += gameLogic.getHeight();
+                else
+                    opposedPosition.y =- gameLogic.getHeight();
+
+                positionsToRender.add(opposedPosition);
+            }
         }
 
         Line[] renderLines = new Line[definedPoints.length * positionsToRender.size()];
@@ -276,14 +303,22 @@ public class GameObject implements ICollisionable
         return physicsEnabled;
     }
 
-    public void enablePhysics(boolean isEnabled)
+    public GameObject enablePhysics(boolean isEnabled)
     {
         physicsEnabled = isEnabled;
+        return this;
     }
 
-    public void setVisible(boolean isEnabled)
+    public GameObject setVisible(boolean isEnabled)
     {
         isVisible = isEnabled;
+        return this;
+    }
+
+    public GameObject setStatic(boolean isStatic)
+    {
+        this.isStatic = isStatic;
+        return this;
     }
 
     public void onCollisionEnter(ICollisionable other)
