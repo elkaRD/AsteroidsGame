@@ -117,6 +117,8 @@ public class Asteroid extends GameObject implements ICollisionable
             new Asteroid(gameLogic, getPosition(), randomDirection + diff, curScaleLevel+1);
             new Asteroid(gameLogic, getPosition(), randomDirection - diff, curScaleLevel+1);
         }
+
+        gameLogic.onAsteroidDestroyed(this, curScaleLevel);
     }
 
     @Override
@@ -136,9 +138,6 @@ public class Asteroid extends GameObject implements ICollisionable
         super.onCollisionEnter(other);
 
         if (other instanceof Bullet)
-        {
             destroy();
-            gameLogic.onAsteroidDestroyed(this, curScaleLevel);
-        }
     }
 }

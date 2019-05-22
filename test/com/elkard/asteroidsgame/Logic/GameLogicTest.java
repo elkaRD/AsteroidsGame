@@ -6,6 +6,7 @@ import com.elkard.asteroidsgame.Logic.GameObjects.Bullet;
 import com.elkard.asteroidsgame.Logic.GameObjects.PlayerSpaceship;
 import com.elkard.asteroidsgame.Logic.GameObjects.Weapons.StandardWeapon;
 import com.elkard.asteroidsgame.Logic.GameObjects.Weapons.Weapon;
+import com.elkard.asteroidsgame.RandomGenerator;
 import com.elkard.asteroidsgame.Vec2;
 import org.junit.Test;
 
@@ -188,6 +189,39 @@ public class GameLogicTest
     {
         TestController controller = new TestController();
         GameLogic gameLogic = controller.getGameLogic();
+        gameLogic.startTestGame(false, false, true, true);
+        PlayerSpaceship player = gameLogic.getCurPlayer();
+
+        int w = gameLogic.getWidth();
+        int h = gameLogic.getHeight();
+        controller.update(1f);
+
+        float prevPosX = player.getPosition().x;
+        boolean didTeleport = false;
+
+        for (int i = 0; i < 1200; i++)
+        {
+            controller.onAccelerate(1f);
+            controller.update(0.016f);
+
+            if (player.getPosition().x > w)
+                fail("player is out of screen");
+
+            if (player.getPosition().x < prevPosX)
+                didTeleport = true;
+
+            prevPosX = player.getPosition().x;
+        }
+
+        if (!didTeleport)
+            fail("did not detect teleport when reached edge");
+    }
+
+    @Test
+    public void checkScreenEdgesMirroring()
+    {
+        TestController controller = new TestController();
+        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, false, true, false);
 
         int w = gameLogic.getWidth();
@@ -219,21 +253,63 @@ public class GameLogicTest
     }
 
     @Test
-    public void checkScreenEdgesMirroring()
-    {
-
-    }
-
-    @Test
     public void checkScoreUpdate()
     {
+        TestController controller = new TestController();
+        GameLogic gameLogic = controller.getGameLogic();
+        gameLogic.startTestGame(false, false, true, false);
 
+        Asteroid asteroid = new Asteroid(gameLogic, new Vec2());
+        asteroid.setStatic(true);
+
+        int scoreAtBegin = gameLogic.getCurScore();
+
+        controller.update(1f);
+        asteroid.destroy();
+        controller.update(1f);
+
+        if (gameLogic.getCurScore() <= scoreAtBegin)
+            fail("score did not increase");
     }
 
     @Test
     public void checkPause()
     {
+        TestController controller = new TestController();
+        GameLogic gameLogic = controller.getGameLogic();
+        gameLogic.startTestGame(false, false, true, true);
+        PlayerSpaceship player = gameLogic.getCurPlayer();
 
+        Vec2 prevPos = player.getPosition().clone();
+        controller.onAccelerate(1f);
+        controller.onTurn(RandomGenerator.getFloat(-1f, 1f));
+        controller.update(0.016f);
+
+        for (int i = 0; i < 500; i++)
+        {
+            controller.onAccelerate(1f);
+            controller.onTurn(RandomGenerator.getFloat(-1f, 1f));
+            controller.update(0.016f);
+
+            if (prevPos.equals(player.getPosition()))
+                fail("unexpected problem: player did not change its position");
+
+            prevPos = player.getPosition().clone();
+        }
+
+        controller.onPause();
+        prevPos = player.getPosition().clone();
+        float prevRot = player.getRotation();
+
+        for (int i = 0; i < 500; i++)
+        {
+            controller.onAccelerate(1f);
+            controller.onTurn(RandomGenerator.getFloat(-1f, 1f));
+            controller.update(0.016f);
+
+            if (!prevPos.equals(player.getPosition()) || prevRot != player.getRotation())
+                fail("player changed its transform in pause");
+        }
     }
 
     private String checkEdgeMirroring(TestController controller, Asteroid asteroid, String edgeName, int w, int h, int expectedLines)
