@@ -32,6 +32,9 @@ public class ButtonsGroup
     public Vec2i position = new Vec2i();
     public String tag = "";
 
+    private float ignoreTouch;
+    private static final float ignoreTouchTime = 1f;
+
     public ButtonsGroup()
     {
         ButtonsManager.getInstance().registerGroup(this);
@@ -64,6 +67,7 @@ public class ButtonsGroup
 
         this.isVisible = isVisible;
         ButtonsManager.getInstance().groupChangedVisible(this, isVisible);
+        ignoreTouch = ignoreTouchTime;
 
         return this;
     }

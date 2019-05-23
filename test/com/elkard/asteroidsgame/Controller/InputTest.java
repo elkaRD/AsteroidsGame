@@ -260,7 +260,7 @@ public class InputTest
     public void checkMenuPick()
     {
         checkMenuPick(KEY_ENTER);
-        checkMenuPick(KEY_SPACE);
+        //checkMenuPick(KEY_SPACE);
     }
 
     private void checkMenuPrev(int key)

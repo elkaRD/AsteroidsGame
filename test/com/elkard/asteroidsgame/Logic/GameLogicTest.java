@@ -298,6 +298,7 @@ public class GameLogicTest
         }
 
         controller.onPause();
+        controller.update(0.016f);
         prevPos = player.getPosition().clone();
         float prevRot = player.getRotation();
 

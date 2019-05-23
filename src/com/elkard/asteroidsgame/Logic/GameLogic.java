@@ -84,6 +84,8 @@ public class GameLogic
     private GameState curState = GameState.MAINMENU;
     private GameState prevState = GameState.INIT;
 
+    private boolean debugMode = false;
+
     public GameLogic()
     {
         for (ObjectType type : ObjectType.values())
@@ -163,6 +165,7 @@ public class GameLogic
             case MAIN_PLAY:
             case GAMEOVER_AGAIN:
                 startGame();
+                //startTestGame(false, false, false, true);
                 break;
 
             case MAIN_HIGHSCORES:
@@ -188,6 +191,8 @@ public class GameLogic
         curState = GameState.GAMEPLAY;
         player = new PlayerSpaceship(this);
         generateAsteroids();
+
+        debugMode = false;
     }
 
     public void startTestGame(boolean enabledAsteroids, boolean godMode, boolean playerCollisionAtStart, boolean createPlayer)
@@ -206,6 +211,8 @@ public class GameLogic
 
         if (enabledAsteroids)
             generateAsteroids();
+
+        debugMode = true;
     }
 
     public void exitGame()
@@ -312,6 +319,8 @@ public class GameLogic
 
     private void nextLevel()
     {
+        if (debugMode) return;
+
         curLevel++;
         curScore += 200 * curLevel;
         if (curLevel % 2 == 0 && remainingLives < 5)

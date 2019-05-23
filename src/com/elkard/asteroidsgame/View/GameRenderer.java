@@ -48,6 +48,8 @@ public class GameRenderer extends JFrame
     private Image imageLive;
     private String imageLiveFilename = "heart.png";
 
+    private boolean screenResized = true;
+
     public GameRenderer(AsteroidsGame controller, IInputHandler inputHandler)
     {
         gameEngine = controller;
@@ -69,8 +71,9 @@ public class GameRenderer extends JFrame
 
     public void paint(Graphics g)
     {
-        if (frameBuffer == null)
+        if (screenResized)
         {
+            screenResized = false;
             frameBuffer = createImage(getWidth(), getHeight());
             g_frameBuffer = frameBuffer.getGraphics();
         }
@@ -222,6 +225,7 @@ public class GameRenderer extends JFrame
         screenHeight = curScreenHeight;
         screenWidthFactor = 1f;
         screenHeightFactor = 1f;
+        screenResized = true;
     }
 
     public float getScreenRatio()

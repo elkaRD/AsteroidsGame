@@ -143,7 +143,7 @@ public class InputHandler implements IInputHandler
         if (downSinglePress || rightSinglePress)
             buttonsManager.nextButton();
 
-        if (spaceSinglePress || enterSinglePress)
+        if (enterSinglePress)
             buttonsManager.pickButton();
     }
 
