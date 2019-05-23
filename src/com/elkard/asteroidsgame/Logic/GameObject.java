@@ -196,6 +196,16 @@ public class GameObject implements ICollisionable
         float objectDimension = getMaxDst(definedPoints);   // actually half of the object dimension
         halfOfDimension = objectDimension;
 
+        ArrayList<Vec2> positionsToRender = findPositionsToRender();
+        Line[] renderLines = calcLines(positionsToRender, renderPoints);
+
+        areLinesValid = true;
+        return renderLines;
+    }
+
+    private ArrayList<Vec2> findPositionsToRender()
+    {
+        float objectDimension = getMaxDst(definedPoints);
         ArrayList<Vec2> positionsToRender = new ArrayList<>();
         positionsToRender.add(position);
 
@@ -227,6 +237,11 @@ public class GameObject implements ICollisionable
             }
         }
 
+        return positionsToRender;
+    }
+
+    private Line[] calcLines(ArrayList<Vec2>  positionsToRender, Vec2[] renderPoints)
+    {
         Line[] renderLines = new Line[definedPoints.length * positionsToRender.size()];
         int linesIter = 0;
 
@@ -261,7 +276,6 @@ public class GameObject implements ICollisionable
             }
         }
 
-        areLinesValid = true;
         return renderLines;
     }
 

@@ -15,6 +15,7 @@
 package com.elkard.asteroidsgame.Controller;
 
 import com.elkard.asteroidsgame.Logic.GameLogic;
+import com.elkard.asteroidsgame.View.AudioManager;
 import com.elkard.asteroidsgame.View.GameRenderer;
 import com.elkard.asteroidsgame.View.MenuManager;
 import com.elkard.asteroidsgame.View.UI.ButtonsManager;

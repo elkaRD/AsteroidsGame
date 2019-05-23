@@ -20,8 +20,12 @@ import com.elkard.asteroidsgame.Logic.GameObjects.Asteroid;
 import com.elkard.asteroidsgame.Logic.GameObjects.PlayerSpaceship;
 import com.elkard.asteroidsgame.Logic.GameObjects.Weapons.WeaponsFactory;
 import com.elkard.asteroidsgame.Vec2;
+import com.elkard.asteroidsgame.View.AudioManager;
 
 import java.util.*;
+
+import static com.elkard.asteroidsgame.View.AudioManager.EXPLOSION;
+import static com.elkard.asteroidsgame.View.AudioManager.PAUSE;
 
 public class GameLogic
 {
@@ -241,6 +245,8 @@ public class GameLogic
         isPaused = !isPaused;
         if (isPaused) curState = GameState.PAUSED;
         else curState = GameState.GAMEPLAY;
+
+        AudioManager.getInstance().playSound(PAUSE);
     }
 
     public void onGameIsOver()
@@ -290,6 +296,8 @@ public class GameLogic
 
         if (remainingLives > 0)
              player = new PlayerSpaceship(this);
+
+        AudioManager.getInstance().playSound(EXPLOSION);
     }
 
     public int getRemainingLives()
@@ -341,6 +349,7 @@ public class GameLogic
     public void onAsteroidDestroyed(Asteroid asteroid, int asteroidSize)
     {
         curScore += (asteroidSize + 1) * 10;
+        AudioManager.getInstance().playSound(EXPLOSION);
     }
 
     public GameState getState()

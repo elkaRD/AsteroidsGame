@@ -14,12 +14,16 @@
 
 package com.elkard.asteroidsgame.View.UI;
 
+import com.elkard.asteroidsgame.View.AudioManager;
 import com.elkard.asteroidsgame.View.GameRenderer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Stack;
+
+import static com.elkard.asteroidsgame.View.AudioManager.CLICK;
+import static com.elkard.asteroidsgame.View.AudioManager.SELECT;
 
 public class ButtonsManager extends JFrame implements IButtonsManager
 {
@@ -64,6 +68,7 @@ public class ButtonsManager extends JFrame implements IButtonsManager
         if (activeGroup.size() == 0) return;
 
         activeGroup.lastElement().nextButton();
+        AudioManager.getInstance().playSound(CLICK);
     }
 
     @Override
@@ -72,6 +77,7 @@ public class ButtonsManager extends JFrame implements IButtonsManager
         if (activeGroup.size() == 0) return;
 
         activeGroup.lastElement().prevButton();
+        AudioManager.getInstance().playSound(CLICK);
     }
 
     @Override
@@ -80,6 +86,7 @@ public class ButtonsManager extends JFrame implements IButtonsManager
         if (activeGroup.size() == 0) return;
 
         activeGroup.lastElement().pickButton();
+        AudioManager.getInstance().playSound(SELECT);
     }
 
     public void groupChangedVisible(ButtonsGroup group, boolean isVisible)

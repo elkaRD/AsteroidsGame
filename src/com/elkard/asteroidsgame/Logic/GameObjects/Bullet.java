@@ -21,6 +21,9 @@ import com.elkard.asteroidsgame.Logic.GameObjects.Weapons.Weapon;
 import com.elkard.asteroidsgame.Logic.ICollisionable;
 import com.elkard.asteroidsgame.PolarLayout;
 import com.elkard.asteroidsgame.Vec2;
+import com.elkard.asteroidsgame.View.AudioManager;
+
+import static com.elkard.asteroidsgame.View.AudioManager.SHOT;
 
 public class Bullet extends GameObject
 {
@@ -50,6 +53,8 @@ public class Bullet extends GameObject
         bulletVelocity.mul(speed);
 
         move(Vec2.mul(bulletDirection, 50));
+
+        AudioManager.getInstance().playSound(SHOT);
     }
 
     public Bullet(GameLogic gl, Weapon weapon)
