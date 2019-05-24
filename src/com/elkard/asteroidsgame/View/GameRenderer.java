@@ -46,7 +46,7 @@ public class GameRenderer extends JFrame
     private Graphics g_frameBuffer;
 
     private Image imageLive;
-    private String imageLiveFilename = "heart.png";
+    private String imageLiveFilename = "resources/heart.png";
 
     private boolean screenResized = true;
 

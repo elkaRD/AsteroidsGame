@@ -26,11 +26,11 @@ public class AudioManager
     private AudioManager()
     {
         //TODO: find and replace with different sounds - on Windows loading this files causes an exception which blocks a game after some time
-//        loadSound(CLICK, "click.wav");
-//        loadSound(SELECT, "select.wav");
-//        loadSound(SHOT, "bullet.wav");
-//        loadSound(EXPLOSION, "explosion.wav");
-//        loadSound(PAUSE, "select.wav");
+//        loadSound(CLICK, "resources/click.wav");
+//        loadSound(SELECT, "resources/select.wav");
+//        loadSound(SHOT, "resources/bullet.wav");
+//        loadSound(EXPLOSION, "resources/explosion.wav");
+//        loadSound(PAUSE, "resources/select.wav");
     }
 
     private void loadSound(int id, String fileName)
