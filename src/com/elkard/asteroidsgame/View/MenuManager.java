@@ -69,7 +69,7 @@ public class MenuManager implements IButtonClickListener, IGameState
     private void prepareMainMenuButtons()
     {
         buttonsMain = new ButtonsGroup()
-                .setPosition(300,300)
+                .setPosition(550,300)
                 .setListener(this)
                 .setTag(TAG_MENU_MAIN)
                 .setVisible(false);
@@ -79,13 +79,14 @@ public class MenuManager implements IButtonClickListener, IGameState
                 .setSize(200,20)
                 .setText(BUTTON_MAIN_PLAY));
 
-        buttonsMain.add(new Button()
-                .setPosition(0, 60)
-                .setSize(200,20)
-                .setText(BUTTON_MAIN_HIGHSCORES));
+        //TODO: future feature
+//        buttonsMain.add(new Button()
+//                .setPosition(0, 60)
+//                .setSize(200,20)
+//                .setText(BUTTON_MAIN_HIGHSCORES));
 
         buttonsMain.add(new Button()
-                .setPosition(0, 120)
+                .setPosition(0, 60)
                 .setSize(200,20)
                 .setText(BUTTON_MAIN_EXIT));
     }

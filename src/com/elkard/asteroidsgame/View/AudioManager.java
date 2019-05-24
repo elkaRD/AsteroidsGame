@@ -25,11 +25,12 @@ public class AudioManager
 
     private AudioManager()
     {
-        loadSound(CLICK, "click.wav");
-        loadSound(SELECT, "select.wav");
-        loadSound(SHOT, "bullet.wav");
-        loadSound(EXPLOSION, "explosion.wav");
-        loadSound(PAUSE, "select.wav");
+        //TODO: find and replace with different sounds - on Windows loading this files causes an exception which blocks a game after some time
+//        loadSound(CLICK, "click.wav");
+//        loadSound(SELECT, "select.wav");
+//        loadSound(SHOT, "bullet.wav");
+//        loadSound(EXPLOSION, "explosion.wav");
+//        loadSound(PAUSE, "select.wav");
     }
 
     private void loadSound(int id, String fileName)
@@ -54,16 +55,5 @@ public class AudioManager
 
         clip.setMicrosecondPosition(0);
         clip.start();
-
-//        Thread thread = new Thread()
-//        {
-//            public void run()
-//            {
-//                clip.setMicrosecondPosition(0);
-//                clip.start();
-//            }
-//        };
-//
-//        thread.start();
     }
 }

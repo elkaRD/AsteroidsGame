@@ -61,6 +61,7 @@ public class GameRenderer extends JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         loadImages();
+        setTitle("Asteroids - Projekt PROZ 19L");
     }
 
     public void onUpdate(float deltaTime)
@@ -120,7 +121,8 @@ public class GameRenderer extends JFrame
 
     private void drawMainMenu(Graphics g)
     {
-
+        drawText(g, "ASTEROIDS", screenWidth/2, 200, 90, true);
+        drawText(g, "by Robert Dudzinski", screenWidth/2, 220, 20, true);
     }
 
     private void drawGameplay(Graphics g)
