@@ -173,6 +173,17 @@ public class GameRenderer extends JFrame
 
         setFocusable(true);
 
+        initKeyListener();
+
+        addWindowStateListener(new WindowStateListener() {
+            public void windowStateChanged(WindowEvent arg0) {
+                onWindowStateChanged(arg0);
+            }
+        });
+    }
+
+    private void initKeyListener()
+    {
         addKeyListener(new KeyListener()
         {
             @Override
@@ -193,6 +204,12 @@ public class GameRenderer extends JFrame
 
             }
         });
+    }
+
+    public void onWindowStateChanged(WindowEvent e)
+    {
+        if ((e.getNewState() & Frame.ICONIFIED) == Frame.ICONIFIED)
+            gameEngine.getGameLogic().onLostFocus();
     }
 
     public GameRenderer getOuter()

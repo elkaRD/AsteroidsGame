@@ -73,8 +73,10 @@ public class GameLogic
     private boolean isPaused = false;
     private boolean gameOver = false;
 
-    private int screenWidth = 1280;
-    private int screenHeight = 720;
+    private int originalScreenWidth = 1280;
+    private int originalScreenHeight = 720;
+    private int screenWidth = originalScreenWidth;
+    private int screenHeight = originalScreenHeight;
 
     private int remainingLives;
     private int curLevel;
@@ -248,7 +250,12 @@ public class GameLogic
         isPaused = false;
         gameOver = false;
 
-        screenWidth = (int) (screenHeight * gameController.getScreenRatio());
+        screenWidth = (int) (originalScreenHeight * gameController.getScreenRatio());
+        if (screenWidth < originalScreenWidth)
+        {
+            screenWidth = originalScreenWidth;
+            screenHeight = (int) (originalScreenWidth / gameController.getScreenRatio());
+        }
     }
 
     public void onPause()
@@ -262,10 +269,21 @@ public class GameLogic
         AudioManager.getInstance().playSound(PAUSE);
     }
 
+    public void onLostFocus()
+    {
+        if (!isPaused)
+            onPause();
+    }
+
     public void onGameIsOver()
     {
         curState = GameState.GAMEOVER;
         gameOver = true;
+
+        if (curScore > GameStats.getInstance().getHighScore())
+        {
+            GameStats.getInstance().setHighScore(curScore);
+        }
     }
 
     public void onAccelerate(float force)

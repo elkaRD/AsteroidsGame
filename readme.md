@@ -3,6 +3,10 @@
 # ASTEROIDS – DOKUMENTACJA
 ## Robert Dudziński
 
+## URUCHOMIENIE GRY
+
+Należy wypakować plik AsteroidsGame.zip. W celu uruchomienia gry należy uruchomić plik AsteroidsGame.jar, w tym samym folderze powinien znajdować się również folder resources, który zawiera wszystkie zewnętrzne pliki potrzebne do prawidłowego działania programu.
+
 ## PORUSZANIE SIĘ PO MENU
 
 W menu można się poruszać za pomocą strzałek lub klawiszy WSAD. Program zaznacza aktualnie wybrany przycisk – można go wybrać poprzez wciśnięcie klawisza ENTER.
