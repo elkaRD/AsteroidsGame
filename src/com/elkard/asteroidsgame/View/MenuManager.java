@@ -28,7 +28,6 @@ public class MenuManager implements IButtonClickListener, IGameState
     private static final String TAG_MENU_GAMEOVER = "gameoverMenu";
 
     private static final String BUTTON_MAIN_PLAY = "PLAY";
-    private static final String BUTTON_MAIN_HIGHSCORES = "HI-SCORES";
     private static final String BUTTON_MAIN_EXIT = "EXIT";
 
     private static final String BUTTON_PAUSE_RESUME = "RESUME";
@@ -139,10 +138,6 @@ public class MenuManager implements IButtonClickListener, IGameState
             if (clicked.getText().equals(BUTTON_MAIN_PLAY))
             {
                 gameLogic.menuButtonClicked(GameLogic.MenuButton.MAIN_PLAY);
-            }
-            else if (clicked.getText().equals(BUTTON_MAIN_HIGHSCORES))
-            {
-                gameLogic.menuButtonClicked(GameLogic.MenuButton.MAIN_HIGHSCORES);
             }
             else if (clicked.getText().equals(BUTTON_MAIN_EXIT))
             {

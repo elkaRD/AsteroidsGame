@@ -4,6 +4,7 @@ import com.elkard.asteroidsgame.Logic.GameLogic;
 import com.elkard.asteroidsgame.Logic.GameObject;
 import com.elkard.asteroidsgame.Logic.ICollisionable;
 import com.elkard.asteroidsgame.Logic.Physics;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -13,12 +14,19 @@ import static org.junit.Assert.*;
 public class PhysicsTest
 {
     private static final String tag = "PHYSICS_TESTS: ";
+    private Physics physics;
+    private GameLogic gameLogic;
+
+    @Before
+    public void initPhysics()
+    {
+        physics = new Physics();
+        gameLogic = new GameLogic();
+    }
 
     @Test
     public void checkCollision1()
     {
-        Physics physics = new Physics();
-
         Vec2 p00 = new Vec2(0,0);
         Vec2 p10 = new Vec2(100,0);
         Vec2 p11 = new Vec2(100, 100);
@@ -28,16 +36,12 @@ public class PhysicsTest
         CollisionableLine b = new CollisionableLine(new Line(p10, p11));
 
         if (physics.checkCollision(a, b))
-        {
             fail(tag + "failed 1");
-        }
     }
 
     @Test
     public void checkCollision2()
     {
-        Physics physics = new Physics();
-
         Vec2 p00 = new Vec2(0,0);
         Vec2 p10 = new Vec2(100,0);
         Vec2 p11 = new Vec2(100, 100);
@@ -47,16 +51,12 @@ public class PhysicsTest
         CollisionableLine b = new CollisionableLine(new Line(p01, p10));
 
         if (!physics.checkCollision(a, b))
-        {
             fail(tag + "failed 2");
-        }
     }
 
     @Test
     public void checkCollision3()
     {
-        Physics physics = new Physics();
-
         Vec2 p00 = new Vec2(0,0);
         Vec2 p10 = new Vec2(100,0);
         Vec2 p20 = new Vec2(200, 0);
@@ -66,32 +66,24 @@ public class PhysicsTest
         CollisionableLine b = new CollisionableLine(new Line(p20, p30));
 
         if (physics.checkCollision(a, b))
-        {
             fail(tag + "failed 3 - line 00-10 with 20-30");
-        }
 
         a = new CollisionableLine(new Line(p00, p20));
         b = new CollisionableLine(new Line(p10, p30));
 
         if (!physics.checkCollision(a, b))
-        {
             fail(tag + "failed 3 - line 00-20 with 10-30");
-        }
 
         a = new CollisionableLine(new Line(p00, p30));
         b = new CollisionableLine(new Line(p10, p20));
 
         if (!physics.checkCollision(a, b))
-        {
             fail(tag + "failed 3 - line 00-30 with 10-20");
-        }
     }
 
     @Test
     public void checkCollision4()
     {
-        Physics physics = new Physics();
-
         Vec2 p10 = new Vec2(100,0);
         Vec2 p20 = new Vec2(200,0);
         Vec2 p11 = new Vec2(100, 100);
@@ -101,17 +93,12 @@ public class PhysicsTest
         CollisionableLine b = new CollisionableLine(new Line(p11, p22));
 
         if (physics.checkCollision(a, b))
-        {
             fail(tag + "failed 4");
-        }
     }
 
     @Test
     public void checkIntegrationWithGameLogic()
     {
-        Physics physics = new Physics();
-        GameLogic gameLogic = new GameLogic();
-
         SimpleObject a = new SimpleObject(gameLogic);
         SimpleObject b = new SimpleObject(gameLogic);
 

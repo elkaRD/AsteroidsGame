@@ -20,6 +20,9 @@ import com.elkard.asteroidsgame.View.GameRenderer;
 import com.elkard.asteroidsgame.View.MenuManager;
 import com.elkard.asteroidsgame.View.UI.ButtonsManager;
 
+import static com.elkard.asteroidsgame.Logic.GameLogic.GameState.MAINMENU;
+import static com.elkard.asteroidsgame.Logic.GameLogic.GameState.PAUSED;
+
 public class AsteroidsGame implements IGameController
 {
     private GameLogic gameLogic;
@@ -74,27 +77,23 @@ public class AsteroidsGame implements IGameController
         float deltaTime = elapsedTimeMillis/1000F;
         prevTime = curTime;
 
-        if (deltaTime < 0.013f)
-        {
-            try
-            {
-                int toSleep  = (int) (13 - deltaTime * 1000);
-                Thread.sleep(toSleep);
-            }
-            catch (InterruptedException ex)
-            {
-                ex.printStackTrace();
-            }
-        }
-
-        //TODO: just to  slow down main loop - to have cooler computer
         try
         {
+            if (gameLogic.getCurState() == MAINMENU || gameLogic.getCurState() == PAUSED)
+                Thread.sleep(80);
+
+            if (deltaTime < 0.013f)
+            {
+                int toSleep = (int) (13 - deltaTime * 1000);
+                Thread.sleep(toSleep);
+            }
+
+            //just to  slow down main loop - to have cooler computer
             Thread.sleep(16);
         }
-        catch(Exception e)
+        catch (InterruptedException ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
         }
 
         if (deltaTime > 0.25f) deltaTime = 0.25f;

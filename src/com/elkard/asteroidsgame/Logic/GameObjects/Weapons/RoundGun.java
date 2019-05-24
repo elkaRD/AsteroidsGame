@@ -20,7 +20,7 @@ import com.elkard.asteroidsgame.Logic.GameObjects.Bullet;
 
 public class RoundGun extends Weapon
 {
-    private final float minTimeSinceLastShoot = 0.4f;
+    private final float minTimeSinceLastShoot = 0.5f;
     private float timeSinceLastShoot = 0f;
 
     private int amountOfBullets = 36;

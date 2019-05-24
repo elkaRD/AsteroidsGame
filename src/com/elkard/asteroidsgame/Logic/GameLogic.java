@@ -42,7 +42,6 @@ public class GameLogic
     public enum MenuButton
     {
         MAIN_PLAY,
-        MAIN_HIGHSCORES,
         MAIN_EXIT,
         GAMEOVER_AGAIN,
         GAMEOVER_RETURN,
@@ -119,6 +118,9 @@ public class GameLogic
             go.updateObject(deltaTime);
 
         for (GameObject go : newObjects)
+            go.updateObject(deltaTime);
+
+        for (GameObject go : newObjects)
             gameObjects.add(go);
 
         for (GameObject go : objectsToRemove)
@@ -146,6 +148,11 @@ public class GameLogic
         }
     }
 
+    public GameState getCurState()
+    {
+        return curState;
+    }
+
     public int getWidth()
     {
         return screenWidth;
@@ -168,7 +175,6 @@ public class GameLogic
                 //startTestGame(false, false, false, true);
                 break;
 
-            case MAIN_HIGHSCORES:
             case GAMEOVER_RETURN:
             case PAUSE_MENU:
                 returnToMenu();

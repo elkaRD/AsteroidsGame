@@ -8,17 +8,26 @@ import com.elkard.asteroidsgame.Logic.GameObjects.Weapons.StandardWeapon;
 import com.elkard.asteroidsgame.Logic.GameObjects.Weapons.Weapon;
 import com.elkard.asteroidsgame.RandomGenerator;
 import com.elkard.asteroidsgame.Vec2;
+import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.fail;
 
 public class GameLogicTest
 {
+    private TestController controller;
+    private GameLogic gameLogic;
+
+    @Before
+    public void initLogic()
+    {
+        controller = new TestController();
+        gameLogic = controller.getGameLogic();
+    }
+
     @Test
     public void checkPlayerMovement()
     {
-        TestController controller = new TestController();
-        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, true, true, true);
 
         PlayerSpaceship player = gameLogic.getCurPlayer();
@@ -50,8 +59,6 @@ public class GameLogicTest
     @Test
     public void checkPlayerTurning()
     {
-        TestController controller = new TestController();
-        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, true, true, true);
 
         PlayerSpaceship player = gameLogic.getCurPlayer();
@@ -76,8 +83,6 @@ public class GameLogicTest
     @Test
     public void checkBoosterAppearing()
     {
-        TestController controller = new TestController();
-        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, true, true, true);
 
         PlayerSpaceship player = gameLogic.getCurPlayer();
@@ -102,8 +107,6 @@ public class GameLogicTest
     @Test
     public void checkShootingBullets()
     {
-        TestController controller = new TestController();
-        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, true, true, true);
 
         PlayerSpaceship player = gameLogic.getCurPlayer();
@@ -113,7 +116,6 @@ public class GameLogicTest
 
         controller.update(1f);
         controller.onStartShooting();
-        controller.update(0.1f);
         controller.update(0.1f);
         controller.onEndShooting();
         controller.update(0.1f);
@@ -125,8 +127,6 @@ public class GameLogicTest
     @Test
     public void checkDeath()
     {
-        TestController controller = new TestController();
-        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, false, true, true);
 
         int lives = gameLogic.getRemainingLives();
@@ -152,8 +152,6 @@ public class GameLogicTest
     @Test
     public void checkAsteroidDestruction()
     {
-        TestController controller = new TestController();
-        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, false, true, false);
 
         Asteroid asteroid = new Asteroid(gameLogic, new Vec2(400, gameLogic.getHeight()/2));
@@ -168,7 +166,6 @@ public class GameLogicTest
                 .setPosition(new Vec2(200, gameLogic.getHeight()/2));
         Weapon weapon = new StandardWeapon(gameLogic, bulletSpot);
 
-        controller.update(1f);
         controller.update(1f);
 
         new Bullet(gameLogic, weapon);
@@ -187,8 +184,6 @@ public class GameLogicTest
     @Test
     public void checkScreenEdgesTransition()
     {
-        TestController controller = new TestController();
-        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, false, true, true);
         PlayerSpaceship player = gameLogic.getCurPlayer();
 
@@ -220,8 +215,6 @@ public class GameLogicTest
     @Test
     public void checkScreenEdgesMirroring()
     {
-        TestController controller = new TestController();
-        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, false, true, false);
 
         int w = gameLogic.getWidth();
@@ -255,8 +248,6 @@ public class GameLogicTest
     @Test
     public void checkScoreUpdate()
     {
-        TestController controller = new TestController();
-        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, false, true, false);
 
         Asteroid asteroid = new Asteroid(gameLogic, new Vec2());
@@ -275,8 +266,6 @@ public class GameLogicTest
     @Test
     public void checkPause()
     {
-        TestController controller = new TestController();
-        GameLogic gameLogic = controller.getGameLogic();
         gameLogic.startTestGame(false, false, true, true);
         PlayerSpaceship player = gameLogic.getCurPlayer();
 
