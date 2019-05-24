@@ -3,6 +3,11 @@
 # ASTEROIDS – DOKUMENTACJA
 ## Robert Dudziński
 
+## WYMAGANIA
+
+- Java Runtime Environment
+- min. 418KB wolnego miejsca
+
 ## URUCHOMIENIE GRY
 
 Należy wypakować plik AsteroidsGame.zip. W celu uruchomienia gry należy uruchomić plik AsteroidsGame.jar, w tym samym folderze powinien znajdować się również folder resources, który zawiera wszystkie zewnętrzne pliki potrzebne do prawidłowego działania programu.
@@ -38,7 +43,7 @@ Za pomocą spacji można strzelać. W zależności od broni możliwy jest jeden 
 
 Wciskając klawisz ESC można zapauzować rozgrywkę – gra zostaje zatrzymana aż do momentu wybrania przycisku do kontynuacji gry lub do wyjścia do menu głównego.
 
-![screenshot1](readme_pictures/pic_paused.png)
+![screenshot1](readme_pictures/pic_pause.png)
 
 ## PRZEBIEG GRY
 
