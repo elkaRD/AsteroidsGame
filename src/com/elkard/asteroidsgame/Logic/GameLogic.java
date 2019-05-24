@@ -72,6 +72,7 @@ public class GameLogic
 
     private boolean isPaused = false;
     private boolean gameOver = false;
+    private boolean newHighScore = false;
 
     private int originalScreenWidth = 1280;
     private int originalScreenHeight = 720;
@@ -249,6 +250,7 @@ public class GameLogic
 
         isPaused = false;
         gameOver = false;
+        newHighScore = false;
 
         screenWidth = (int) (originalScreenHeight * gameController.getScreenRatio());
         if (screenWidth < originalScreenWidth)
@@ -283,6 +285,7 @@ public class GameLogic
         if (curScore > GameStats.getInstance().getHighScore())
         {
             GameStats.getInstance().setHighScore(curScore);
+            newHighScore = true;
         }
     }
 
@@ -458,5 +461,10 @@ public class GameLogic
     public PlayerSpaceship getCurPlayer()
     {
         return player;
+    }
+
+    public boolean isNewHighScore()
+    {
+        return newHighScore;
     }
 }

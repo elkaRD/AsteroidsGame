@@ -19,6 +19,7 @@ import com.elkard.asteroidsgame.Controller.IInputHandler;
 import com.elkard.asteroidsgame.Logic.GameLogic;
 import com.elkard.asteroidsgame.Controller.IGameController;
 import com.elkard.asteroidsgame.Line;
+import com.elkard.asteroidsgame.Logic.GameStats;
 import com.elkard.asteroidsgame.View.UI.ButtonsManager;
 
 import javax.imageio.ImageIO;
@@ -117,12 +118,15 @@ public class GameRenderer extends JFrame
     private void drawGameoverMenu(Graphics g)
     {
         drawText(g, "GAME OVER", screenWidth/2, screenHeight/2, 100, true);
+        if (gameEngine.getGameLogic().isNewHighScore())
+            drawText(g, "New hi-score!", screenWidth/2, screenHeight/2 + 20, 20, true);
     }
 
     private void drawMainMenu(Graphics g)
     {
         drawText(g, "ASTEROIDS", screenWidth/2, 200, 90, true);
         drawText(g, "by Robert Dudzinski", screenWidth/2, 220, 20, true);
+        drawText(g, "HI_SCORE: " + GameStats.getInstance().getHighScore(), screenWidth/2, 500, 20, true);
     }
 
     private void drawGameplay(Graphics g)
