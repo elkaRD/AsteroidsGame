@@ -3,15 +3,6 @@
 # ASTEROIDS – DOKUMENTACJA
 ## Robert Dudziński
 
-## WYMAGANIA
-
-- Java Runtime Environment
-- min. 418KB wolnego miejsca
-
-## URUCHOMIENIE GRY
-
-Należy wypakować plik AsteroidsGame.zip. W celu uruchomienia gry należy uruchomić plik AsteroidsGame.jar, w tym samym folderze powinien znajdować się również folder resources, który zawiera wszystkie zewnętrzne pliki potrzebne do prawidłowego działania programu.
-
 ## PORUSZANIE SIĘ PO MENU
 
 W menu można się poruszać za pomocą strzałek lub klawiszy WSAD. Program zaznacza aktualnie wybrany przycisk – można go wybrać poprzez wciśnięcie klawisza ENTER.
@@ -28,12 +19,12 @@ Menu główne pozwala rozpoczynać nową grę jak i umożliwia wyjście z progra
 
 ## STEROWANIE
 
-W – uruchom ciąg do przodu
-S – uruchom ciąg do tyłu (jest mniejszy niż ciąg do przodu)
-A – obróć statek w lewo
-D – obróć statek w prawo
-SPACJA – korzystanie z broni
-ESC – pauza gry
+- W – uruchom ciąg do przodu
+- S – uruchom ciąg do tyłu (jest mniejszy niż ciąg do przodu)
+- A – obróć statek w lewo
+- D – obróć statek w prawo
+- SPACJA – korzystanie z broni
+- ESC – pauza gry
 
 ## Korzystanie z broni
 
